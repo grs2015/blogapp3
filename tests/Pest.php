@@ -1,5 +1,9 @@
 <?php
 
+use Tests\CreatesApplication;
+use Illuminate\Foundation\Testing\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -10,8 +14,8 @@
 | need to change it using the "uses()" function to bind a different classes or traits.
 |
 */
-
-uses(Tests\TestCase::class)->in('Feature');
+uses(TestCase::class, CreatesApplication::class, RefreshDatabase::class)->in('Feature', 'Unit');
+// uses(Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
