@@ -58,6 +58,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Post whereDraft()
  * @method static Builder|Post wherePending()
  * @method static Builder|Post whereUnpublished()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read int|null $tags_count
  */
 class Post extends Model
 {
@@ -210,7 +216,7 @@ class Post extends Model
      */
     public function tags():BelongsToMany
     {
-        return $this->belongsToMany(Tags::class);
+        return $this->belongsToMany(Tag::class);
     }
 
     /**

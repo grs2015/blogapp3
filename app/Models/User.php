@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 /**
  * App\Models\User
@@ -54,6 +57,11 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
+ * @property-read int|null $posts_count
+ * @method static Builder|User whereAdmin()
+ * @method static Builder|User whereAuthor()
+ * @method static Builder|User whereRegular()
  */
 class User extends Authenticatable
 {
@@ -92,4 +100,70 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Checks the Admin status of the user
+     * @return boolean
+     */
+    public function isAdmin():bool
+    {
+        return Str::contains($this->role, User::ADMIN_USER);
+    }
+
+    /**
+     * Checks the Author status of the user
+     * @return boolean
+     */
+    public function isAuthor():bool
+    {
+        return Str::contains($this->role, User::AUTHOR_USER);
+    }
+
+    /**
+     * Checks the Regular status of the user
+     * @return boolean
+     */
+    public function isRegular():bool
+    {
+        return Str::contains($this->role, User::REGULAR_USER);
+    }
+
+    /**
+     * Queries the users with Admin role
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWhereAdmin(Builder $builder):void
+    {
+        $builder->where('role', User::ADMIN_USER);
+    }
+
+    /**
+     * Queries the users with Author role
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWhereAuthor(Builder $builder):void
+    {
+        $builder->where('role', User::AUTHOR_USER);
+    }
+
+    /**
+     * Queries the users with Regular role
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWhereRegular(Builder $builder):void
+    {
+        $builder->where('role', User::REGULAR_USER);
+    }
+
+    /**
+     * Relationship to Post model
+     * @return HasMany
+     */
+    public function posts():HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
 }
