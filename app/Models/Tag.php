@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Tag
@@ -31,4 +34,34 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
+
+    public $guarded = [];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
+     * Slug attributes creation while creating instance
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function(Tag $tag) {
+            if (!$tag->slug) {
+                $tag->slug = Str::slug($tag->title, '-');
+            }
+        });
+    }
+
+    public function posts():BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
+    }
 }
