@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Postmeta wherePostId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Postmeta whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Post|null $post
  */
 class Postmeta extends Model
 {

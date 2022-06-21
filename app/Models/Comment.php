@@ -32,6 +32,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Post|null $post
+ * @method static Builder|Comment wherePending()
+ * @method static Builder|Comment whereUnpublished()
  */
 class Comment extends Model
 {
