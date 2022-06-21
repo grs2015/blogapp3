@@ -39,4 +39,6 @@ use Illuminate\Database\Eloquent\Model;
 class Baseinfo extends Model
 {
     use HasFactory;
+
+    public $guarded = [];
 }
