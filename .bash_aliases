@@ -10,4 +10,5 @@ alias artr="php artisan route:list --except-vendor"
 alias cda="composer dump-autoload -o"
 alias p="vendor/bin/pest"
 alias pf="vendor/bin/pest --filter"
+alias pg="vendor/bin/pest --group="
 
