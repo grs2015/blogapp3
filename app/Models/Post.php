@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Post
@@ -47,16 +52,173 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereViews($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Postmeta[] $postmetas
+ * @property-read int|null $postmetas_count
+ * @property-read \App\Models\User|null $user
+ * @method static Builder|Post whereDraft()
+ * @method static Builder|Post wherePending()
+ * @method static Builder|Post whereUnpublished()
  */
 class Post extends Model
 {
     use HasFactory;
 
+    /**
+     * Constants for blog state
+     */
     const PUBLISHED = 'published';
     const DRAFT = 'draft';
     const PENDING = 'pending';
     const UNPUBLISHED = 'unpublished';
-
+    /**
+     * Constants for favorite state
+     */
     const FAVORITE = 'favorite';
     const NONFAVORITE = 'usual';
+
+    public $guarded = [];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
+     * Slug attributes creation while creating instance
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function(Post $post) {
+            if (!$post->slug) {
+                $post->slug = Str::slug($post->title, '-');
+            }
+        });
+    }
+
+    /**
+     * Checks the Published status of the post
+     * @return boolean
+     */
+    public function isPublished():bool
+    {
+        return Str::contains($this->published, Post::PUBLISHED);
+    }
+
+    /**
+     * Checks the Draft status of the post
+     * @return boolean
+     */
+    public function isDraft():bool
+    {
+        return Str::contains($this->published, Post::DRAFT);
+    }
+
+    /**
+     * Checks the Pending status of the post
+     * @return boolean
+     */
+    public function isPending():bool
+    {
+        return Str::contains($this->published, Post::PENDING);
+    }
+
+    /**
+     * Checks the Unpublished status of the post
+     * @return boolean
+     */
+    public function isUnpublished():bool
+    {
+        return Str::contains($this->published, Post::UNPUBLISHED);
+    }
+
+    /**
+     * Queries the posts with Published status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWherePublished(Builder $builder):void
+    {
+        $builder->where('published', Post::PUBLISHED);
+    }
+
+    /**
+     * Queries the posts with Draft status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWhereDraft(Builder $builder):void
+    {
+        $builder->where('published', Post::DRAFT);
+    }
+
+    /**
+     * Queries the posts with Pending status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWherePending(Builder $builder):void
+    {
+        $builder->where('published', Post::PENDING);
+    }
+
+    /**
+     * Queries the posts with Unpublished status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWhereUnpublished(Builder $builder):void
+    {
+        $builder->where('published', Post::UNPUBLISHED);
+    }
+
+    /**
+     * Relationship to User model
+     * @return BelongsTo
+     */
+    public function user():BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relationship to Postmeta model
+     * @return HasMany
+     */
+    public function postmetas():HasMany
+    {
+        return $this->hasMany(Postmeta::class);
+    }
+
+    /**
+     * Relationship to Comment model
+     * @return HasMany
+     */
+    public function comments():HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Relationship to Tag model
+     * @return BelongsToMany
+     */
+    public function tags():BelongsToMany
+    {
+        return $this->belongsToMany(Tags::class);
+    }
+
+    /**
+     * Relationship to Category model
+     * @return BelongsToMany
+     */
+    public function categories():BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }
