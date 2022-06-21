@@ -27,7 +27,7 @@ class PostFactory extends Factory
             'content' => $this->faker->text(),
             'views' => $this->faker->numberBetween(0, 50),
             'hero_image' => $this->faker->imageUrl(640, 480, 'blog-image', true),
-            'images' => array($this->faker->imageUrl(), $this->faker->imageUrl()),
+            'images' => $this->faker->imageUrl().','.$this->faker->imageUrl(),
             'time_to_read' => $this->faker->numberBetween(1, 20),
         ];
     }
