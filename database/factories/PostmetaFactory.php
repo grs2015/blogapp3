@@ -17,7 +17,8 @@ class PostmetaFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'key' => $this->faker->word(),
+            'content' => $this->faker->sentence()
         ];
     }
 }
