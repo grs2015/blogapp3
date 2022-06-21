@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Comment
@@ -37,4 +40,72 @@ class Comment extends Model
     const PUBLISHED = 'published';
     const PENDING = 'pending';
     const UNPUBLISHED = 'unpublished';
+
+    public $guarded = [];
+
+    /**
+     * Checks the Published status of the comment
+     * @return boolean
+     */
+    public function isPublished():bool
+    {
+        return Str::contains($this->published, Comment::PUBLISHED);
+    }
+
+    /**
+     * Checks the Pending status of the comment
+     * @return boolean
+     */
+    public function isPending():bool
+    {
+        return Str::contains($this->published, Comment::PENDING);
+    }
+
+    /**
+     * Checks the Unpublished status of the comment
+     * @return boolean
+     */
+    public function isUnpublished():bool
+    {
+        return Str::contains($this->published, Comment::UNPUBLISHED);
+    }
+
+    /**
+     * Queries the comments with Published status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWherePublished(Builder $builder):void
+    {
+        $builder->where('published', Comment::PUBLISHED);
+    }
+
+    /**
+     * Queries the comments with Pending status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWherePending(Builder $builder):void
+    {
+        $builder->where('published', Comment::PENDING);
+    }
+
+    /**
+     * Queries the comments with Unpublished status
+     * @param Builder $builder
+     * @return void
+     */
+    public function scopeWhereUnpublished(Builder $builder):void
+    {
+        $builder->where('published', Comment::UNPUBLISHED);
+    }
+
+    /**
+     * Relationship to Post model
+     * @return BelongsTo
+     */
+    public function post():BelongsTo
+    {
+        return $this->belongsTo(Post::class);
+    }
 }
