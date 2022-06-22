@@ -165,11 +165,6 @@ class User extends Authenticatable
      */
     public function posts():HasMany
     {
-        return $this->hasMany(Post::class);
-    }
-
-    public function scopeCurrentUser(Builder $builder, int $userId):?Builder
-    {
-        return $builder->where('id', $userId)->first();
+        return $this->hasMany(Post::class, 'author_id');
     }
 }

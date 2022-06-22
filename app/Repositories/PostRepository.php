@@ -23,7 +23,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function getAllEntries(int $userId):?Collection
     {
-        return $this->model->currentUser($userId)->posts;
+        return $this->model->where('id', $userId)->first()->posts;
     }
 
     /**
@@ -34,7 +34,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function getEntryById(int $userId, int $postId): ?Model
     {
-        return $this->model->currentUser($userId)->posts()->where('id', $postId)->firstOrFail();
+        return $this->model->where('id', $userId)->first()->posts()->where('id', $postId)->firstOrFail();
     }
 
     /**
@@ -45,7 +45,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function deleteEntry(int $userId, int $postId): void
     {
-        $this->model->currentUser($userId)->posts()->where('id', $postId)->delete();
+        $this->model->where('id', $userId)->first()->posts()->where('id', $postId)->delete();
     }
 
     /**
@@ -57,7 +57,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function updateEntry(int $userId, int $postId, array $newAttributes): ?Model
     {
-        return $this->model->currentUser($userId)->posts()->where('id', $postId)->update($newAttributes);
+        return $this->model->where('id', $userId)->first()->posts()->where('id', $postId)->update($newAttributes);
     }
 
     /**
@@ -68,6 +68,6 @@ class PostRepository implements PostRepositoryInterface
      */
     public function createEntry(int $userId, array $postAttributes):?Model
     {
-        return $this->model->currentUser($userId)->posts()->create($postAttributes);
+        return $this->model->where('id', $userId)->first()->posts()->create($postAttributes);
     }
 }
