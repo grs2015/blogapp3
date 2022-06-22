@@ -62,6 +62,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|User whereAdmin()
  * @method static Builder|User whereAuthor()
  * @method static Builder|User whereRegular()
+ * @method static Builder|User currentUser(int $userId)
  */
 class User extends Authenticatable
 {
