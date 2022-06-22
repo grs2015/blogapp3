@@ -166,4 +166,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    public function scopeCurrentUser(Builder $builder, int $userId):?Builder
+    {
+        return $builder->where('id', $userId)->first();
+    }
 }
