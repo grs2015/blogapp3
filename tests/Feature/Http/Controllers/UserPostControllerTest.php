@@ -33,3 +33,8 @@ it('renders the post page with all types of posts', function() {
     $response->assertOk();
     $response->assertSee(['published', 'draft', 'pending', 'unpublished']);
 });
+
+/* ------------------------------ @create method (Admin part)----------------------------- */
+it('renders create post form', function() {
+    $this->get('/posts/create')->assertSee('Form for post creation');
+});
