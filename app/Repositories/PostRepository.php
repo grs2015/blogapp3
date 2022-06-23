@@ -17,7 +17,7 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
-     * Gets all entries
+     * Gets all entries of current user
      * @param integer $userId
      * @return Collection|null
      */
@@ -27,7 +27,7 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
-     * Get specific entry
+     * Get specific entry of current user
      * @param integer $userId
      * @param integer $postId
      * @return Model|null
@@ -38,7 +38,7 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
-     * Delete specific entry
+     * Delete specific entry of current user
      * @param integer $userId
      * @param integer $postId
      * @return void
@@ -49,7 +49,7 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
-     * Update specific entry
+     * Update specific entry of current user
      * @param integer $userId
      * @param integer $postId
      * @param array $newAttributes
@@ -61,7 +61,7 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
-     * Create new entry
+     * Create new entry for current user
      * @param integer $userId
      * @param array $postAttributes
      * @return Model|null

@@ -24,7 +24,7 @@ class UserPostController extends Controller
     {
         $posts = $this->postRepository->getAllEntries($user->id);
 
-        return view('post.index', ['posts' => $posts ]);
+        return view('post.index', ['posts' => $posts, 'user' => $user ]);
     }
 
     /**

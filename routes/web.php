@@ -19,6 +19,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/* ------------------------------- Public part ------------------------------ */
+
+// TODO - public routes for index/show methods
+
+/* ------------------------------- Admin part ------------------------------- */
+// Dashboard
+
+
+// Specific user posts end-points
 Route::name('users.posts.')->group(function() {
     Route::get('/users/{user}/posts', [UserPostController::class, 'index'])->name('index');
     Route::get('/users/{user}/posts/{post:slug}', [UserPostController::class, 'show'])->name('show');
