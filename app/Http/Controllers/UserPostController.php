@@ -63,6 +63,16 @@ class UserPostController extends Controller
 
         $post = $this->postRepository->createEntry($user->id, $validated);
 
+        if ($request->has('tags')) {
+            $tagIDs = $request->input('tags');
+            $post->tags()->sync($tagIDs);
+        }
+
+        if ($request->has('categories')) {
+            $catsIDs = $request->input('categories');
+            $post->categories()->sync($catsIDs);
+        }
+
         return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
 
         // TODO - Allow storing only for Author users - later test this feature as well
