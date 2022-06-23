@@ -93,7 +93,7 @@ it('checks the stored post has some predefined properties', function() {
     ]);
 });
 
-it('check the stored post is in database as well as in pivot table', function() {
+it('checks the stored post is in database as well as in pivot table', function() {
     $tagIds = Tag::factory()->count(3)->create()->pluck('id')->toArray();
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
     $user = User::factory()->create();
@@ -124,7 +124,7 @@ it('check the stored post is in database as well as in pivot table', function() 
 
 });
 
-it('check the hero-image upload and its url resides in database after post storing', function() {
+it('checks the hero-image upload and its url resides in database after post storing', function() {
     testTime()->freeze('2022-01-01 00:00:00');
     $user = User::factory()->create();
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
@@ -145,7 +145,7 @@ it('check the hero-image upload and its url resides in database after post stori
     $response->assertStatus(302);
 });
 
-it('check the post images upload and their urls are imploded in database after post storing', function() {
+it('checks the post images upload and their urls are imploded in database after post storing', function() {
     testTime()->freeze('2022-01-01 00:00:00');
     $user = User::factory()->create();
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
@@ -167,4 +167,22 @@ it('check the post images upload and their urls are imploded in database after p
         'images' => $urlEntry
     ]);
     $response->assertStatus(302);
+});
+
+it('checks the event firing after storing the post in database', function() {
+    Event::fake();
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    $postData = [
+        'title' => 'Newest post',
+        'categories' => $categoryIds
+    ];
+
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+
+    Event::assertDispatched(PostCreated::class);
+});
+
+it('checks the mail been sent after storing the post in database', function() {
+
 });
