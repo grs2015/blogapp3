@@ -4,6 +4,7 @@ use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
+use App\Events\PostCreated;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
 use function Spatie\PestPluginTestTime\testTime;
@@ -133,7 +134,7 @@ it('checks the hero-image upload and its url resides in database after post stor
     $postData = [
         'title' => 'Newest post',
         'hero_image' => $file,
-        'categories' => $categoryIds
+        'categories' => $categoryIds,
     ];
 
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
@@ -175,11 +176,14 @@ it('checks the event firing after storing the post in database', function() {
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
     $postData = [
         'title' => 'Newest post',
+        'summary' => 'Summary of the newest post',
         'categories' => $categoryIds
     ];
 
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
 
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
     Event::assertDispatched(PostCreated::class);
 });
 

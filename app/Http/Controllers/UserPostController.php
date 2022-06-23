@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostCreated;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -51,6 +52,8 @@ class UserPostController extends Controller
         $validated['views'] = 0;
         $validated['published'] = Post::UNPUBLISHED;
         $validated['favorite'] = Post::NONFAVORITE;
+        $title = $validated['title'];
+        $summary = $validated['summary'] ?? $validated['title'];
 
         if ($request->has('hero_image')) {
             $file = $request->file('hero_image');
@@ -87,12 +90,11 @@ class UserPostController extends Controller
             $post->categories()->sync($catsIDs);
         }
 
+        PostCreated::dispatch($user, $title, $summary);
+
         return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
 
         // TODO - Allow storing only for Author users - later test this feature as well
-
-
-        // TODO - Store functionality for post-images
 
         // TODO - after successful creation send the notification to admin user
 
