@@ -77,12 +77,11 @@ class UserPostController extends Controller
 
         // TODO - Allow storing only for Author users - later test this feature as well
 
-        // TODO - Store functionality for hero-image
+
         // TODO - Store functionality for post-images
 
-        // TODO - If category/tags IDs received with request, connect them as sync (M-2-M) to created post
         // TODO - after successful creation send the notification to admin user
-        // TODO - Stored post must have statuses: unpublished and favotire: usual with views: zero
+
         // TODO - Add library for image processing
     }
 

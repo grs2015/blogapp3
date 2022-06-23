@@ -4,7 +4,9 @@ use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
+use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
+use function Spatie\PestPluginTestTime\testTime;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 uses()->group('UserPostController');
@@ -119,5 +121,27 @@ it('check the stored post is in database as well as in pivot table', function() 
         'post_id' => $postId
     ]);
 
+
+});
+
+it('check the hero-image upload', function() {
+    testTime()->freeze('2022-01-01 00:00:00');
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    Storage::fake('public');
+    $file = UploadedFile::fake()->image('test.jpg');
+    $postData = [
+        'title' => 'Newest post',
+        'hero_image' => $file,
+        'categories' => $categoryIds
+    ];
+
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    $response->assertStatus(302);
+});
+
+it('check the post images upload', function() {
 
 });
