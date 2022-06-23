@@ -217,5 +217,14 @@ it('checks the mail been sent after storing the post in database', function() {
         }
         return true;
     });
+});
 
+it('test the content of the PostCreatedNotificationMarkdown mailable', function() {
+    $user = User::factory()->create();
+
+    $mailable = new PostCreatedNotificationMarkdown($user, 'Post Title', 'Post Summary');
+
+    $mailable->assertSeeInHtml($user->first_name);
+    $mailable->assertSeeInHtml('Post Title');
+    $mailable->assertSeeInHtml('Post Summary');
 });
