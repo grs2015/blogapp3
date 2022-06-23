@@ -139,6 +139,9 @@ it('check the hero-image upload', function() {
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
 
     Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    $this->assertDatabaseHas('posts', [
+        'hero_image' => '/storage/uploads/2022-01-01-00-00-00-test.jpg'
+    ]);
     $response->assertStatus(302);
 });
 

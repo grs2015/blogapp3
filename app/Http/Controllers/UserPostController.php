@@ -59,6 +59,7 @@ class UserPostController extends Controller
 
             Storage::putFileAs('uploads', $file, $filename);
             $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
+            $validated['hero_image'] = $url;
         }
 
         $post = $this->postRepository->createEntry($user->id, $validated);
