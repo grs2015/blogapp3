@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Events\PostCreated;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
+use App\Mail\PostCreatedNotificationMarkdown;
+
 use function Spatie\PestPluginTestTime\testTime;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
@@ -188,5 +190,32 @@ it('checks the event firing after storing the post in database', function() {
 });
 
 it('checks the mail been sent after storing the post in database', function() {
+    Mail::fake();
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    $postData = [
+        'title' => 'Newest post',
+        'summary' => 'Summary of the newest post',
+        'categories' => $categoryIds
+    ];
+
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Mail::assertSent(function(PostCreatedNotificationMarkdown $mail) use ($postData, $user) {
+        if ( ! $mail->hasTo('admin@admin.com')) {
+            return false;
+        }
+
+        if ( $mail->title !== $postData['title'] ) {
+            return false;
+        }
+
+        if ( $mail->user->first_name !== $user->first_name) {
+            return false;
+        }
+        return true;
+    });
 
 });

@@ -96,8 +96,6 @@ class UserPostController extends Controller
 
         // TODO - Allow storing only for Author users - later test this feature as well
 
-        // TODO - after successful creation send the notification to admin user
-
         // TODO - Add library for image processing
     }
 
