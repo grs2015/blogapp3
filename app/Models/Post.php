@@ -82,7 +82,7 @@ class Post extends Model
     const FAVORITE = 'favorite';
     const NONFAVORITE = 'usual';
 
-    public $guarded = ['published', 'views', 'favorite'];
+    public $guarded = [];
 
     /**
      * Get the route key for the model.

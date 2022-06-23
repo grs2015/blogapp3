@@ -47,10 +47,10 @@ class UserPostController extends Controller
      */
     public function store(StorePostRequest $request, User $user)
     {
-        $validated = $request->safe()->expect(['tags', 'categories', 'hero_image', 'images']);
+        $validated = $request->safe()->except(['tags', 'categories', 'hero_image', 'images']);
         $validated['views'] = 0;
-        $validated['published'] = 'unpublished';
-        $validated['favorite'] = 'usual';
+        $validated['published'] = Post::UNPUBLISHED;
+        $validated['favorite'] = Post::NONFAVORITE;
 
         if ($request->has('hero_image')) {
             $file = $request->file('hero_image');
