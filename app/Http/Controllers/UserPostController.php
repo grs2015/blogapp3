@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Interfaces\PostRepositoryInterface;
 
 class UserPostController extends Controller
 {
@@ -43,18 +45,31 @@ class UserPostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(StorePostRequest $request, User $user)
     {
-        $validated = $request->validated();
-        // TODO - Form request for validation
-        // Form request can accept 'published' field only as 'unpublished'
-        // Or make it as an exception if received any other than 'unpublished'
+        $validated = $request->safe()->expect(['tags', 'categories', 'hero_image', 'images']);
+        $validated['views'] = 0;
+        $validated['published'] = 'unpublished';
+        $validated['favorite'] = 'usual';
+
+        if ($request->has('hero_image')) {
+            $file = $request->file('hero_image');
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+
+            Storage::putFileAs('uploads', $file, $filename);
+            $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
+        }
+
+        $post = $this->postRepository->createEntry($user->id, $validated);
+
+        return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
+
         // TODO - Allow storing only for Author users - later test this feature as well
-        // TODO - Store property view as zero
+
         // TODO - Store functionality for hero-image
         // TODO - Store functionality for post-images
-        // TODO - Request must contain category array, not null
-        // TODO - Request may contain tags array
+
         // TODO - If category/tags IDs received with request, connect them as sync (M-2-M) to created post
         // TODO - after successful creation send the notification to admin user
         // TODO - Stored post must have statuses: unpublished and favotire: usual with views: zero
