@@ -124,7 +124,7 @@ it('check the stored post is in database as well as in pivot table', function() 
 
 });
 
-it('check the hero-image upload', function() {
+it('check the hero-image upload and its url resides in database after post storing', function() {
     testTime()->freeze('2022-01-01 00:00:00');
     $user = User::factory()->create();
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
@@ -145,6 +145,26 @@ it('check the hero-image upload', function() {
     $response->assertStatus(302);
 });
 
-it('check the post images upload', function() {
+it('check the post images upload and their urls are imploded in database after post storing', function() {
+    testTime()->freeze('2022-01-01 00:00:00');
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    Storage::fake('public');
+    $file_1 = UploadedFile::fake()->image('test_1.jpg');
+    $file_2 = UploadedFile::fake()->image('test_2.jpg');
+    $postData = [
+        'title' => 'Newest post',
+        'images' => array($file_1, $file_2),
+        'categories' => $categoryIds
+    ];
 
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_2.jpg');
+    $urlEntry = '/storage/uploads/2022-01-01-00-00-00-test_1.jpg'.','.'/storage/uploads/2022-01-01-00-00-00-test_2.jpg';
+    $this->assertDatabaseHas('posts', [
+        'images' => $urlEntry
+    ]);
+    $response->assertStatus(302);
 });
