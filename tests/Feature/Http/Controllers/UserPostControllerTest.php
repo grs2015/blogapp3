@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\UserPostController;
+use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Category;
+use App\Http\Controllers\UserPostController;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 uses()->group('UserPostController');
@@ -83,5 +85,37 @@ it('checks the stored post has some predefined properties', function() {
         'published' => Post::UNPUBLISHED,
         'favorite' => Post::NONFAVORITE,
         'views' => 0,
+        'title' => 'New Post'
     ]);
+});
+
+it('check the stored post is in database as well as in pivot table', function() {
+    $tagIds = Tag::factory()->count(3)->create()->pluck('id')->toArray();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    $user = User::factory()->create();
+    $postData = [
+        'title' => 'New Post Entry',
+        'tags' => $tagIds,
+        'categories' => $categoryIds
+    ];
+
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+    $postId = Post::where('slug', 'new-post-entry')->first()->id;
+
+    $response->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('posts', ['title' => 'New Post Entry']);
+    $this->assertDatabaseHas('category_post', [
+        'category_id' => $categoryIds[0],
+        'category_id' => $categoryIds[1],
+        'category_id' => $categoryIds[2],
+        'post_id' => $postId
+    ]);
+    $this->assertDatabaseHas('post_tag', [
+        'tag_id' => $tagIds[0],
+        'tag_id' => $tagIds[1],
+        'tag_id' => $tagIds[2],
+        'post_id' => $postId
+    ]);
+
+
 });
