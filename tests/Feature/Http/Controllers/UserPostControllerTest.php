@@ -44,12 +44,14 @@ it('renders create post form', function() {
 
 /* ------------------------------ @store method (Admin part)----------------------------- */
 it('checks the validation and redirect', function() {
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
     $postData = [
         'title' => 'New Post',
         'meta_title' => 'Meta information',
         'summary' => 'Post summary information',
-        'categories' => array(1, 2, 3)
+        'categories' => $categoryIds
     ];
+
     $user = User::factory()->create();
 
     $response = $this->post(action([UserPostController::class, 'store'],['user' => $user->id]), $postData);
