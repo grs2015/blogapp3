@@ -5,10 +5,11 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use App\Events\PostCreated;
+use App\Events\PostUpdated;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
-use App\Mail\PostCreatedNotificationMarkdown;
 
+use App\Mail\PostCreatedNotificationMarkdown;
 use function Spatie\PestPluginTestTime\testTime;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Events\PostCreated;
+use App\Events\PostUpdated;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
@@ -206,6 +207,8 @@ class UserPostController extends Controller
             $catsIDs = $request->input('categories');
             $post->categories()->sync($catsIDs);
         }
+
+        PostUpdated::dispatch();
 
         return redirect()->action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]);
     }
