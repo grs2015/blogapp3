@@ -443,3 +443,25 @@ it('checks the images upload and substitute the previous ones in database after 
     ]);
     $response->assertStatus(302);
 });
+
+it('checks the event firing after updating the post in database', function() {
+    $user = User::factory()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(3))
+        ->has(Tag::factory()->count(3))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
+    Event::fake();
+
+    $categoryIds = Category::pluck('id')->toArray();
+    $postData = [
+        'title' => 'Updated post',
+        'categories' => $categoryIds
+    ];
+
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Event::assertDispatched(PostUpdated::class);
+});
