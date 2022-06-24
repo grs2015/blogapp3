@@ -169,7 +169,7 @@ it('checks the post images upload and their urls are imploded in database after 
 
     Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_1.jpg');
     Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_2.jpg');
-    $urlEntry = '/storage/uploads/2022-01-01-00-00-00-test_1.jpg'.','.'/storage/uploads/2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry = 'uploads/2022-01-01-00-00-00-test_1.jpg'.','.'uploads/2022-01-01-00-00-00-test_2.jpg';
     $this->assertDatabaseHas('posts', [
         'images' => $urlEntry
     ]);
@@ -389,6 +389,57 @@ it('checks the hero-image upload and substitutes the previous one in database af
     ]);
     $this->assertDatabaseHas('posts', [
         'hero_image' => 'uploads/2022-01-01-01-00-00-test.jpg'
+    ]);
+    $response->assertStatus(302);
+});
+
+it('checks the images upload and substitute the previous ones in database after post updating', function() {
+    // Arrange #1
+    testTime()->freeze('2022-01-01 00:00:00');
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    Storage::fake('public');
+    $file_1 = UploadedFile::fake()->image('test_1.jpg');
+    $file_2 = UploadedFile::fake()->image('test_2.jpg');
+    $postData = [
+        'title' => 'Newest post',
+        'images' => array($file_1, $file_2),
+        'categories' => $categoryIds,
+    ];
+    // Action #1
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+    // Assertion #1
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_2.jpg');
+    $urlEntry = 'uploads/2022-01-01-00-00-00-test_1.jpg'.','.'uploads/2022-01-01-00-00-00-test_2.jpg';
+    $this->assertDatabaseHas('posts', [
+        'images' => $urlEntry
+    ]);
+    $response->assertStatus(302);
+
+    //Arrange #2
+    testTime()->addHour();
+    $file_3 = UploadedFile::fake()->image('test_3.jpg');
+    $file_4 = UploadedFile::fake()->image('test_4.jpg');
+    $postData = [
+        'title' => 'Newest post',
+        'images' => array($file_3, $file_4),
+        'categories' => $categoryIds,
+    ];
+    $post = Post::first();
+    // Action #2
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+    // Assertion #2
+    $urlEntryNew = 'uploads/2022-01-01-01-00-00-test_3.jpg'.','.'uploads/2022-01-01-01-00-00-test_4.jpg';
+    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test_2.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test_3.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test_4.jpg');
+    $this->assertDatabaseMissing('posts', [
+        'images' => $urlEntry
+    ]);
+    $this->assertDatabaseHas('posts', [
+        'images' => $urlEntryNew
     ]);
     $response->assertStatus(302);
 });

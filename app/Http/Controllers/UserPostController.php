@@ -80,8 +80,9 @@ class UserPostController extends Controller
             collect($files['images'])->each(function($file) use ($fileNames) {
                 $timestamp = now()->format('Y-m-d-H-i-s');
                 $filename = "{$timestamp}-{$file->getClientOriginalName()}";
-                Storage::putFileAs('uploads', $file, $filename);
-                $fileNames->push(parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH));
+                $path = Storage::putFileAs('uploads', $file, $filename);
+                // $fileNames->push(parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH));
+                $fileNames->push($path);
             });
             $fileNamesDB = $fileNames->implode(',');
             $validated['images'] = $fileNamesDB;
@@ -151,6 +152,7 @@ class UserPostController extends Controller
         // TODO - add policy in order to update post only for those who created it
         // TODO - email notification (for admin if updated by author, and for author if updated by admin)
         // TODO - published/favorite can be set only by admin user
+        // TODO - add necessary exceptions/test for them
 
         $validated = $request->safe()->except(['published', 'views', 'favorite', 'tags', 'categories', 'hero_image', 'images']);
         $title = $validated['title'];
