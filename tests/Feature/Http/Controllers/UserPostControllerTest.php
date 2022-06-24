@@ -228,3 +228,17 @@ it('test the content of the PostCreatedNotificationMarkdown mailable', function(
     $mailable->assertSeeInHtml('Post Title');
     $mailable->assertSeeInHtml('Post Summary');
 });
+
+/* ------------------------------- Show method (Admin part)------------------------------ */
+
+it('renders single post entry by given slug', function() {
+    $user = User::factory()->hasPosts(3)->create();
+    $post = Post::first();
+
+    $response = $this->get(action([UserPostController::class, 'show'], ['user' => $user->id, 'post' => $post->slug]));
+
+    $response->assertSee($post->title);
+    $response->assertSee($post->slug);
+    $response->assertDontSee($post->summary);
+    $response->assertSee($user->first_name);
+});
