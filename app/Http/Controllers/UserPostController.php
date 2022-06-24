@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PostCreated;
 use App\Models\Post;
 use App\Models\User;
+use App\Events\PostCreated;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
 
 class UserPostController extends Controller
@@ -144,10 +145,12 @@ class UserPostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user, Post $post)
+    public function update(UpdatePostRequest $request, User $user, Post $post)
     {
-        // TODO - in test add the check of previous file deletion after update
+        // TODO - in test add the check of previous file(s) deletion after update
         // TODO - add policy in order to update post only for those who created it
+
+
     }
 
     /**
