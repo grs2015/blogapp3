@@ -147,7 +147,7 @@ it('checks the hero-image upload and its url resides in database after post stor
 
     Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
     $this->assertDatabaseHas('posts', [
-        'hero_image' => '/storage/uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
     ]);
     $response->assertStatus(302);
 });
@@ -366,7 +366,7 @@ it('checks the hero-image upload and substitutes the previous one in database af
     // Assertion #1
     Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
     $this->assertDatabaseHas('posts', [
-        'hero_image' => '/storage/uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
     ]);
     $response->assertStatus(302);
 
@@ -385,10 +385,10 @@ it('checks the hero-image upload and substitutes the previous one in database af
     Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test.jpg');
     Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test.jpg');
     $this->assertDatabaseMissing('posts', [
-        'hero_image' => '/storage/uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
     ]);
     $this->assertDatabaseHas('posts', [
-        'hero_image' => '/storage/uploads/2022-01-01-01-00-00-test.jpg'
+        'hero_image' => 'uploads/2022-01-01-01-00-00-test.jpg'
     ]);
     $response->assertStatus(302);
 });

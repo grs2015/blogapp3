@@ -69,9 +69,9 @@ class UserPostController extends Controller
             $timestamp = now()->format('Y-m-d-H-i-s');
             $filename = "{$timestamp}-{$file->getClientOriginalName()}";
 
-            Storage::putFileAs('uploads', $file, $filename);
-            $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
-            $validated['hero_image'] = $url;
+            $path = Storage::putFileAs('uploads', $file, $filename);
+            // $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
+            $validated['hero_image'] = $path;
         }
 
         if ($request->has('images')) {
@@ -153,6 +153,24 @@ class UserPostController extends Controller
         // TODO - published/favorite can be set only by admin user
 
         $validated = $request->safe()->except(['published', 'views', 'favorite', 'tags', 'categories', 'hero_image', 'images']);
+        $title = $validated['title'];
+        $summary = $validated['summary'] ?? $validated['title'];
+
+        if ($request->has('hero_image')) {
+            $file = $request->file('hero_image');
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+
+            try {
+                Storage::disk('public')->delete($post->hero_image);
+            } catch(\Exception $e) {
+                throw $e;
+            }
+
+            $path = Storage::putFileAs('uploads', $file, $filename);
+            // $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
+            $validated['hero_image'] = $path;
+        }
 
         $this->postRepository->updateEntry($user->id, $post->id, $validated);
 
