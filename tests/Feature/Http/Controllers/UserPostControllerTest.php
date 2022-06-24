@@ -10,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
 
 use App\Mail\PostCreatedNotificationMarkdown;
+use App\Mail\PostUpdatedNotificationMarkdown;
 use function Spatie\PestPluginTestTime\testTime;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
@@ -465,4 +466,39 @@ it('checks the event firing after updating the post in database', function() {
     $response->assertStatus(302);
     $response->assertSessionHasNoErrors();
     Event::assertDispatched(PostUpdated::class);
+});
+
+it('checks the mail been sent to admin after updating the post in database', function() {
+    Mail::fake();
+    $user = User::factory()->author()->create();
+    $adminUser = User::factory()->admin()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(3))
+        ->has(Tag::factory()->count(3))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
+    $categoryIds = Category::pluck('id')->toArray();
+    $postData = [
+        'title' => 'Updated post',
+        'categories' => $categoryIds
+    ];
+
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Mail::assertSent(function(PostUpdatedNotificationMarkdown $mail) use ($postData, $user, $adminUser) {
+        if ( ! $mail->hasTo($adminUser->email)) {
+            return false;
+        }
+
+        if ( $mail->title !== $postData['title'] ) {
+            return false;
+        }
+
+        if ( $mail->user->first_name !== $user->first_name) {
+            return false;
+        }
+        return true;
+    });
 });
