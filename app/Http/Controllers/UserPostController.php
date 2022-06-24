@@ -126,7 +126,9 @@ class UserPostController extends Controller
      */
     public function edit(User $user, Post $post)
     {
-        // TODO - Corresponding View class
+        $post = $this->postRepository->getEntryById($user->id, $post->id);
+
+        return view('post.edit', ['post' => $post, 'user' => $user]);
     }
 
     /**
