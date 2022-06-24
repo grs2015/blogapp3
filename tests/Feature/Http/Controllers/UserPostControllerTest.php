@@ -267,6 +267,36 @@ it('checks the validation and redirect at update', function() {
     // Arrange #1
     $user = User::factory()->create();
     $categoryIds = Category::factory()->create(['id' => 5])->pluck('id')->toArray();
+    $postData = [
+        'title' => 'Newest post',
+        'summary' => 'Summary of the newest post',
+        'categories' => $categoryIds,
+    ];
+
+    // Action #1
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+    // Assertion #1 - Check the correct data is saved to database, including pivot-tables
+    $response->assertStatus(302);
+    $post = Post::first();
+
+    // Arrange #2 - Preparation data for update procedure
+    $postData = [
+        'title' => 'Updated post',
+        'summary' => 'Summary of the updated post',
+        'categories' => $categoryIds,
+    ];
+    // Action #2
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+    // Assertion #2 - Check the data is updated in database, including pivot-tables
+    $response->assertSessionHasNoErrors();
+    $response->assertStatus(302);
+    $response->assertRedirect(action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]));
+});
+
+it('checks the stored post is in database as well as in pivot table at update', function() {
+    // Arrange #1
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->create(['id' => 5])->pluck('id')->toArray();
     $tagIds = Tag::factory()->create(['id' => 7])->pluck('id')->toArray();
     $postData = [
         'title' => 'Newest post',
@@ -274,7 +304,6 @@ it('checks the validation and redirect at update', function() {
         'categories' => $categoryIds,
         'tags' => $tagIds
     ];
-
     // Action #1
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
     // Assertion #1 - Check the correct data is saved to database, including pivot-tables
@@ -292,6 +321,7 @@ it('checks the validation and redirect at update', function() {
         'category_id' => $catId,
         'post_id' => $post->id
     ]);
+
 
     // Arrange #2 - Preparation data for update procedure
     Category::factory()->create(['id' => 6]);
@@ -317,5 +347,48 @@ it('checks the validation and redirect at update', function() {
     $this->assertDatabaseHas('posts', ['title' => 'Updated post', 'summary' => 'Summary of the updated post']);
     $response->assertStatus(302);
     $response->assertRedirect(action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]));
+});
 
+it('checks the hero-image upload and substitutes the previous one in database after post updating', function() {
+    // Arrange #1
+    testTime()->freeze('2022-01-01 00:00:00');
+    $user = User::factory()->create();
+    $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+    Storage::fake('public');
+    $file = UploadedFile::fake()->image('test.jpg');
+    $postData = [
+        'title' => 'Newest post',
+        'hero_image' => $file,
+        'categories' => $categoryIds,
+    ];
+    // Action #1
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+    // Assertion #1
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    $this->assertDatabaseHas('posts', [
+        'hero_image' => '/storage/uploads/2022-01-01-00-00-00-test.jpg'
+    ]);
+    $response->assertStatus(302);
+
+    // Arrange #2
+    testTime()->addHour();
+    $file = UploadedFile::fake()->image('test.jpg');
+    $postData = [
+        'title' => 'Newest post',
+        'hero_image' => $file,
+        'categories' => $categoryIds,
+    ];
+    $post = Post::first();
+    // Action #2
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+    // Assertion #2
+    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test.jpg');
+    $this->assertDatabaseMissing('posts', [
+        'hero_image' => '/storage/uploads/2022-01-01-00-00-00-test.jpg'
+    ]);
+    $this->assertDatabaseHas('posts', [
+        'hero_image' => '/storage/uploads/2022-01-01-01-00-00-test.jpg'
+    ]);
+    $response->assertStatus(302);
 });
