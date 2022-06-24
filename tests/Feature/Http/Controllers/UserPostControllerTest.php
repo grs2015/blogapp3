@@ -13,14 +13,20 @@ use function Spatie\PestPluginTestTime\testTime;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 uses()->group('UserPostController');
-
+// beforeEach(function() {
+//     $this->simpleUser = User::factory()->create();
+//     $this->userWithPosts = User::factory()->hasPosts(3)->create();
+//     $this->categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
+//     $this->tagIds = Tag::factory()->count(3)->create()->pluck('id')->toArray();
+// });
+// TODO - As authorization will be implemented, add the policy tests for correspoding methods
 /* ------------------------------ @index method (Admin part)----------------------------- */
 it('renders the post page with posts data', function() {
-    $user = User::factory()->hasPosts(3)->create(['id' => 1]);
+    $user = User::factory()->hasPosts(3)->create();
     $posts = $user->posts;
     $postTitle = $posts[random_int(0, 2)]->title;
 
-    $response = $this->get('/users/1/posts');
+    $response = $this->get(action([UserPostController::class, 'index'], ['user' => $user->id]));
 
     $response->assertOk();
     $response->assertSee('All posts of User');
@@ -229,7 +235,7 @@ it('test the content of the PostCreatedNotificationMarkdown mailable', function(
     $mailable->assertSeeInHtml('Post Summary');
 });
 
-/* ------------------------------- Show method (Admin part)------------------------------ */
+/* ------------------------------- @show method (Admin part)------------------------------ */
 
 it('renders single post entry by given slug', function() {
     $user = User::factory()->hasPosts(3)->create();
@@ -243,7 +249,7 @@ it('renders single post entry by given slug', function() {
     $response->assertSee($user->first_name);
 });
 
-/* -------------------------------- Edit form (Admin part)------------------------------- */
+/* -------------------------------- @edit method (Admin part)------------------------------- */
 
 it('renders edit form for single post entry by given slug', function() {
     $user = User::factory()->hasPosts(3)->create();
@@ -255,4 +261,28 @@ it('renders edit form for single post entry by given slug', function() {
     $response->assertSee($post->slug);
     $response->assertDontSee($post->summary);
     $response->assertSee($user->first_name);
+});
+
+/* ----------------------------- @update method (Admin part)----------------------------- */
+
+it('checks the validation and redirect at update', function() {
+    $user = User::factory()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(3))
+        ->has(Tag::factory()->count(3))
+        ->for($user)
+        ->create();
+
+    $postData = [
+        'title' => 'Newest post',
+        'summary' => 'Summary of the newest post',
+        'categories' => array(1, 2)
+    ];
+
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+
+    $response->assertSessionHasNoErrors();
+    $response->assertStatus(302);
+    $response->assertRedirect(action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]));
+
 });

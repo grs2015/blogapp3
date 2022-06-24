@@ -29,6 +29,8 @@ class UserPostController extends Controller
      */
     public function index(User $user)
     {
+        // TODO - Add policy in order to show posts only for those who created them
+
         $posts = $this->postRepository->getAllEntries($user->id);
 
         return view('post.index', ['posts' => $posts, 'user' => $user ]);
@@ -41,6 +43,8 @@ class UserPostController extends Controller
      */
     public function create()
     {
+    // TODO - Allow use create form only for Author users - Policies
+
         return view('post.create');
     }
 
@@ -98,8 +102,7 @@ class UserPostController extends Controller
 
         return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
 
-        // TODO - Allow storing only for Author users - later test this feature as well
-
+        // TODO - Allow storing only for Author users - later test this feature as well (Policies)
         // TODO - Add library for image processing
     }
 
@@ -112,6 +115,7 @@ class UserPostController extends Controller
     public function show(User $user, Post $post)
     {
         // TODO - View increment functionality
+        // TODO - Add policy in order to show post only for those who created it
 
         $post = $this->postRepository->getEntryById($user->id, $post->id);
 
@@ -126,6 +130,8 @@ class UserPostController extends Controller
      */
     public function edit(User $user, Post $post)
     {
+        // TODO - Allow edit form only for Author users - Policies
+
         $post = $this->postRepository->getEntryById($user->id, $post->id);
 
         return view('post.edit', ['post' => $post, 'user' => $user]);
@@ -141,6 +147,7 @@ class UserPostController extends Controller
     public function update(Request $request, User $user, Post $post)
     {
         // TODO - in test add the check of previous file deletion after update
+        // TODO - add policy in order to update post only for those who created it
     }
 
     /**
