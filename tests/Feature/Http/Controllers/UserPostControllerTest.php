@@ -129,8 +129,6 @@ it('checks the stored post is in database as well as in pivot table', function()
         'tag_id' => $tagIds[2],
         'post_id' => $postId
     ]);
-
-
 });
 
 it('checks the hero-image upload and its url resides in database after post storing', function() {
@@ -266,22 +264,57 @@ it('renders edit form for single post entry by given slug', function() {
 /* ----------------------------- @update method (Admin part)----------------------------- */
 
 it('checks the validation and redirect at update', function() {
+    // Arrange #1
     $user = User::factory()->create();
-    $post = Post::factory()
-        ->has(Category::factory()->count(3))
-        ->has(Tag::factory()->count(3))
-        ->for($user)
-        ->create();
-
+    $categoryIds = Category::factory()->create(['id' => 5])->pluck('id')->toArray();
+    $tagIds = Tag::factory()->create(['id' => 7])->pluck('id')->toArray();
     $postData = [
         'title' => 'Newest post',
         'summary' => 'Summary of the newest post',
-        'categories' => array(1, 2)
+        'categories' => $categoryIds,
+        'tags' => $tagIds
     ];
 
-    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+    // Action #1
+    $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
+    // Assertion #1 - Check the correct data is saved to database, including pivot-tables
+    $response->assertStatus(302);
+    $post = Post::first();
+    $tagId = $post->tags->first()->id;
+    $catId = $post->categories->first()->id;
+    expect($tagId)->toBe(7);
+    expect($catId)->toBe(5);
+    $this->assertDatabaseHas('post_tag', [
+        'tag_id' => $tagId,
+        'post_id' => $post->id
+    ]);
+    $this->assertDatabaseHas('category_post', [
+        'category_id' => $catId,
+        'post_id' => $post->id
+    ]);
 
+    // Arrange #2 - Preparation data for update procedure
+    Category::factory()->create(['id' => 6]);
+    Tag::factory()->create(['id' => 8]);
+    $postData = [
+        'title' => 'Updated post',
+        'summary' => 'Summary of the updated post',
+        'categories' => array(6),
+        'tags' => array(8)
+    ];
+    // Action #2
+    $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+    // Assertion #2 - Check the data is updated in database, including pivot-tables
     $response->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('post_tag', [
+        'tag_id' => 8,
+        'post_id' => $post->id
+    ]);
+    $this->assertDatabaseHas('category_post', [
+        'category_id' => 6,
+        'post_id' => $post->id
+    ]);
+    $this->assertDatabaseHas('posts', ['title' => 'Updated post', 'summary' => 'Summary of the updated post']);
     $response->assertStatus(302);
     $response->assertRedirect(action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]));
 
