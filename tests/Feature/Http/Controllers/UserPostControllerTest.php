@@ -242,3 +242,17 @@ it('renders single post entry by given slug', function() {
     $response->assertDontSee($post->summary);
     $response->assertSee($user->first_name);
 });
+
+/* -------------------------------- Edit form (Admin part)------------------------------- */
+
+it('renders edit form for single post entry by given slug', function() {
+    $user = User::factory()->hasPosts(3)->create();
+    $post = Post::first();
+
+    $response = $this->get(action([UserPostController::class, 'show'], ['user' => $user->id, 'post' => $post->slug]));
+
+    $response->assertSee($post->title);
+    $response->assertSee($post->slug);
+    $response->assertDontSee($post->summary);
+    $response->assertSee($user->first_name);
+});
