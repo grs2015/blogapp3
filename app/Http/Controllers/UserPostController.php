@@ -150,7 +150,7 @@ class UserPostController extends Controller
         // TODO - in test add the check of previous file(s) deletion after update
         // TODO - add policy in order to update post only for those who created it
 
-
+        return redirect()->action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]);
     }
 
     /**
