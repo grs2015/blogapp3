@@ -174,6 +174,27 @@ class UserPostController extends Controller
             $validated['hero_image'] = $path;
         }
 
+        if ($request->has('images')) {
+            try {
+                $namesArr = explode(',', $post->images);
+                Storage::disk('public')->delete($namesArr);
+            } catch(\Exception $e) {
+                throw $e;
+            }
+
+            $files = $request->allFiles('images');
+            $fileNames = collect([]);
+            collect($files['images'])->each(function($file) use ($fileNames) {
+                $timestamp = now()->format('Y-m-d-H-i-s');
+                $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+                $path = Storage::putFileAs('uploads', $file, $filename);
+                // $fileNames->push(parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH));
+                $fileNames->push($path);
+            });
+            $fileNamesDB = $fileNames->implode(',');
+            $validated['images'] = $fileNamesDB;
+        }
+
         $this->postRepository->updateEntry($user->id, $post->id, $validated);
 
         if ($request->has('tags')) {
