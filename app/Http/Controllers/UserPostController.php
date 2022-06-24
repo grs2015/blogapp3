@@ -149,6 +149,21 @@ class UserPostController extends Controller
     {
         // TODO - in test add the check of previous file(s) deletion after update
         // TODO - add policy in order to update post only for those who created it
+        // TODO - email notification (for admin if updated by author, and for author if updated by admin)
+
+        $validated = $request->safe()->except(['published', 'views', 'favorite', 'tags', 'categories', 'hero_image', 'images']);
+
+        $this->postRepository->updateEntry($user->id, $post->id, $validated);
+
+        if ($request->has('tags')) {
+            $tagIDs = $request->input('tags');
+            $post->tags()->sync($tagIDs);
+        }
+
+        if ($request->has('categories')) {
+            $catsIDs = $request->input('categories');
+            $post->categories()->sync($catsIDs);
+        }
 
         return redirect()->action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]);
     }

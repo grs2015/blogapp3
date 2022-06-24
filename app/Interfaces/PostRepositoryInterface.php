@@ -11,5 +11,5 @@ interface PostRepositoryInterface
     public function getEntryById(int $userId, int $postId):?Model;
     public function deleteEntry(int $userId, int $postId):void;
     public function createEntry(int $userId, array $postAttributes):?Model;
-    public function updateEntry(int $userId, int $postId, array $newAttributes):?Model;
+    public function updateEntry(int $userId, int $postId, array $newAttributes):?int;
 }

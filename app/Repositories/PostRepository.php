@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Interfaces\PostRepositoryInterface;
+use Faker\Core\Number;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -23,7 +24,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function getAllEntries(int $userId):?Collection
     {
-        return $this->model->where('id', $userId)->first()->posts;
+        return $this->model->whereId($userId)->first()->posts;
     }
 
     /**
@@ -34,7 +35,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function getEntryById(int $userId, int $postId): ?Model
     {
-        return $this->model->where('id', $userId)->first()->posts()->where('id', $postId)->firstOrFail();
+        return $this->model->whereId($userId)->first()->posts()->whereId($postId)->firstOrFail();
     }
 
     /**
@@ -45,7 +46,7 @@ class PostRepository implements PostRepositoryInterface
      */
     public function deleteEntry(int $userId, int $postId): void
     {
-        $this->model->where('id', $userId)->first()->posts()->where('id', $postId)->delete();
+        $this->model->whereId($userId)->first()->posts()->whereId($postId)->delete();
     }
 
     /**
@@ -55,9 +56,9 @@ class PostRepository implements PostRepositoryInterface
      * @param array $newAttributes
      * @return Model|null
      */
-    public function updateEntry(int $userId, int $postId, array $newAttributes): ?Model
+    public function updateEntry(int $userId, int $postId, array $newAttributes): ?int
     {
-        return $this->model->where('id', $userId)->first()->posts()->where('id', $postId)->update($newAttributes);
+        return $this->model->whereId($userId)->first()->posts()->whereId($postId)->update($newAttributes);
     }
 
     /**
@@ -68,6 +69,6 @@ class PostRepository implements PostRepositoryInterface
      */
     public function createEntry(int $userId, array $postAttributes):?Model
     {
-        return $this->model->where('id', $userId)->first()->posts()->create($postAttributes);
+        return $this->model->whereId($userId)->first()->posts()->create($postAttributes);
     }
 }
