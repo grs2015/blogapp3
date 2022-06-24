@@ -12,12 +12,16 @@ use App\Interfaces\PostRepositoryInterface;
 
 class UserPostController extends Controller
 {
-    private PostRepositoryInterface $postRepository;
+    // private PostRepositoryInterface $postRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository)
-    {
-        $this->postRepository = $postRepository;
-    }
+    public function __construct(
+      private PostRepositoryInterface $postRepository
+    ) {}
+
+    // public function __construct(PostRepositoryInterface $postRepository)
+    // {
+    //     $this->postRepository = $postRepository;
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -108,7 +112,10 @@ class UserPostController extends Controller
     public function show(User $user, Post $post)
     {
         // TODO - View increment functionality
-        // TODO - Corresponding View class
+
+        $post = $this->postRepository->getEntryById($user->id, $post->id);
+
+        return view('post.show', ['post' => $post, 'user' => $user]);
     }
 
     /**
