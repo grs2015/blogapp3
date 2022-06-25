@@ -226,6 +226,11 @@ class UserPostController extends Controller
      */
     public function destroy(User $user, Post $post)
     {
-        //
+        $post->tags()->detach();
+        $post->categories()->detach();
+
+        $this->postRepository->deleteEntry($user->id, $post->id);
+
+        return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
     }
 }
