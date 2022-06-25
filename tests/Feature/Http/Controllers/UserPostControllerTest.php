@@ -563,8 +563,8 @@ it('checks the deletion of entry as well as related models 1-M and entry in pivo
     $response->assertRedirect(route('users.posts.index', ['user' => $user->id]));
     $this->assertModelMissing($post);
     $this->assertDatabaseMissing('posts', $post->toArray());
-    $this->assertModelMissing(Comment::first());
-    $this->assertModelMissing(Postmeta::first());
+    $this->assertDatabaseMissing('comments', Comment::first()->toArray());
+    $this->assertDatabaseMissing('postmetas', Postmeta::first()->toArray());
     $this->assertDatabaseMissing('post_tag', [
         'post_id' => $post->id,
         'tag_id' => Tag::first()->id
