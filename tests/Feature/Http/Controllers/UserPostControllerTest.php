@@ -210,7 +210,7 @@ it('checks the mail been sent after storing the post in database', function() {
     $response->assertStatus(302);
     $response->assertSessionHasNoErrors();
     Mail::assertSent(function(PostCreatedNotificationMarkdown $mail) use ($postData, $user) {
-        if ( ! $mail->hasTo('admin@admin.com')) {
+        if ( ! $mail->hasTo(config('contacts.admin_email'))) {
             return false;
         }
 
@@ -471,7 +471,6 @@ it('checks the event firing after updating the post in database', function() {
 it('checks the mail been sent to admin after updating the post in database', function() {
     Mail::fake();
     $user = User::factory()->author()->create();
-    $adminUser = User::factory()->admin()->create();
     $post = Post::factory()
         ->has(Category::factory()->count(3))
         ->has(Tag::factory()->count(3))
@@ -487,8 +486,8 @@ it('checks the mail been sent to admin after updating the post in database', fun
 
     $response->assertStatus(302);
     $response->assertSessionHasNoErrors();
-    Mail::assertSent(function(PostUpdatedNotificationMarkdown $mail) use ($postData, $user, $adminUser) {
-        if ( ! $mail->hasTo($adminUser->email)) {
+    Mail::assertSent(function(PostUpdatedNotificationMarkdown $mail) use ($postData, $user) {
+        if ( ! $mail->hasTo(config('contacts.admin_email'))) {
             return false;
         }
 

@@ -208,7 +208,7 @@ class UserPostController extends Controller
             $post->categories()->sync($catsIDs);
         }
 
-        PostUpdated::dispatch();
+        PostUpdated::dispatch($user, $post->user, $title, $summary);
 
         return redirect()->action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]);
     }

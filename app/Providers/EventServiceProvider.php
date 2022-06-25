@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Events\PostCreated;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use App\Listeners\SendNotificationMailToAdmin;
+use App\Listeners\SendPostNotificationMail;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -20,9 +20,17 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        PostCreated::class => [
-            SendNotificationMailToAdmin::class
-        ]
+        // PostCreated::class => [ SendNotificationMailToAdmin::class ],
+
+    ];
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        SendPostNotificationMail::class,
     ];
 
     /**
