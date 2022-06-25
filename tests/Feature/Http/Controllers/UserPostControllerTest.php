@@ -526,3 +526,13 @@ it('checks if the slug attribute updated according updated title attribute', fun
     expect($post->slug)->toBe('updated-post-entry');
     $this->assertDatabaseHas('posts', ['slug' => $post->slug]);
 });
+
+it('test the content of the PostUpdatedNotificationMarkdown mailable', function() {
+    $user = User::factory()->create();
+
+    $mailable = new PostUpdatedNotificationMarkdown($user, 'Post Title', 'Post Summary');
+
+    $mailable->assertSeeInHtml($user->first_name);
+    $mailable->assertSeeInHtml('Post Title');
+    $mailable->assertSeeInHtml('Post Summary');
+});
