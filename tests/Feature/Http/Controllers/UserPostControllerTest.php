@@ -419,7 +419,7 @@ it('checks the images upload and substitute the previous ones in database after 
     ]);
     $response->assertStatus(302);
 
-    //Arrange #2
+    // Arrange #2
     testTime()->addHour();
     $file_3 = UploadedFile::fake()->image('test_3.jpg');
     $file_4 = UploadedFile::fake()->image('test_4.jpg');
@@ -500,4 +500,29 @@ it('checks the mail been sent to admin after updating the post in database', fun
         }
         return true;
     });
+});
+
+it('checks if the slug attribute updated according updated title attribute', function() {
+    // Arrange #1
+    $user = User::factory()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(3))
+        ->has(Tag::factory()->count(3))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
+    // Assertion #1
+    expect($post->slug)->toBe('new-post-entry');
+    $this->assertDatabaseHas('posts', ['slug' => $post->slug]);
+    // Arrange #2
+    $categoryIds = Category::pluck('id')->toArray();
+    $postData = [
+        'title' => 'Updated Post Entry',
+        'categories' => $categoryIds
+    ];
+    // Act #2
+    $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
+    // Assertion #2
+    $post->refresh();
+    expect($post->slug)->toBe('updated-post-entry');
+    $this->assertDatabaseHas('posts', ['slug' => $post->slug]);
 });
