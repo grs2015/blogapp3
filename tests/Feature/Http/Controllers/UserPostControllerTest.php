@@ -3,12 +3,14 @@
 use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Category;
+use App\Models\Postmeta;
 use App\Events\PostCreated;
 use App\Events\PostUpdated;
+
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
-
 use App\Mail\PostCreatedNotificationMarkdown;
 use App\Mail\PostUpdatedNotificationMarkdown;
 use function Spatie\PestPluginTestTime\testTime;
@@ -535,4 +537,52 @@ it('test the content of the PostUpdatedNotificationMarkdown mailable', function(
     $mailable->assertSeeInHtml($user->first_name);
     $mailable->assertSeeInHtml('Post Title');
     $mailable->assertSeeInHtml('Post Summary');
+});
+
+/* ----------------------------- @destroy method (Admin part)---------------------------- */
+
+it('checks the deletion of entry as well as related models 1-M and entry in pivot-table', function() {
+    // Arrange #1
+    $user = User::factory()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(1))
+        ->has(Tag::factory()->count(1))
+        ->has(Comment::factory()->count(1))
+        ->has(Postmeta::factory()->count(1))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
+    // Assertion #1
+    $this->assertDatabaseHas('posts', ['slug' => $post->slug]);
+    $this->assertDatabaseHas('comments', ['title' => Comment::first()->title]);
+    $this->assertDatabaseHas('postmetas', ['key' => Postmeta::first()->key]);
+    $this->assertDatabaseHas('category_post', ['category_id' => Category::first()->id, 'post_id' => $post->id]);
+    $this->assertDatabaseHas('post_tag', ['tag_id' => Tag::first()->id, 'post_id' => $post->id]);
+
+    $response = $this->delete(action([UserPostController::class, 'destroy'], ['user' => $user->id, 'post' => $post->slug]));
+
+    $response->assertRedirect(route('users.posts.index', ['user' => $user->id]));
+    $this->assertModelMissing($post);
+    $this->assertDatabaseMissing('posts', $post->toArray());
+    $this->assertModelMissing(Comment::first());
+    $this->assertModelMissing(Postmeta::first());
+    $this->assertDatabaseMissing('post_tag', [
+        'post_id' => $post->id,
+        'tag_id' => Tag::first()->id
+    ]);
+    $this->assertDatabaseMissing('category_post', [
+        'post_id' => $post->id,
+        'category_id' => Category::first()->id
+    ]);
+});
+
+it('checks the event firing after deletion the post in database', function() {
+
+});
+
+it('checks the mail been sent to admin after deletion the post in database', function() {
+
+});
+
+it('test the content of the PostDeletedNotificationMarkdown mailable', function() {
+
 });
