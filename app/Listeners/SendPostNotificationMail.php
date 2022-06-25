@@ -23,11 +23,7 @@ class SendPostNotificationMail
      */
     public function handlePostUpdatedNotification(PostUpdated $event)
     {
-        if ($event->user->isAuthor()) {
-            Mail::to(config('contacts.admin_email'))->send(new PostUpdatedNotificationMarkdown($event->user, $event->title, $event->summary));
-        } else {
-            Mail::to($event->author->email)->send(new PostUpdatedNotificationMarkdown($event->user, $event->title, $event->summary));
-        }
+        Mail::to(config('contacts.admin_email'))->send(new PostUpdatedNotificationMarkdown($event->user, $event->title, $event->summary));
     }
 
     /**

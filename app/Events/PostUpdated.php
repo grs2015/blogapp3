@@ -22,7 +22,6 @@ class PostUpdated
      */
     public function __construct(
         public Model $user,
-        public ?Model $author = null,
         public string $title,
         public string $summary
     ) {}
