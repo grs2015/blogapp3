@@ -23,6 +23,8 @@ class SendPostNotificationMail
      */
     public function handlePostUpdatedNotification(PostUpdated $event)
     {
+        // TODO - Condition with 'to' field is defined on the Auth::user() basis
+        // If it's author - sending out mail to admin, if admin - sending out mail to author
         Mail::to(config('contacts.admin_email'))->send(new PostUpdatedNotificationMarkdown($event->user, $event->title, $event->summary));
     }
 

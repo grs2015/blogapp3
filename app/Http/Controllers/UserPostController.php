@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Events\PostCreated;
 use App\Events\PostUpdated;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
@@ -158,6 +159,10 @@ class UserPostController extends Controller
         $validated = $request->safe()->except(['published', 'views', 'favorite', 'tags', 'categories', 'hero_image', 'images']);
         $title = $validated['title'];
         $summary = $validated['summary'] ?? $validated['title'];
+
+        if ($request->has('title')) {
+            $validated['slug'] = Str::slug($validated['title'], '-');
+        }
 
         if ($request->has('hero_image')) {
             $file = $request->file('hero_image');
