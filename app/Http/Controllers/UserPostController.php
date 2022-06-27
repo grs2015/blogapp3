@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Events\PostCreated;
+use App\Events\PostDeleted;
 use App\Events\PostUpdated;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
+use PhpParser\Node\Expr\PostDec;
 
 class UserPostController extends Controller
 {
@@ -226,10 +228,15 @@ class UserPostController extends Controller
      */
     public function destroy(User $user, Post $post)
     {
+        $title = $post->title;
+        $summary = $post->summary ?? $post->title;
+
         $post->tags()->detach();
         $post->categories()->detach();
 
         $this->postRepository->deleteEntry($user->id, $post->id);
+
+        PostDeleted::dispatch($user, $title, $summary);
 
         return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
     }

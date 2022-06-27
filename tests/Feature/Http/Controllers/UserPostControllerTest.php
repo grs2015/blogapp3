@@ -7,8 +7,9 @@ use App\Models\Comment;
 use App\Models\Category;
 use App\Models\Postmeta;
 use App\Events\PostCreated;
-use App\Events\PostUpdated;
+use App\Events\PostDeleted;
 
+use App\Events\PostUpdated;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
 use App\Mail\PostCreatedNotificationMarkdown;
