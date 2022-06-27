@@ -624,5 +624,11 @@ it('checks the mail been sent to admin after deletion the post in database', fun
 });
 
 it('test the content of the PostDeletedNotificationMarkdown mailable', function() {
+    $user = User::factory()->create();
 
+    $mailable = new PostDeletedNotificationMarkdown($user, 'Post Title', 'Post Summary');
+
+    $mailable->assertSeeInHtml($user->first_name);
+    $mailable->assertSeeInHtml('Post Title');
+    $mailable->assertSeeInHtml('Post Summary');
 });
