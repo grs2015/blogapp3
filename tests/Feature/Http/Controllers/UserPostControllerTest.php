@@ -576,7 +576,19 @@ it('checks the deletion of entry as well as related models 1-M and entry in pivo
 });
 
 it('checks the event firing after deletion the post in database', function() {
+    $user = User::factory()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(3))
+        ->has(Tag::factory()->count(3))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
+    Event::fake();
 
+    $response = $this->delete(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]));
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Event::assertDispatched(PostDeleted::class);
 });
 
 it('checks the mail been sent to admin after deletion the post in database', function() {
