@@ -593,7 +593,33 @@ it('checks the event firing after deletion the post in database', function() {
 });
 
 it('checks the mail been sent to admin after deletion the post in database', function() {
+    Mail::fake();
+    $user = User::factory()->author()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(3))
+        ->has(Tag::factory()->count(3))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
 
+
+    $response = $this->delete(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]));
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Mail::assertSent(function(PostDeletedNotificationMarkdown $mail) use ($post, $user) {
+        if ( ! $mail->hasTo(config('contacts.admin_email'))) {
+            return false;
+        }
+
+        if ( $mail->title !== $post['title'] ) {
+            return false;
+        }
+
+        if ( $mail->user->first_name !== $user->first_name) {
+            return false;
+        }
+        return true;
+    });
 });
 
 it('test the content of the PostDeletedNotificationMarkdown mailable', function() {
