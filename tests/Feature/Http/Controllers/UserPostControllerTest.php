@@ -13,6 +13,7 @@ use App\Events\PostUpdated;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
 use App\Mail\PostCreatedNotificationMarkdown;
+use App\Mail\PostDeletedNotificationMarkdown;
 use App\Mail\PostUpdatedNotificationMarkdown;
 use function Spatie\PestPluginTestTime\testTime;
 use Illuminate\Database\Eloquent\Factories\Sequence;

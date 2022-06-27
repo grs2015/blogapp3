@@ -7,6 +7,7 @@ use App\Events\PostDeleted;
 use App\Events\PostUpdated;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PostCreatedNotificationMarkdown;
+use App\Mail\PostDeletedNotificationMarkdown;
 use App\Mail\PostUpdatedNotificationMarkdown;
 
 class SendPostNotificationMail
@@ -33,7 +34,7 @@ class SendPostNotificationMail
     {
         // TODO - Condition with 'to' field is defined on the Auth::user() basis
         // If it's author - sending out mail to admin, if admin - sending out mail to author
-        Mail::to(config('contacts.admin_email'))->send(new PostUpdatedNotificationMarkdown($event->user, $event->title, $event->summary));
+        Mail::to(config('contacts.admin_email'))->send(new PostDeletedNotificationMarkdown($event->user, $event->title, $event->summary));
     }
     /**
      * Register the listeners for the subscriber.
