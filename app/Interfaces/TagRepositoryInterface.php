@@ -9,7 +9,7 @@ interface TagRepositoryInterface
 {
     public function getAllEntries():?Collection;
     public function getEntryById(int $tagId):?Model;
-    public function deleteEntry(int $tagId):void;
+    public function deleteEntry(int $tagId):int;
     public function createEntry(array $postAttributes):?Model;
     public function updateEntry(int $tagId, array $newAttributes):?int;
 }
