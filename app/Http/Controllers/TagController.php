@@ -42,7 +42,9 @@ class TagController extends Controller
 
     public function show(Tag $tag)
     {
+        $tag = $this->tagRepository->getEntryById($tag->id);
 
+        return view('tag.show', ['tag' => $tag]);
     }
 
     public function edit(Tag $tag)
