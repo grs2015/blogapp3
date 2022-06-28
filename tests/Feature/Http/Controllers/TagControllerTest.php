@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\TagController;
 use App\Models\Tag;
+use App\Models\User;
+use App\Events\TagCreated;
+use App\Http\Controllers\TagController;
+use App\Mail\TagCreatedNotificationMarkdown;
 
 uses()->group('TagController');
 
@@ -58,4 +61,41 @@ it('checks the stored tag is in database', function() {
 
     $response->assertSessionHasNoErrors();
     $this->assertDatabaseHas('tags', ['title' => 'New Tag']);
+});
+
+it('checks the event firing after storing the tag in database', function() {
+    Event::fake();
+    $tagData = [
+        'title' => 'Newest tag',
+        'content' => 'Content of the newest tag',
+    ];
+
+    $response = $this->post(action([TagController::class, 'store']), $tagData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Event::assertDispatched(TagCreated::class);
+});
+
+it('checks the mails been queued from admin after storing the tag in database', function() {
+    Mail::fake();
+    $user = User::factory()->author()->create();
+    $tagData = [
+        'title' => 'Newest tag',
+        'content' => 'Content of the newest tag',
+    ];
+
+    $response = $this->post(action([TagController::class, 'store']), $tagData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Mail::assertQueued(function(TagCreatedNotificationMarkdown $mail) use ($tagData, $user) {
+        if ( ! $mail->hasTo($user->email)) {
+            return false;
+        }
+        if ( $mail->title !== $tagData['title'] ) {
+            return false;
+        }
+        return true;
+    });
 });

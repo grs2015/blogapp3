@@ -12,7 +12,8 @@ class SendTagNotificationMail
     public function handleTagCreatedNotification(TagCreated $event)
     {
         foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
-            Mail::to($author_email)->send(new TagCreatedNotificationMarkdown($event->title, $event->content));
+            Mail::to($author_email)->later(now()->addMinutes(10), new TagCreatedNotificationMarkdown($event->title, $event->content));
+            // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }
     }
 
