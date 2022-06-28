@@ -46,3 +46,16 @@ it('checks the session error when validation fails', function() {
 
     $response->assertSessionHasErrors();
 });
+
+it('checks the stored tag is in database', function() {
+    $tagData = [
+        'title' => 'New Tag',
+        'meta_title' => 'Meta information',
+        'content' => 'Tag content',
+    ];
+
+    $response = $this->post(action([TagController::class, 'store']), $tagData);
+
+    $response->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('tags', ['title' => 'New Tag']);
+});
