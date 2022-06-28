@@ -4,8 +4,10 @@ namespace App\Listeners;
 
 use App\Models\User;
 use App\Events\TagCreated;
+use App\Events\TagUpdated;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TagCreatedNotificationMarkdown;
+use App\Mail\TagUpdatedNotificationMarkdown;
 
 class SendTagNotificationMail
 {
@@ -13,6 +15,14 @@ class SendTagNotificationMail
     {
         foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new TagCreatedNotificationMarkdown($event->title, $event->content));
+            // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
+        }
+    }
+
+    public function handleTagUpdatedNotification(TagUpdated $event)
+    {
+        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+            Mail::to($author_email)->later(now()->addMinutes(10), new TagUpdatedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }
     }
@@ -29,5 +39,12 @@ class SendTagNotificationMail
             TagCreated::class,
             [SendTagNotificationMail::class, 'handleTagCreatedNotification']
         );
+
+        $events->listen(
+            TagUpdated::class,
+            [SendTagNotificationMail::class, 'handleTagUpdatedNotification']
+        );
+
+
     }
 }

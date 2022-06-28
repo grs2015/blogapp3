@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\TagCreated;
 use App\Models\Tag;
+use App\Events\TagCreated;
+use App\Events\TagUpdated;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTagRequest;
+use App\Http\Requests\UpdateTagRequest;
 use App\Interfaces\TagRepositoryInterface;
 
 class TagController extends Controller
@@ -54,9 +57,22 @@ class TagController extends Controller
         return view('tag.edit', ['tag' => $tag]);
     }
 
-    public function update(Request $reques, Tag $tag)
+    public function update(UpdateTagRequest $request, Tag $tag)
     {
+        $validated = $request->validated();
 
+        if ($request->has('title')) {
+            $validated['slug'] = Str::slug($validated['title'], '-');
+        }
+
+        $title = $validated['title'];
+        $content = $validated['content'] ?? null;
+
+        $this->tagRepository->updateEntry($tag->id, $validated);
+
+        TagUpdated::dispatch($title, $content);
+
+        return redirect()->action([TagController::class, 'edit'], ['tag' => $tag->slug]);
     }
 
     public function destroy(Tag $tag)
