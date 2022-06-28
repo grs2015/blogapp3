@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserPostController;
 
 /*
@@ -35,4 +36,13 @@ Route::name('users.posts.')->group(function() {
     Route::post('/users/{user}/posts', [UserPostController::class, 'store'])->name('store');
     Route::put('/users/{user}/posts/{post:slug}', [UserPostController::class, 'update'])->name('update');
     Route::delete('/users/{user}/posts/{post:slug}', [UserPostController::class, 'destroy'])->name('delete');
+});
+
+Route::name('tags.')->group(function() {
+    Route::get('/tags', [TagController::class, 'index'])->name('index');
+    Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('show');
+    Route::get('/tags/{tag:slug}/edit', [TagController::class, 'edit'])->name('edit');
+    Route::post('/tags', [TagController::class, 'store'])->name('store');
+    Route::post('/tags/{tag:slug}', [TagController::class, 'update'])->name('update');
+    Route::post('/tags/{tag:slug}', [TagController::class, 'destroy'])->name('delete');
 });
