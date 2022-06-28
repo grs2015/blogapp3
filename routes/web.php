@@ -44,6 +44,6 @@ Route::name('tags.')->group(function() {
     Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('show');
     Route::get('/tags/{tag:slug}/edit', [TagController::class, 'edit'])->name('edit');
     Route::post('/tags', [TagController::class, 'store'])->name('store');
-    Route::post('/tags/{tag:slug}', [TagController::class, 'update'])->name('update');
+    Route::put('/tags/{tag:slug}', [TagController::class, 'update'])->name('update');
     Route::post('/tags/{tag:slug}', [TagController::class, 'destroy'])->name('delete');
 });

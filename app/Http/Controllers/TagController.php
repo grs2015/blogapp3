@@ -69,6 +69,7 @@ class TagController extends Controller
         $content = $validated['content'] ?? null;
 
         $this->tagRepository->updateEntry($tag->id, $validated);
+        $tag->refresh();
 
         TagUpdated::dispatch($title, $content);
 
