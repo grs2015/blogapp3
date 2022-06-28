@@ -36,3 +36,13 @@ it('checks the validation and redirect', function() {
     $response->assertSessionHasNoErrors();
     $response->assertRedirect(route('tags.index'));
 });
+
+it('checks the session error when validation fails', function() {
+    $tagData = [
+        'meta_title' => 'Meta information'
+    ];
+
+    $response = $this->post(action([TagController::class, 'store']), $tagData);
+
+    $response->assertSessionHasErrors();
+});
