@@ -21,3 +21,18 @@ it('renders the tag page with tags data', function() {
 it('renders create tag form', function() {
     $this->get('/tags/create')->assertSee('Form for tag creation');
 });
+
+/* ------------------------------ @store method ----------------------------- */
+it('checks the validation and redirect', function() {
+    $tagData = [
+        'title' => 'New Tag',
+        'meta_title' => 'Meta information',
+        'content' => 'Tag content',
+    ];
+
+    $response = $this->post(action([TagController::class, 'store']), $tagData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    $response->assertRedirect(route('tags.index'));
+});

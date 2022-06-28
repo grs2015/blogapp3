@@ -28,7 +28,7 @@ class TagController extends Controller
 
     public function store(StoreTagRequest $request)
     {
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         $this->tagRepository->createEntry($validated);
 
