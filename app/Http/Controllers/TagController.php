@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\TagRepositoryInterface;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTagRequest;
+use App\Interfaces\TagRepositoryInterface;
 
 class TagController extends Controller
 {
     public function __construct(
-        private TagRepositoryInterface $tagRepositoryInterface
+        private TagRepositoryInterface $tagRepository
     ) {}
 
 
     public function index()
     {
-        $tags = $this->tagRepositoryInterface->getAllEntries();
+        $tags = $this->tagRepository->getAllEntries();
 
         return view('tag.index', ['tags' => $tags]);
     }
@@ -25,9 +26,13 @@ class TagController extends Controller
         return view('tag.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreTagRequest $request)
     {
+        $validated = $request->validate();
 
+        $this->tagRepository->createEntry($validated);
+
+        return redirect()->action([TagController::class, 'index']);
     }
 
     public function show(Tag $tag)
