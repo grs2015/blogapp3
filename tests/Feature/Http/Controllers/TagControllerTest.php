@@ -99,3 +99,15 @@ it('checks the mails been queued from admin after storing the tag in database', 
         return true;
     });
 });
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single tag entry by given slug', function() {
+    $tag = Tag::factory()->create();
+
+    $response = $this->get(action([TagController::class, 'show'], ['tag' => $tag->slug]));
+
+    $response->assertSee($tag->title);
+    $response->assertSee($tag->content);
+    $response->assertSee($tag->slug);
+    $response->assertDontSee($tag->summary);
+});

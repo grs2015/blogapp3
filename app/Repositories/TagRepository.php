@@ -10,7 +10,7 @@ use App\Interfaces\TagRepositoryInterface;
 class TagRepository implements TagRepositoryInterface
 {
     public function __construct(
-        protected ?Tag $model
+        protected Tag $model
     ) {}
 
     /**
@@ -24,7 +24,7 @@ class TagRepository implements TagRepositoryInterface
 
     public function getEntryById(int $tagId): ?Model
     {
-        return $this->model->findOfFail($tagId);
+        return $this->model->findOrFail($tagId);
     }
 
     public function deleteEntry(int $tagId): int
