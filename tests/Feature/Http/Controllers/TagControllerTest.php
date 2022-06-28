@@ -16,3 +16,8 @@ it('renders the tag page with tags data', function() {
     $response->assertSee('All tags');
     $response->assertSee($tagTitle);
 });
+
+/* ----------------------------- @create method ----------------------------- */
+it('renders create tag form', function() {
+    $this->get('/tags/create')->assertSee('Form for tag creation');
+});

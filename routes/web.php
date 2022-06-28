@@ -40,6 +40,7 @@ Route::name('users.posts.')->group(function() {
 
 Route::name('tags.')->group(function() {
     Route::get('/tags', [TagController::class, 'index'])->name('index');
+    Route::get('/tags/create', [TagController::class, 'create'])->name('create');
     Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('show');
     Route::get('/tags/{tag:slug}/edit', [TagController::class, 'edit'])->name('edit');
     Route::post('/tags', [TagController::class, 'store'])->name('store');
