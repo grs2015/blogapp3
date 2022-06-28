@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TagCreated;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTagRequest;
@@ -29,8 +30,12 @@ class TagController extends Controller
     public function store(StoreTagRequest $request)
     {
         $validated = $request->validated();
+        $title = $validated['title'];
+        $content = $validated['content'] ?? null;
 
         $this->tagRepository->createEntry($validated);
+
+        TagCreated::dispatch($title, $content);
 
         return redirect()->action([TagController::class, 'index']);
     }
