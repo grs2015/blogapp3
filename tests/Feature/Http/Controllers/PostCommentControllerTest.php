@@ -41,7 +41,7 @@ it('checks the validation and redirect', function() {
     $response->assertRedirect(route('posts.comments.index', ['post' => $post->slug]));
 });
 
-it('checks the session error when validation fails', function() {
+it('checks the session error when validation fails at storing', function() {
     $post = Post::factory()->create();
     $commentData = [
         'content' => 'Content of comment',
@@ -93,4 +93,45 @@ it('renders edit form for single comment entry by given ID', function() {
     $response->assertSee($comment->published);
     $response->assertDontSee($comment->summary);
     $response->assertSee($post->title);
+});
+
+/* ----------------------------- @update method ----------------------------- */
+it('checks the validation and redirect at update', function() {
+    $post = Post::factory()->hasComments(3)->create();
+    $commentData = [
+        'title' => 'Updated comment',
+        'content' => 'Updated comment content',
+        'published_at' => now()->addHours(5)
+    ];
+
+    $response = $this->put(action([PostCommentController::class, 'update'], ['post' => $post->slug, 'comment' => Comment::first()->id]), $commentData);
+
+    $response->assertSessionHasNoErrors();
+    $response->assertStatus(302);
+    $response->assertRedirect(action([PostCommentController::class, 'edit'], ['post' => $post->slug, 'comment' => Comment::first()->id]));
+});
+
+it('checks the updated comment is in database', function() {
+    $post = Post::factory()->hasComments(3)->create();
+    $commentData = [
+        'title' => 'Updated comment',
+        'content' => 'Updated comment content',
+        'published_at' => now()->addHours(5)
+    ];
+
+    $this->put(action([PostCommentController::class, 'update'], ['post' => $post->slug, 'comment' => Comment::first()->id]), $commentData);
+
+    $this->assertDatabaseHas('comments', ['title' => 'Updated comment']);
+});
+
+it('checks the session error when validation fails at update', function() {
+    $post = Post::factory()->hasComments(3)->create();
+    $commentData = [
+        'content' => 'Updated comment content',
+        'published_at' => now()
+    ];
+
+    $response = $this->put(action([PostCommentController::class, 'update'], ['post' => $post->slug, 'comment' => Comment::first()->id]), $commentData);
+
+    $response->assertSessionHasErrors();
 });
