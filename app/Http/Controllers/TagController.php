@@ -78,6 +78,13 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
+        $title = $tag->title;
+        $content = $tag->content ?? null;
 
+        $tag->posts()->detach();
+
+        $this->tagRepository->deleteEntry($tag->id);
+
+        return redirect()->action([TagController::class, 'index']);
     }
 }
