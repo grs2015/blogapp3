@@ -113,3 +113,15 @@ it('test the content of the CategoryCreatedNotificationMarkdown mailable', funct
     $mailable->assertSeeInHtml('Category Title');
     $mailable->assertSeeInHtml('Category Content');
 });
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single cat entry by given slug', function() {
+    $cat = Category::factory()->create();
+
+    $response = $this->get(action([CategoryController::class, 'show'], ['category' => $cat->slug]));
+
+    $response->assertSee($cat->title);
+    $response->assertSee($cat->content);
+    $response->assertSee($cat->slug);
+    $response->assertDontSee($cat->summary);
+});
