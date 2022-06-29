@@ -125,3 +125,15 @@ it('renders single cat entry by given slug', function() {
     $response->assertSee($cat->slug);
     $response->assertDontSee($cat->summary);
 });
+
+/* ------------------------------ @edit method ------------------------------ */
+it('renders edit form for cat by given slug', function() {
+    $cat = Category::factory()->create();
+
+    $response = $this->get(action([CategoryController::class, 'edit'], ['category' => $cat->slug]));
+
+    $response->assertSee($cat->title);
+    $response->assertSee($cat->content);
+    $response->assertSee($cat->slug);
+    $response->assertDontSee($cat->summary);
+});
