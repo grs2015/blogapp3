@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Interfaces\CommentRepositoryInterface;
 
 class PostCommentController extends Controller
 {
+
+    public function __construct(
+        private CommentRepositoryInterface $commentRepository
+    ) {  }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Post $post)
     {
-        //
+        $comments = $this->commentRepository->getAllEntries($post->id);
+
+        return view('comment.index', ['comments' => $comments, 'post' => $post ]);
     }
 
     /**
