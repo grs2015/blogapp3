@@ -5,6 +5,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use App\Events\TagCreated;
+use App\Events\TagDeleted;
 use App\Events\TagUpdated;
 use App\Http\Controllers\TagController;
 use App\Mail\TagCreatedNotificationMarkdown;

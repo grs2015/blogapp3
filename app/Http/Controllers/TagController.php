@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Events\TagCreated;
+use App\Events\TagDeleted;
 use App\Events\TagUpdated;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -79,11 +80,13 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         $title = $tag->title;
-        $content = $tag->content ?? null;
+        $content = $tag->content ?? 'No content provided';
 
         $tag->posts()->detach();
 
         $this->tagRepository->deleteEntry($tag->id);
+
+        TagDeleted::dispatch($title, $content);
 
         return redirect()->action([TagController::class, 'index']);
     }
