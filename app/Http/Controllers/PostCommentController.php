@@ -71,9 +71,11 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post, Comment $comment)
     {
-        //
+        $comment = $this->commentRepository->getEntryById($post->id, $comment->id);
+
+        return view('comment.edit', compact('post', 'comment'));
     }
 
     /**
