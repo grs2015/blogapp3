@@ -69,3 +69,15 @@ it('checks the stored comment has some predefined properties and resides in data
         'published_at' => $time
     ]);
 });
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single comment entry by given ID', function() {
+    $post = Post::factory()->hasComments(3)->create();
+    $comment = Comment::first();
+
+    $response = $this->get(action([PostCommentController::class, 'show'], ['post' => $post->slug, 'comment' => $comment->id]));
+
+    $response->assertSee($comment->title);
+    $response->assertSee($post->title);
+    $response->assertDontSee($post->content);
+});
