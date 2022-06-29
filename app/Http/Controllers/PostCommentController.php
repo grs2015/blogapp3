@@ -31,7 +31,7 @@ class PostCommentController extends Controller
      */
     public function create()
     {
-        //
+        return view('comment.create');
     }
 
     /**
