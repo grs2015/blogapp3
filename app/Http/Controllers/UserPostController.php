@@ -205,6 +205,7 @@ class UserPostController extends Controller
 
         $this->postRepository->updateEntry($user->id, $post->id, $validated);
 
+
         if ($request->has('tags')) {
             $tagIDs = $request->input('tags');
             $post->tags()->sync($tagIDs);
