@@ -259,7 +259,7 @@ it('renders edit form for single post entry by given slug', function() {
     $user = User::factory()->hasPosts(3)->create();
     $post = Post::first();
 
-    $response = $this->get(action([UserPostController::class, 'show'], ['user' => $user->id, 'post' => $post->slug]));
+    $response = $this->get(action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]));
 
     $response->assertSee($post->title);
     $response->assertSee($post->slug);

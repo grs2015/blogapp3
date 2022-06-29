@@ -5,6 +5,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPostController;
+use App\Http\Controllers\PostCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +59,7 @@ Route::name('categories.')->group(function() {
     Route::put('/categories/{category:slug}', [CategoryController::class, 'update'])->name('update');
     Route::delete('/categories/{category:slug}', [CategoryController::class, 'destroy'])->name('delete');
 });
+
+Route::get('/comments/create', [PostCommentController::class, 'create'])->name('comments.create');
+Route::resource('posts.comments', PostCommentController::class);
+
