@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Interfaces\CommentRepositoryInterface;
 
 class PostCommentController extends Controller
@@ -85,9 +86,13 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCommentRequest $request, Post $post, Comment $comment)
     {
-        //
+        $validated = $request->validated();
+
+        $this->commentRepository->updateEntry($post->id, $comment->id, $validated);
+
+        return redirect()->action([PostCommentController::class, 'edit'], ['post' => $post->slug, 'comment' => $comment->id]);
     }
 
     /**
