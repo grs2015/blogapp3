@@ -1,11 +1,15 @@
 <?php
 
+use App\Models\Tag;
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use App\Events\CategoryCreated;
+use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
 use App\Http\Controllers\CategoryController;
 use App\Mail\CategoryCreatedNotificationMarkdown;
+use App\Mail\CategoryDeletedNotificationMarkdown;
 use App\Mail\CategoryUpdatedNotificationMarkdown;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
@@ -251,4 +255,71 @@ it('checks the mails been queued from admin after updating the cat in database',
         }
         return true;
     });
+});
+
+/* ----------------------------- @destroy method ---------------------------- */
+it('checks the deletion of cat entry as well as entry in pivot-table', function() {
+    // Arrange #1
+    $user = User::factory()->create();
+    $post = Post::factory()
+        ->has(Category::factory()->count(1))
+        ->has(Tag::factory()->count(1))
+        ->for($user)
+        ->create(['title' => 'New Post Entry']);
+    // Assertion #1
+    $this->assertDatabaseHas('posts', ['slug' => $post->slug]);
+    $this->assertDatabaseHas('category_post', ['category_id' => Category::first()->id, 'post_id' => $post->id]);
+    $this->assertDatabaseHas('categories', ['id' => Category::first()->id, 'title' => Category::first()->title]);
+    $cat = Category::first();
+
+    $response = $this->delete(action([CategoryController::class, 'destroy'], ['category' => Category::first()->slug]));
+
+    $response->assertRedirect(action([CategoryController::class, 'index']));
+    $this->assertModelMissing($cat);
+    $this->assertDatabaseMissing('categories', $cat->toArray());
+    $this->assertDatabaseMissing('category_post', [
+        'post_id' => $post->id,
+        'category_id' => $cat->id
+    ]);
+});
+
+it('checks the event firing after deletion the category in database', function() {
+    $cat = Category::factory()->create();
+    Event::fake();
+
+    $response = $this->delete(action([CategoryController::class, 'destroy'], ['category' => $cat->slug]));
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Event::assertDispatched(CategoryDeleted::class);
+});
+
+it('checks the mails been queued from admin after deleting the category in database', function() {
+    Mail::fake();
+    $user = User::factory()->author()->create();
+    $cat = Category::factory()->create();
+
+    $response = $this->delete(action([CategoryController::class, 'destroy'], ['category' => $cat->slug]));
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Mail::assertQueued(function(CategoryDeletedNotificationMarkdown $mail) use ($cat, $user) {
+        if ( ! $mail->hasTo($user->email)) {
+            return false;
+        }
+        if ( $mail->title !== $cat->title ) {
+            return false;
+        }
+        return true;
+    });
+});
+
+it('test the content of the CategoryDeletedNotificationMarkdown mailable', function() {
+    $cat = Category::factory()->create();
+
+    $mailable = new CategoryDeletedNotificationMarkdown('Cat Title', 'Cat Content');
+
+    $mailable->assertSeeInHtml(config('contacts.admin_email'));
+    $mailable->assertSeeInHtml('Cat Title');
+    $mailable->assertSeeInHtml('Cat Content');
 });
