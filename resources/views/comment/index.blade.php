@@ -36,7 +36,7 @@
 
                 <div>
                     <p style="font-weight: bold; font-size: 20px; color: blue;">All comments attached to Post: {{ $post->title }}</p>
-                    @foreach ($posts as $post)
+                    @foreach ($comments as $comment)
                         <p><span style="font-weight: bold;">Comment ID: </span>{{ $comment->id }}</p>
                         <p><span style="font-weight: bold;">Comment title: </span>{{ $comment->title }}</p>
                         <p><span style="font-weight: bold;">Comment published: </span>{{ $comment->published }}</p>
