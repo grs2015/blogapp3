@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\CategoryRepositoryInterface;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct(
+        private CategoryRepositoryInterface $categoryRepository
+    ) {  }
+
+
     public function index()
     {
+        $cats = $this->categoryRepository->getAllEntries();
 
+        return view('category.index', ['cats' => $cats]);
     }
 
     public function create()
