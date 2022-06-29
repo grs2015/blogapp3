@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPostController;
 
 /*
@@ -46,4 +47,14 @@ Route::name('tags.')->group(function() {
     Route::post('/tags', [TagController::class, 'store'])->name('store');
     Route::put('/tags/{tag:slug}', [TagController::class, 'update'])->name('update');
     Route::delete('/tags/{tag:slug}', [TagController::class, 'destroy'])->name('delete');
+});
+
+Route::name('categories.')->group(function() {
+    Route::get('/categories', [CategoryController::class, 'index'])->name('index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('create');
+    Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('show');
+    Route::get('/categories/{category:slug}/edit', [CategoryController::class, 'edit'])->name('edit');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('store');
+    Route::put('/categories/{category:slug}', [CategoryController::class, 'update'])->name('update');
+    Route::delete('/categories/{category:slug}', [CategoryController::class, 'destroy'])->name('delete');
 });
