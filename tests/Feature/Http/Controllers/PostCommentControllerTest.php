@@ -135,3 +135,15 @@ it('checks the session error when validation fails at update', function() {
 
     $response->assertSessionHasErrors();
 });
+
+/* ----------------------------- @destroy method ---------------------------- */
+it('checks the deletion of entry', function() {
+    $post = Post::factory()->hasComments(3)->create();
+    $comment = Comment::first();
+
+    $response = $this->delete(action([PostCommentController::class, 'destroy'], ['post' => $post->slug, 'comment' => Comment::first()->id]));
+
+    $response->assertRedirect(route('posts.comments.index', ['post' => $post->slug]));
+    $this->assertModelMissing($comment);
+    $this->assertDatabaseMissing('comments', $comment->toArray());
+});
