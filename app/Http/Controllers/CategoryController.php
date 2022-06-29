@@ -42,7 +42,9 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
+        $cat = $this->categoryRepository->getEntryById($category->id);
 
+        return view('category.show', ['category' => $cat]);
     }
 
     public function edit(Category $category)
