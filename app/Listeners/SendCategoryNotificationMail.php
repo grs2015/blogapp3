@@ -5,9 +5,11 @@ namespace App\Listeners;
 use App\Models\User;
 
 use App\Events\CategoryCreated;
+use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CategoryCreatedNotificationMarkdown;
+use App\Mail\CategoryDeletedNotificationMarkdown;
 use App\Mail\CategoryUpdatedNotificationMarkdown;
 
 
@@ -29,6 +31,14 @@ class SendCategoryNotificationMail
         }
     }
 
+    public function handleCategoryDeletedNotification(CategoryDeleted $event)
+    {
+        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+            Mail::to($author_email)->later(now()->addMinutes(10), new CategoryDeletedNotificationMarkdown($event->title, $event->content));
+            // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
+        }
+    }
+
 
     /**
      * Register the listeners for the subscriber.
@@ -46,6 +56,11 @@ class SendCategoryNotificationMail
         $events->listen(
             CategoryUpdated::class,
             [SendCategoryNotificationMail::class, 'handleCategoryUpdatedNotification']
+        );
+
+        $events->listen(
+            CategoryDeleted::class,
+            [SendCategoryNotificationMail::class, 'handleCategoryDeletedNotification']
         );
 
 

@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Events\CategoryCreated;
+use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -78,6 +79,15 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        $title = $category->title;
+        $content = $category->content ?? 'No content provided';
 
+        $category->posts()->detach();
+
+        $this->categoryRepository->deleteEntry($category->id);
+
+        CategoryDeleted::dispatch($title, $content);
+
+        return redirect()->action([CategoryController::class, 'index']);
     }
 }
