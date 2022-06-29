@@ -101,8 +101,10 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post, Comment $comment)
     {
-        //
+        $this->commentRepository->deleteEntry($post->id, $comment->id);
+
+        return redirect()->action([PostCommentController::class, 'index'], ['post' => $post->slug]);
     }
 }
