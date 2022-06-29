@@ -240,21 +240,29 @@ it('checks the deletion of entry as well as entry in pivot-table', function() {
     // Assertion #1
     $this->assertDatabaseHas('posts', ['slug' => $post->slug]);
     $this->assertDatabaseHas('post_tag', ['tag_id' => Tag::first()->id, 'post_id' => $post->id]);
-    $this->assertDatabaseHas('tags', ['tag_id' => Tag::first()->id, 'title' => Tag::first()->title]);
+    $this->assertDatabaseHas('tags', ['id' => Tag::first()->id, 'title' => Tag::first()->title]);
+    $tag = Tag::first();
 
     $response = $this->delete(action([TagController::class, 'destroy'], ['tag' => Tag::first()->slug]));
 
-    $response->assertRedirect(route('users.posts.index', ['user' => $user->id]));
-    $this->assertModelMissing(Tag::first());
-    $this->assertDatabaseMissing('tags', Tag::first()->toArray());
+    $response->assertRedirect(action([TagController::class, 'index']));
+    $this->assertModelMissing($tag);
+    $this->assertDatabaseMissing('tags', $tag->toArray());
     $this->assertDatabaseMissing('post_tag', [
         'post_id' => $post->id,
-        'tag_id' => Tag::first()->id
+        'tag_id' => $tag->id
     ]);
 });
 
 it('checks the event firing after deletion the tag in database', function() {
+    $tag = Tag::factory()->create();
+    Event::fake();
 
+    $response = $this->delete(action([TagController::class, 'destroy'], ['tag' => $tag->slug]));
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    Event::assertDispatched(TagDeleted::class);
 });
 
 it('checks the mails been queued from admin after deleting the tag in database', function() {
