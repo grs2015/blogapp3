@@ -49,7 +49,9 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+        $cat = $this->categoryRepository->getEntryById($category->id);
 
+        return view('category.edit', ['category' => $cat]);
     }
 
     public function update(Request $request, Category $category)
