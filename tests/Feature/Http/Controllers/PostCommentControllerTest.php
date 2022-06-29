@@ -81,3 +81,16 @@ it('renders single comment entry by given ID', function() {
     $response->assertSee($post->title);
     $response->assertDontSee($post->content);
 });
+
+/* ------------------------------ @edit method ------------------------------ */
+it('renders edit form for single comment entry by given ID', function() {
+    $post = Post::factory()->hasComments(3)->create();
+    $comment = Comment::first();
+
+    $response = $this->get(action([PostCommentController::class, 'edit'], ['post' => $post->slug, 'comment' => $comment->id]));
+
+    $response->assertSee($comment->title);
+    $response->assertSee($comment->published);
+    $response->assertDontSee($comment->summary);
+    $response->assertSee($post->title);
+});
