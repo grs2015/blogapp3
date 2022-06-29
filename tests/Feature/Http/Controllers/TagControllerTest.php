@@ -271,20 +271,16 @@ it('checks the mails been queued from admin after deleting the tag in database',
     Mail::fake();
     $user = User::factory()->author()->create();
     $tag = Tag::factory()->create();
-    $tagData = [
-        'title' => 'Newest tag',
-        'content' => 'Content of the newest tag',
-    ];
 
     $response = $this->delete(action([TagController::class, 'destroy'], ['tag' => $tag->slug]));
 
     $response->assertStatus(302);
     $response->assertSessionHasNoErrors();
-    Mail::assertQueued(function(TagDeletedNotificationMarkdown $mail) use ($tagData, $user) {
+    Mail::assertQueued(function(TagDeletedNotificationMarkdown $mail) use ($tag, $user) {
         if ( ! $mail->hasTo($user->email)) {
             return false;
         }
-        if ( $mail->title !== $tagData['title'] ) {
+        if ( $mail->title !== $tag->title ) {
             return false;
         }
         return true;
@@ -292,6 +288,12 @@ it('checks the mails been queued from admin after deleting the tag in database',
 });
 
 it('test the content of the TagDeletedNotificationMarkdown mailable', function() {
+    $tag = Tag::factory()->create();
 
+    $mailable = new TagDeletedNotificationMarkdown('Tag Title', 'Tag Content');
+
+    $mailable->assertSeeInHtml(config('contacts.admin_email'));
+    $mailable->assertSeeInHtml('Tag Title');
+    $mailable->assertSeeInHtml('Tag Content');
 });
 
