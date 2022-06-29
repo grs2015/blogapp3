@@ -19,10 +19,10 @@ class TagDeleted
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(
+        public string $title,
+        public string $content
+    ) {  }
 
     /**
      * Get the channels the event should broadcast on.

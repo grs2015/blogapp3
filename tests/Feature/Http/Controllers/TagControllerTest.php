@@ -9,6 +9,7 @@ use App\Events\TagDeleted;
 use App\Events\TagUpdated;
 use App\Http\Controllers\TagController;
 use App\Mail\TagCreatedNotificationMarkdown;
+use App\Mail\TagDeletedNotificationMarkdown;
 use App\Mail\TagUpdatedNotificationMarkdown;
 
 uses()->group('TagController');

@@ -4,9 +4,11 @@ namespace App\Listeners;
 
 use App\Models\User;
 use App\Events\TagCreated;
+use App\Events\TagDeleted;
 use App\Events\TagUpdated;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TagCreatedNotificationMarkdown;
+use App\Mail\TagDeletedNotificationMarkdown;
 use App\Mail\TagUpdatedNotificationMarkdown;
 
 class SendTagNotificationMail
@@ -27,6 +29,14 @@ class SendTagNotificationMail
         }
     }
 
+    public function handleTagDeletedNotification(TagDeleted $event)
+    {
+        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+            Mail::to($author_email)->later(now()->addMinutes(10), new TagDeletedNotificationMarkdown($event->title, $event->content));
+            // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
+        }
+    }
+
     /**
      * Register the listeners for the subscriber.
      *
@@ -43,6 +53,11 @@ class SendTagNotificationMail
         $events->listen(
             TagUpdated::class,
             [SendTagNotificationMail::class, 'handleTagUpdatedNotification']
+        );
+
+        $events->listen(
+            TagDeleted::class,
+            [SendTagNotificationMail::class, 'handleTagDeletedNotification']
         );
 
 
