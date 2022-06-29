@@ -21,3 +21,5 @@ it('renders the cat page with cats data', function() {
 it('renders create cat form', function() {
     $this->get('/categories/create')->assertSee('Form for cat creations');
 });
+
+

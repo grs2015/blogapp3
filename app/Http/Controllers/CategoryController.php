@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\CategoryRepositoryInterface;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Events\CategoryCreated;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Interfaces\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
@@ -25,9 +27,17 @@ class CategoryController extends Controller
         return view('category.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
+        $validated = $request->validated();
+        $title = $validated['title'];
+        $content = $validated['content'] ?? 'No content provided';
 
+        $this->categoryRepository->createEntry($validated);
+
+        CategoryCreated::dispatch($title, $content);
+
+        return redirect()->action([CategoryController::class, 'index']);
     }
 
     public function show(Category $category)
