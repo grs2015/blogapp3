@@ -18,3 +18,8 @@ it('renders the comment page with comments data', function() {
     $response->assertSee($post->title);
     $response->assertSee($commentTitle);
 });
+
+/* ----------------------------- @create method ----------------------------- */
+it('renders create comment form', function() {
+    $this->get('/comments/create')->assertSee('Form for comment creation');
+});
