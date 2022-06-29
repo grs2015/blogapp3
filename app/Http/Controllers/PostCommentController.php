@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCommentRequest;
 use App\Interfaces\CommentRepositoryInterface;
 
 class PostCommentController extends Controller
@@ -21,7 +23,7 @@ class PostCommentController extends Controller
     {
         $comments = $this->commentRepository->getAllEntries($post->id);
 
-        return view('comment.index', ['comments' => $comments, 'post' => $post ]);
+        return view('comment.index', compact('comments', 'post'));
     }
 
     /**
@@ -40,9 +42,14 @@ class PostCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request, Post $post)
     {
-        //
+        $validated = $request->validated();
+        $validated['published'] = Comment::UNPUBLISHED;
+
+        $this->commentRepository->createEntry($post->id, $validated);
+
+        return redirect()->action([PostCommentController::class, 'index'], ['post' => $post->slug]);
     }
 
     /**
