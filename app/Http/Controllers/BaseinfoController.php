@@ -82,4 +82,11 @@ class BaseinfoController extends Controller
 
         return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $baseinfo->id]);
     }
+
+    public function destroy(Baseinfo $baseinfo)
+    {
+        $this->baseinfoRepository->deleteEntry($baseinfo->id);
+
+        return redirect()->action([BaseinfoController::class, 'index']);
+    }
 }
