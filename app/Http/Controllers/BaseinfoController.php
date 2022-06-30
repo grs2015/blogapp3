@@ -6,6 +6,7 @@ use App\Models\Baseinfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreBaseinfoRequest;
+use App\Http\Requests\UpdateBaseinfoRequest;
 use App\Interfaces\BaseinfoRepositoryInterface;
 
 class BaseinfoController extends Controller
@@ -56,5 +57,29 @@ class BaseinfoController extends Controller
         $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
 
         return view('baseinfo.edit', compact(['info']));
+    }
+
+    public function update(UpdateBaseinfoRequest $request, Baseinfo $baseinfo)
+    {
+        $validated = $request->safe()->except(['hero_image']);
+
+        if ($request->has('hero_image')) {
+            $file = $request->file('hero_image');
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+
+            try {
+                Storage::disk('public')->delete($baseinfo->hero_image);
+            } catch(\Exception $e) {
+                throw $e;
+            }
+
+            $path = Storage::putFileAs('uploads', $file, $filename);
+            $validated['hero_image'] = $path;
+        }
+
+        $this->baseinfoRepository->updateEntry($baseinfo->id, $validated);
+
+        return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $baseinfo->id]);
     }
 }
