@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\BaseinfoController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\PostCommentController;
@@ -66,3 +67,5 @@ Route::resource('posts.comments', PostCommentController::class);
 
 Route::get('/postmetas/create', [PostPostmetaController::class, 'create'])->name('postmetas.create');
 Route::resource('posts.postmetas', PostPostmetaController::class);
+
+Route::resource('/baseinfo', BaseinfoController::class);
