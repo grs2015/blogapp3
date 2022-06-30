@@ -82,3 +82,15 @@ it('checks the hero-image upload and its url resides in database after info stor
     ]);
     $response->assertStatus(302);
 });
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single info entry by given ID', function() {
+    $base = Baseinfo::factory()->create();
+
+    $response = $this->get(action([BaseinfoController::class, 'show'], ['baseinfo' => $base->id]));
+
+    $response->assertSee($base->title);
+    $response->assertSee($base->content);
+    $response->assertSee($base->address);
+    $response->assertDontSee($base->summary);
+});
