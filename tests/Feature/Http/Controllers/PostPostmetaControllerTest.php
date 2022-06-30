@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Models\Postmeta;
 use App\Http\Controllers\PostPostmetaController;
 
 uses()->group('PPMC');
@@ -37,4 +38,16 @@ it('checks the validation and redirect', function() {
     $response->assertStatus(302);
     $response->assertSessionHasNoErrors();
     $response->assertRedirect(route('posts.postmetas.index', ['post' => $post->slug]));
+});
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single postmeta entry by given ID', function() {
+    $post = Post::factory()->hasPostmetas(3)->create();
+    $postmeta = Postmeta::first();
+
+    $response = $this->get(action([PostPostmetaController::class, 'show'], ['post' => $post->slug, 'postmeta' => $postmeta->id]));
+
+    $response->assertSee($postmeta->key);
+    $response->assertSee($post->title);
+    $response->assertDontSee($post->content);
 });
