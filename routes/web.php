@@ -63,4 +63,6 @@ Route::name('categories.')->group(function() {
 
 Route::get('/comments/create', [PostCommentController::class, 'create'])->name('comments.create');
 Route::resource('posts.comments', PostCommentController::class);
+
+Route::get('/postmetas/create', [PostPostmetaController::class, 'create'])->name('postmetas.create');
 Route::resource('posts.postmetas', PostPostmetaController::class);

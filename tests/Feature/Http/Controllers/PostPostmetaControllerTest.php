@@ -19,3 +19,7 @@ it('renders the postmeta page with postmeta data', function() {
     $response->assertSee($postmetaKey);
 });
 
+/* ----------------------------- @create method ----------------------------- */
+it('renders create postmeta form', function() {
+    $this->get('/postmetas/create')->assertSee('Form for postmeta creation');
+});

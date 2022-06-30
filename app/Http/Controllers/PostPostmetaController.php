@@ -30,7 +30,7 @@ class PostPostmetaController extends Controller
      */
     public function create()
     {
-        //
+        return view('postmeta.create');
     }
 
     /**
