@@ -10,7 +10,7 @@ use App\Interfaces\PostmetaRepositoryInterface;
 
 
 
-class CommentRepository implements PostmetaRepositoryInterface
+class PostmetaRepository implements PostmetaRepositoryInterface
 {
     protected Model $model;
 
