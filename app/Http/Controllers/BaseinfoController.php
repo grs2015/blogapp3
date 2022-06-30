@@ -50,4 +50,11 @@ class BaseinfoController extends Controller
 
         return view('baseinfo.show', compact(['info']));
     }
+
+    public function edit(Baseinfo $baseinfo)
+    {
+        $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
+
+        return view('baseinfo.edit', compact(['info']));
+    }
 }
