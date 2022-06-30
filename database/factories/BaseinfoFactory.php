@@ -17,7 +17,14 @@ class BaseinfoFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->word(),
+            'content' => $this->faker->text(),
+            'meta_title' => $this->faker->sentence(),
+            'hero_image' => $this->faker->imageUrl(640, 480, 'baseinfo-image', true),
+            'email' => $this->faker->unique()->safeEmail(),
+            'address' => $this->faker->address(),
+            'phone' => $this->faker->phoneNumber(),
+            'website' => $this->faker->domainName()
         ];
     }
 }

@@ -2,9 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Baseinfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreBaseinfoRequest;
+use App\Http\Requests\UpdateBaseinfoRequest;
+use App\Interfaces\BaseinfoRepositoryInterface;
 
 class BaseinfoController extends Controller
 {
-    //
+    public function __construct(
+        private BaseinfoRepositoryInterface $baseinfoRepository
+    ) {  }
+
+    public function index()
+    {
+        $infos = $this->baseinfoRepository->getAllEntries();
+
+        return view('baseinfo.index', compact(['infos']));
+    }
+
+    public function create()
+    {
+        return view('baseinfo.create');
+    }
+
+    public function store(StoreBaseinfoRequest $request)
+    {
+        $validated = $request->safe()->except(['hero_image']);
+
+        if ($request->has('hero_image')) {
+            $file = $request->file('hero_image');
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+
+            $path = Storage::putFileAs('uploads', $file, $filename);
+            $validated['hero_image'] = $path;
+        }
+
+        $this->baseinfoRepository->createEntry($validated);
+
+        return redirect()->action([BaseinfoController::class, 'index']);
+    }
+
+    public function show(Baseinfo $baseinfo)
+    {
+        $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
+
+        return view('baseinfo.show', compact(['info']));
+    }
+
+    public function edit(Baseinfo $baseinfo)
+    {
+        $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
+
+        return view('baseinfo.edit', compact(['info']));
+    }
+
+    public function update(UpdateBaseinfoRequest $request, Baseinfo $baseinfo)
+    {
+        $validated = $request->safe()->except(['hero_image']);
+
+        if ($request->has('hero_image')) {
+            $file = $request->file('hero_image');
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+
+            try {
+                Storage::disk('public')->delete($baseinfo->hero_image);
+            } catch(\Exception $e) {
+                throw $e;
+            }
+
+            $path = Storage::putFileAs('uploads', $file, $filename);
+            $validated['hero_image'] = $path;
+        }
+
+        $this->baseinfoRepository->updateEntry($baseinfo->id, $validated);
+
+        return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $baseinfo->id]);
+    }
+
+    public function destroy(Baseinfo $baseinfo)
+    {
+        $this->baseinfoRepository->deleteEntry($baseinfo->id);
+
+        return redirect()->action([BaseinfoController::class, 'index']);
+    }
 }
