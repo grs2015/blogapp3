@@ -51,3 +51,16 @@ it('renders single postmeta entry by given ID', function() {
     $response->assertSee($post->title);
     $response->assertDontSee($post->content);
 });
+
+/* ------------------------------ @edit method ------------------------------ */
+it('renders edit form for single postmeta entry by given ID', function() {
+    $post = Post::factory()->hasPostmetas(3)->create();
+    $postmeta = Postmeta::first();
+
+    $response = $this->get(action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'postmeta' => $postmeta->id]));
+
+    $response->assertSee($postmeta->key);
+    $response->assertSee($postmeta->content);
+    $response->assertDontSee($postmeta->summary);
+    $response->assertSee($post->title);
+});
