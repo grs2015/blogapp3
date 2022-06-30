@@ -94,3 +94,15 @@ it('renders single info entry by given ID', function() {
     $response->assertSee($base->address);
     $response->assertDontSee($base->summary);
 });
+
+/* ------------------------------ @edit method ------------------------------ */
+it('renders edit form for info entry by given ID', function() {
+    $base = Baseinfo::factory()->create();
+
+    $response = $this->get(action([BaseinfoController::class, 'edit'], ['baseinfo' => $base->id]));
+
+    $response->assertSee($base->title);
+    $response->assertSee($base->content);
+    $response->assertSee($base->address);
+    $response->assertDontSee($base->summary);
+});
