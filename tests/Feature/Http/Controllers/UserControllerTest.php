@@ -28,3 +28,14 @@ it('renders single user entry by given ID', function() {
     $response->assertSee($user->email);
     $response->assertDontSee($user->summary);
 });
+
+/* ----------------------------- @destroy method ---------------------------- */
+it('checks the deletion of entry', function() {
+    $user = User::factory()->create();
+
+    $response = $this->delete(action([UserController::class, 'destroy'], ['user' => $user->id]));
+
+    $response->assertRedirect(route('users.index'));
+    $this->assertModelMissing($user);
+    $this->assertDatabaseMissing('users', $user->toArray());
+});
