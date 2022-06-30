@@ -17,4 +17,9 @@ class BaseinfoController extends Controller
 
         return view('baseinfo.index', compact(['infos']));
     }
+
+    public function create()
+    {
+        return view('baseinfo.create');
+    }
 }
