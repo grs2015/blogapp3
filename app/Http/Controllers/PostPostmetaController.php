@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostmetaRequest;
 use App\Interfaces\PostmetaRepositoryInterface;
 
 class PostPostmetaController extends Controller
@@ -39,9 +40,13 @@ class PostPostmetaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostmetaRequest $request, Post $post)
     {
-        //
+        $validated = $request->validated();
+
+        $this->postmetaRepository->createEntry($post->id, $validated);
+
+        return redirect()->action([PostPostmetaController::class, 'index'], ['post' => $post->slug]);
     }
 
     /**
