@@ -23,3 +23,18 @@ it('renders the postmeta page with postmeta data', function() {
 it('renders create postmeta form', function() {
     $this->get('/postmetas/create')->assertSee('Form for postmeta creation');
 });
+
+/* ------------------------------ @store method ----------------------------- */
+it('checks the validation and redirect', function() {
+    $post = Post::factory()->create();
+    $postmetaData = [
+        'key' => 'New Meta',
+        'content' => 'Content of Metadata',
+    ];
+
+    $response = $this->post(action([PostPostmetaController::class, 'store'],['post' => $post->slug]), $postmetaData);
+
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    $response->assertRedirect(route('posts.postmetas.index', ['post' => $post->slug]));
+});
