@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Postmeta;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostmetaRequest;
 use App\Interfaces\PostmetaRepositoryInterface;
@@ -55,9 +56,11 @@ class PostPostmetaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post, Postmeta $postmeta)
     {
-        //
+        $postmeta = $this->postmetaRepository->getEntryById($post->id, $postmeta->id);
+
+        return view('postmeta.show', compact('post', 'postmeta'));
     }
 
     /**
