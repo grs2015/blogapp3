@@ -69,9 +69,11 @@ class PostPostmetaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post, Postmeta $postmeta)
     {
-        //
+        $postmeta = $this->postmetaRepository->getEntryById($post->id, $postmeta->id);
+
+        return view('postmeta.edit', compact('post', 'postmeta'));
     }
 
     /**
