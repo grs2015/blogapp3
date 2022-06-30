@@ -26,8 +26,14 @@ class UpdatePostmetaRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => ['string'],
+            // 'key' => ['string', 'unique:postmetas,key'],
+            'key' => ['string', Rule::unique('postmetas')->ignore($this->getPostmetaId())],
             'content' => ['string']
         ];
+    }
+
+    public function getPostmetaId():int
+    {
+        return $this->route()->parameter('postmeta')->id;
     }
 }

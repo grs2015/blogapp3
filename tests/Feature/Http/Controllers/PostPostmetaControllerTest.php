@@ -64,3 +64,31 @@ it('renders edit form for single postmeta entry by given ID', function() {
     $response->assertDontSee($postmeta->summary);
     $response->assertSee($post->title);
 });
+
+/* ----------------------------- @update method ----------------------------- */
+it('checks the validation and redirect at update', function() {
+    $post = Post::factory()->hasPostmetas(3)->create();
+    $postmetaData = [
+        'key' => 'Updated comment',
+        'content' => 'Updated comment content'
+    ];
+
+    $response = $this->put(action([PostPostmetaController::class, 'update'], ['post' => $post->slug, 'postmeta' => Postmeta::first()->id]), $postmetaData);
+
+    $response->assertSessionHasNoErrors();
+    $response->assertStatus(302);
+    $response->assertRedirect(action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'postmeta' => Postmeta::first()->id]));
+});
+
+it('checks the updated postmeta is in database', function() {
+    $post = Post::factory()->hasPostmetas(3)->create();
+    $postmetaData = [
+        'key' => 'Updated postmeta Key',
+        'content' => 'Updated postmeta content'
+    ];
+
+    $this->put(action([PostPostmetaController::class, 'update'], ['post' => $post->slug, 'postmeta' => Postmeta::first()->id]), $postmetaData);
+
+    $this->assertDatabaseHas('postmetas', ['key' => 'Updated postmeta Key']);
+});
+

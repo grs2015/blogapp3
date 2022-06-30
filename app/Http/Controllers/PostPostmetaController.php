@@ -90,7 +90,7 @@ class PostPostmetaController extends Controller
 
         $this->postmetaRepository->updateEntry($post->id, $postmeta->id, $validated);
 
-        return redirect()->action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'comment' => $postmeta->id]);
+        return redirect()->action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'postmeta' => $postmeta->id]);
     }
 
     /**
