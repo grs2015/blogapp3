@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\PostPostmetaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +63,4 @@ Route::name('categories.')->group(function() {
 
 Route::get('/comments/create', [PostCommentController::class, 'create'])->name('comments.create');
 Route::resource('posts.comments', PostCommentController::class);
-
+Route::resource('posts.postmetas', PostPostmetaController::class);
