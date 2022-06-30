@@ -183,3 +183,14 @@ it('checks the hero-image upload and its url resides in database after info upda
     $response->assertStatus(302);
 });
 
+/* ----------------------------- @destroy method ---------------------------- */
+it('checks the deletion of entry', function() {
+    $info = Baseinfo::factory()->create();
+
+    $response = $this->delete(action([BaseinfoController::class, 'destroy'], ['baseinfo' => $info->id]));
+
+    $response->assertRedirect(route('baseinfo.index'));
+    $this->assertModelMissing($info);
+    $this->assertDatabaseMissing('baseinfos', $info->toArray());
+});
+
