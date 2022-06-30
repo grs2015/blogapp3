@@ -68,4 +68,5 @@ Route::resource('posts.comments', PostCommentController::class);
 Route::get('/postmetas/create', [PostPostmetaController::class, 'create'])->name('postmetas.create');
 Route::resource('posts.postmetas', PostPostmetaController::class);
 
+Route::get('/baseinfo/create', [BaseinfoController::class, 'create'])->name('baseinfos.create');
 Route::resource('/baseinfo', BaseinfoController::class);

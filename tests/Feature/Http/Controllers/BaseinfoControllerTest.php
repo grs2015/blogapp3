@@ -16,3 +16,8 @@ it('renders the info page with infos data', function() {
     $response->assertSee('All infos:');
     $response->assertSee($infoAddress);
 });
+
+/* ----------------------------- @create method ----------------------------- */
+it('renders create baseinfo form', function() {
+    $this->get('/baseinfo/create')->assertSee('Form for baseinfo creation');
+});
