@@ -99,8 +99,10 @@ class PostPostmetaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post, Postmeta $postmeta)
     {
-        //
+        $this->postmetaRepository->deleteEntry($post->id, $postmeta->id);
+
+        return redirect()->action([PostPostmetaController::class, 'index'], ['post' => $post->slug]);
     }
 }
