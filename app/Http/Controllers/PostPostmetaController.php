@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Postmeta;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostmetaRequest;
+use App\Http\Requests\UpdatePostmetaRequest;
 use App\Interfaces\PostmetaRepositoryInterface;
 
 class PostPostmetaController extends Controller
@@ -83,9 +84,13 @@ class PostPostmetaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostmetaRequest $request, Post $post, Postmeta $postmeta)
     {
-        //
+        $validated = $request->validated();
+
+        $this->postmetaRepository->updateEntry($post->id, $postmeta->id, $validated);
+
+        return redirect()->action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'comment' => $postmeta->id]);
     }
 
     /**
