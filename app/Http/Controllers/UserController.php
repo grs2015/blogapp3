@@ -28,6 +28,8 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        $this->userRepository->deleteEntry($user->id);
 
+        return redirect()->action([UserController::class, 'index']);
     }
 }
