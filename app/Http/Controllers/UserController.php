@@ -21,7 +21,9 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user = $this->userRepository->getEntryById($user->id);
 
+        return view('user.show', compact(['user']));
     }
 
     public function destroy(User $user)
