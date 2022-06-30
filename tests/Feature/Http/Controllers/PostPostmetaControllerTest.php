@@ -92,3 +92,15 @@ it('checks the updated postmeta is in database', function() {
     $this->assertDatabaseHas('postmetas', ['key' => 'Updated postmeta Key']);
 });
 
+/* ----------------------------- @destroy method ---------------------------- */
+it('checks the deletion of entry', function() {
+    $post = Post::factory()->hasPostmetas(3)->create();
+    $postmeta = Postmeta::first();
+
+    $response = $this->delete(action([PostPostmetaController::class, 'destroy'], ['post' => $post->slug, 'postmeta' => Postmeta::first()->id]));
+
+    $response->assertRedirect(route('posts.postmetas.index', ['post' => $post->slug]));
+    $this->assertModelMissing($postmeta);
+    $this->assertDatabaseMissing('postmetas', $postmeta->toArray());
+});
+
