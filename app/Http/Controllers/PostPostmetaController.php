@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Interfaces\PostmetaRepositoryInterface;
 
 class PostPostmetaController extends Controller
 {
+    public function __construct(
+        private PostmetaRepositoryInterface $postmetaRepository
+    ) {}
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Post $post)
     {
-        //
+        $postmetas = $this->postmetaRepository->getAllEntries($post->id);
+
+        return view('postmeta.index', compact('postmetas', 'post'));
     }
 
     /**
