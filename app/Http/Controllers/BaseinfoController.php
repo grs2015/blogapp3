@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Baseinfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreBaseinfoRequest;
@@ -41,5 +42,12 @@ class BaseinfoController extends Controller
         $this->baseinfoRepository->createEntry($validated);
 
         return redirect()->action([BaseinfoController::class, 'index']);
+    }
+
+    public function show(Baseinfo $baseinfo)
+    {
+        $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
+
+        return view('baseinfo.show', compact(['info']));
     }
 }
