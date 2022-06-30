@@ -25,7 +25,7 @@ it('renders create baseinfo form', function() {
 });
 
 /* ------------------------------ @store method ----------------------------- */
-it('checks the validation and redirect', function() {
+it('checks the validation and redirect on storing', function() {
     $baseData = [
         'title' => 'New info',
         'meta_title' => 'Meta information',
@@ -39,7 +39,7 @@ it('checks the validation and redirect', function() {
     $response->assertRedirect(route('baseinfo.index'));
 });
 
-it('checks the session error when validation fails', function() {
+it('checks the session error when validation fails on storing', function() {
     $baseData = [
         'meta_title' => 'Meta information',
         'content' => 'Info content',
@@ -50,7 +50,7 @@ it('checks the session error when validation fails', function() {
     $response->assertSessionHasErrors();
 });
 
-it('checks the stored post info in database', function() {
+it('checks the stored info in database', function() {
     $baseData = [
         'title' => 'New info',
         'meta_title' => 'Meta information',
@@ -106,3 +106,80 @@ it('renders edit form for info entry by given ID', function() {
     $response->assertSee($base->address);
     $response->assertDontSee($base->summary);
 });
+
+/* ----------------------------- @update method ----------------------------- */
+it('checks the validation and redirect on updating', function() {
+    $info = Baseinfo::factory()->create();
+
+    $baseData = [
+        'title' => 'New info',
+        'meta_title' => 'Meta information',
+        'content' => 'Info content',
+    ];
+
+    $response = $this->put(action([BaseinfoController::class, 'update'], ['baseinfo' => $info->id]), $baseData);
+
+    $response->assertSessionHasNoErrors();
+    $response->assertStatus(302);
+    $response->assertRedirect(action([BaseinfoController::class, 'edit'], ['baseinfo' => $info->id]));
+});
+
+it('checks the updated info in database', function() {
+    $info = Baseinfo::factory()->create();
+    $baseData = [
+        'title' => 'New info',
+        'meta_title' => 'Meta information',
+        'content' => 'Info content',
+    ];
+
+    $response = $this->put(action([BaseinfoController::class, 'update'], ['baseinfo' => $info->id]), $baseData);
+
+    $this->assertDatabaseHas('baseinfos', ['title' => 'New info']);
+    $response->assertStatus(302);
+    $response->assertRedirect(action([BaseinfoController::class, 'edit'], ['baseinfo' => $info->id]));
+});
+
+it('checks the hero-image upload and its url resides in database after info updating', function() {
+    // Arrange #1
+    testTime()->freeze('2022-01-01 00:00:00');
+    Storage::fake('public');
+    $file = UploadedFile::fake()->image('test.jpg');
+    $baseData = [
+        'title' => 'New info',
+        'hero_image' => $file,
+        'meta_title' => 'Meta information',
+        'content' => 'Info content',
+    ];
+    // Action #1
+    $response = $this->post(action([BaseinfoController::class, 'store']), $baseData);
+    // Assertion #1
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    $this->assertDatabaseHas('baseinfos', [
+        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+    ]);
+    $response->assertStatus(302);
+
+    // Arrange #2
+    testTime()->addHour();
+    $file = UploadedFile::fake()->image('test.jpg');
+    $baseData = [
+        'title' => 'Newest info',
+        'hero_image' => $file,
+        'meta_title' => 'New meta information',
+        'content' => 'New info content',
+    ];
+    $info = Baseinfo::first();
+    // Action #2
+    $response = $this->put(action([BaseinfoController::class, 'update'], ['baseinfo' => $info->id]), $baseData);
+    // Assertion #2
+    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test.jpg');
+    $this->assertDatabaseMissing('baseinfos', [
+        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+    ]);
+    $this->assertDatabaseHas('baseinfos', [
+        'hero_image' => 'uploads/2022-01-01-01-00-00-test.jpg'
+    ]);
+    $response->assertStatus(302);
+});
+
