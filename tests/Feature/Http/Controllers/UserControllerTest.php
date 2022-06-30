@@ -16,3 +16,15 @@ it('renders the user page with users data', function() {
     $response->assertSee('All users:');
     $response->assertSee($userEmail);
 });
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single user entry by given ID', function() {
+    $user = User::factory()->create();
+
+    $response = $this->get(action([UserController::class, 'show'], ['user' => $user->id]));
+
+    $response->assertSee($user->first_name);
+    $response->assertSee($user->last_name);
+    $response->assertSee($user->email);
+    $response->assertDontSee($user->summary);
+});
