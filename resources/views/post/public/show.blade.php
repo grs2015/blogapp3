@@ -35,7 +35,7 @@
 
 
                 <div>
-                    <p style="font-weight: bold; font-size: 20px; color: blue;">Post with all relationships:</p>
+                    <p style="font-weight: bold; font-size: 20px; color: blue;">Single Post with all relationships:</p>
 
                         <p><span style="font-weight: bold;">User of post: </span>{{ $post->user->first_name }}</p>
                         <p><span style="font-weight: bold;">Post ID: </span>{{ $post->id }}</p>

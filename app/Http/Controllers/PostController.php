@@ -20,13 +20,15 @@ class PostController extends Controller
             return $this->publicPostRepository->getAllEntries();
         });
 
-        return view('post.public.index', compact(['posts']));
+        return response()->view('post.public.index', compact(['posts']));
     }
 
-    public function show(Post $post)
+    public function show(Post $post, CacheService $cacheService, Request $request)
     {
-        $post = $this->publicPostRepository->getEntryById($post->id);
+        $post = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($post) {
+            return $this->publicPostRepository->getEntryById($post->id);
+        });
 
-        return view('post.public.show', compact(['post']));
+        return response()->view('post.public.show', compact('post'))->withCookie(cookie('user', 'works', 5))->withHeaders(['SSS' => 'SSS']);
     }
 }
