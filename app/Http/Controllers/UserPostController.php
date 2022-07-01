@@ -8,12 +8,12 @@ use App\Events\PostCreated;
 use App\Events\PostDeleted;
 use App\Events\PostUpdated;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
-use PhpParser\Node\Expr\PostDec;
+use App\Services\CacheService;
 
 class UserPostController extends Controller
 {
@@ -32,11 +32,13 @@ class UserPostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index(User $user, CacheService $cacheService)
     {
         // TODO - Add policy in order to show posts only for those who created them
 
-        $posts = $this->postRepository->getAllEntries($user->id);
+        $posts = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($user) {
+            return $this->postRepository->getAllEntries($user->id);
+        });
 
         return view('post.index', ['posts' => $posts, 'user' => $user ]);
     }

@@ -20,8 +20,6 @@ class UserController extends Controller
             return $this->userRepository->getAllEntries();
         });
 
-        // $users = $this->userRepository->getAllEntries();
-
         return view('user.index', compact(['users']));
     }
 
