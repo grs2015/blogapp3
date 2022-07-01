@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\CacheService;
+use Illuminate\Support\Facades\Cache;
 use App\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
@@ -12,9 +14,11 @@ class UserController extends Controller
         private UserRepositoryInterface $userRepository
     ) {}
 
-    public function index()
+    public function index(CacheService $cacheService)
     {
-        $users = $this->userRepository->getAllEntries();
+        $users = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
+            return $this->userRepository->getAllEntries();
+        });
 
         return view('user.index', compact(['users']));
     }
