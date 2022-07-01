@@ -29,6 +29,9 @@ Route::get('/', function () {
 
 // TODO - public routes for index/show methods
 
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
 
