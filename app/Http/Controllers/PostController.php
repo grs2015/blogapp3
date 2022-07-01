@@ -23,8 +23,10 @@ class PostController extends Controller
         return view('post.public.index', compact(['posts']));
     }
 
-    public function show()
+    public function show(Post $post)
     {
+        $post = $this->publicPostRepository->getEntryById($post->id);
 
+        return view('post.public.show', compact(['post']));
     }
 }
