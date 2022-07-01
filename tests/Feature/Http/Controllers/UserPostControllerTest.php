@@ -56,7 +56,8 @@ it('renders the post page with all types of posts', function() {
 
 /* ------------------------------ @create method (Admin part)----------------------------- */
 it('renders create post form', function() {
-    $this->get('/posts/create')->assertSee('Form for post creation');
+    $user = User::factory()->create();
+    $this->get(action([UserPostController::class, 'create'], ['user' => $user->id]))->assertSee('Form for post creation');
 });
 
 /* ------------------------------ @store method (Admin part)----------------------------- */
