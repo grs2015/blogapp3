@@ -35,7 +35,7 @@
 
 
                 <div>
-                    <p style="font-weight: bold; font-size: 20px; color: blue;">All posts:</p>
+                    <p style="font-weight: bold; font-size: 20px; color: blue;">All posts with all relationships:</p>
                     @foreach ($posts as $post)
                         <p><span style="font-weight: bold;">User of post: </span>{{ $post->user->first_name }}</p>
                         <p><span style="font-weight: bold;">Post ID: </span>{{ $post->id }}</p>
