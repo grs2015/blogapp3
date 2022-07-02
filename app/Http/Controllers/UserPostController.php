@@ -48,7 +48,7 @@ class UserPostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(User $user)
     {
     // TODO - Allow use create form only for Author users - Policies
 

@@ -29,13 +29,16 @@ Route::get('/', function () {
 
 // TODO - public routes for index/show methods
 
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
 
-Route::get('/posts/create', [UserPostController::class, 'create'])->name('posts.create');
 // Specific user posts end-points
 Route::name('users.posts.')->group(function() {
     Route::get('/users/{user}/posts', [UserPostController::class, 'index'])->name('index');
+    Route::get('/users/{user}/posts/create', [UserPostController::class, 'create'])->name('create');
     Route::get('/users/{user}/posts/{post:slug}', [UserPostController::class, 'show'])->name('show');
     Route::get('/users/{user}/posts/{post:slug}/edit', [UserPostController::class, 'edit'])->name('edit');
     Route::post('/users/{user}/posts', [UserPostController::class, 'store'])->name('store');

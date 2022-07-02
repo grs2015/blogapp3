@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Interfaces\PostRepositoryInterface;
-use Faker\Core\Number;
 
 class PostRepository implements PostRepositoryInterface
 {
