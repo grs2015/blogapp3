@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\PublicPostRepositoryInterface;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Services\CacheService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
+use App\Interfaces\PublicPostRepositoryInterface;
 
 class PostController extends Controller
 {
@@ -29,6 +30,13 @@ class PostController extends Controller
             return $this->publicPostRepository->getEntryById($post->id);
         });
 
-        return response()->view('post.public.show', compact('post'))->withCookie(cookie('user', 'works', 5))->withHeaders(['SSS' => 'SSS']);
+        if (!in_array($post->id, session()->get('viewed_posts', []) )) {
+            $post->increment('views');
+            session()->push('viewed_posts', $post->id);
+        }
+
+        $views = Post::whereId($post->id)->first()->views;
+
+        return response()->view('post.public.show', compact('post', 'views'));
     }
 }

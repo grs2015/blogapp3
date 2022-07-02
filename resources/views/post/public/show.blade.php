@@ -42,6 +42,7 @@
                         <p><span style="font-weight: bold;">Post title: </span>{{ $post->title }}</p>
                         <p><span style="font-weight: bold;">Post published: </span>{{ $post->published }}</p>
                         <p><span style="font-weight: bold;">Post slug: </span>{{ $post->slug }}</p>
+                        <p><span style="font-weight: bold;">Post views: </span>{{ $views }}</p>
 
 
                         @foreach ($post->comments as $comment)
