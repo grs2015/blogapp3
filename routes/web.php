@@ -10,6 +10,7 @@ use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\PostRatingController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostPostmetaController;
+use App\Http\Controllers\Trash\UserTrashController;
 use App\Http\Controllers\Trash\UserPostTrashController;
 
 /*
@@ -89,4 +90,7 @@ Route::name('users.')->group(function() {
     Route::get('/users', [UserController::class, 'index'])->name('index');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('show');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('destroy');
+
+    Route::post('/users/delete', [UserTrashController::class, 'destroy'])->name('forcedelete');
+    Route::post('/users/restore', [UserTrashController::class, 'restore'])->name('restore');
 });

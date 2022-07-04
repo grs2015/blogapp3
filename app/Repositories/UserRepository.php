@@ -38,5 +38,15 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->whereId($userId)->update($newAttributes);
     }
 
+    public function forceDeleteEntry(array $ids): ?Collection
+    {
+        return User::onlyTrashed()->whereIn('id', $ids)->get();
+    }
+
+    public function restoreEntry(array $ids): void
+    {
+        $this->model->onlyTrashed()->whereIn('id', $ids)->restore();
+    }
+
 
 }

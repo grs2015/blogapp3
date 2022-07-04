@@ -12,4 +12,6 @@ interface UserRepositoryInterface
     public function deleteEntry(int $userId):int;
     public function createEntry(array $userAttributes):?Model;
     public function updateEntry(int $userId, array $newAttributes):?int;
+    public function forceDeleteEntry(array $ids):?Collection;
+    public function restoreEntry(array $ids):void;
 }
