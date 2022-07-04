@@ -35,6 +35,8 @@ Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.s
 
 Route::post('posts/{post:slug}/rate', [PostRatingController::class, 'store'])->name('posts.rate')->middleware('auth');
 
+
+
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
 
