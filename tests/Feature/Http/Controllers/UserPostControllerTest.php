@@ -544,7 +544,7 @@ it('test the content of the PostUpdatedNotificationMarkdown mailable', function(
 
 /* ----------------------------- @destroy method (Admin part)---------------------------- */
 
-it('checks the deletion of entry as well as related models 1-M and entry in pivot-table', function() {
+it('checks the deletion of entry', function() {
     // Arrange #1
     $user = User::factory()->create();
     $post = Post::factory()
@@ -564,18 +564,10 @@ it('checks the deletion of entry as well as related models 1-M and entry in pivo
     $response = $this->delete(action([UserPostController::class, 'destroy'], ['user' => $user->id, 'post' => $post->slug]));
 
     $response->assertRedirect(route('users.posts.index', ['user' => $user->id]));
-    $this->assertModelMissing($post);
+    $this->assertModelExists($post);
     $this->assertDatabaseMissing('posts', $post->toArray());
     $this->assertDatabaseMissing('comments', Comment::first()->toArray());
     $this->assertDatabaseMissing('postmetas', Postmeta::first()->toArray());
-    $this->assertDatabaseMissing('post_tag', [
-        'post_id' => $post->id,
-        'tag_id' => Tag::first()->id
-    ]);
-    $this->assertDatabaseMissing('category_post', [
-        'post_id' => $post->id,
-        'category_id' => Category::first()->id
-    ]);
 });
 
 it('checks the event firing after deletion the post in database', function() {
