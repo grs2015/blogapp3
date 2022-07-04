@@ -36,6 +36,5 @@ it('checks the deletion of entry', function() {
     $response = $this->delete(action([UserController::class, 'destroy'], ['user' => $user->id]));
 
     $response->assertRedirect(route('users.index'));
-    $this->assertModelMissing($user);
-    $this->assertDatabaseMissing('users', $user->toArray());
+    $this->assertSoftDeleted($user);
 });

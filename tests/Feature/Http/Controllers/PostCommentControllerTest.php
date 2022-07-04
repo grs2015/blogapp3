@@ -144,6 +144,7 @@ it('checks the deletion of entry', function() {
     $response = $this->delete(action([PostCommentController::class, 'destroy'], ['post' => $post->slug, 'comment' => Comment::first()->id]));
 
     $response->assertRedirect(route('posts.comments.index', ['post' => $post->slug]));
-    $this->assertModelMissing($comment);
-    $this->assertDatabaseMissing('comments', $comment->toArray());
+    $this->assertSoftDeleted($comment);
+    // $this->assertModelMissing($comment);
+    // $this->assertDatabaseMissing('comments', $comment->toArray());
 });

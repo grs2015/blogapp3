@@ -190,7 +190,8 @@ it('checks the deletion of entry', function() {
     $response = $this->delete(action([BaseinfoController::class, 'destroy'], ['baseinfo' => $info->id]));
 
     $response->assertRedirect(route('baseinfo.index'));
-    $this->assertModelMissing($info);
-    $this->assertDatabaseMissing('baseinfos', $info->toArray());
+    $this->assertSoftDeleted($info);
+    // $this->assertModelMissing($info);
+    // $this->assertDatabaseMissing('baseinfos', $info->toArray());
 });
 
