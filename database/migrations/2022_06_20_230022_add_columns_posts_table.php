@@ -31,6 +31,8 @@ return new class extends Migration
             $table->char('favorite', 100)->default(Post::NONFAVORITE);
 
             $table->foreignId('author_id')->constrained('users')->cascadeOnUpdate()->restrictOnDelete();
+
+            $table->softDeletes();
         });
     }
 
@@ -42,7 +44,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-            //
+            $table->dropSoftDeletes();
         });
     }
 };

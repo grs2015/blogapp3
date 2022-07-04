@@ -25,6 +25,8 @@ return new class extends Migration
             $table->text('profile')->nullable();
             $table->string('avatar')->nullable();
             $table->char('role', 100)->default(User::REGULAR_USER);
+
+            $table->softDeletes();
         });
     }
 
@@ -36,7 +38,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropSoftDeletes();
         });
     }
 };
