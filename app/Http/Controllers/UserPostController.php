@@ -234,8 +234,6 @@ class UserPostController extends Controller
         $title = $post->title;
         $summary = $post->summary ?? $post->title;
 
-        $post->tags()->detach();
-        $post->categories()->detach();
 
         $this->postRepository->deleteEntry($user->id, $post->id);
 

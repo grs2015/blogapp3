@@ -10,6 +10,7 @@ use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\PostRatingController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostPostmetaController;
+use App\Http\Controllers\UserPostTrashController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,9 @@ Route::name('users.posts.')->group(function() {
     Route::post('/users/{user}/posts', [UserPostController::class, 'store'])->name('store');
     Route::put('/users/{user}/posts/{post:slug}', [UserPostController::class, 'update'])->name('update');
     Route::delete('/users/{user}/posts/{post:slug}', [UserPostController::class, 'destroy'])->name('delete');
+
+    Route::post('/users/{user}/posts/delete', [UserPostTrashController::class, 'destroy'])->name('forcedelete');
+    Route::post('/users/{user}/posts/restore', [UserPostTrashController::class, 'restore'])->name('restore');
 });
 
 Route::name('tags.')->group(function() {
