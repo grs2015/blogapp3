@@ -15,4 +15,6 @@ class PostRatingController extends Controller
 
         $post->rate(request('rating'));
     }
+
+    //TODO - Frontend part should be added later
 }
