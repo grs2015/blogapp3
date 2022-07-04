@@ -5,7 +5,8 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use App\Http\Controllers\UserPostController;
-use App\Http\Controllers\UserPostTrashController;
+use App\Http\Controllers\Trash\UserPostTrashController;
+
 
 uses()->group('TrashController');
 
@@ -25,16 +26,17 @@ it('forces to delete the trashed entries given by array of IDs as well as relate
     $this->delete(action([UserPostController::class, 'destroy'], ['user' => $this->user->id, 'post' => $this->posts[0]->slug]));
     $this->delete(action([UserPostController::class, 'destroy'], ['user' => $this->user->id, 'post' => $this->posts[1]->slug]));
 
+    $deletedAt = Post::withTrashed()->get()->first()->deleted_at;
     $this->assertSoftDeleted($this->posts[0]);
     $this->assertSoftDeleted($this->posts[1]);
-    $this->assertModelExists($this->posts[0]);
-    $this->assertModelExists($this->posts[1]);
+    $this->assertDatabaseHas('posts', ['deleted_at' => $deletedAt]);
 
     $response = $this->post(action([UserPostTrashController::class, 'destroy'], ['user' => $this->user->id]), ['ids' => $this->postIds]);
 
     $this->assertDataBaseMissing('posts', ['id' => $this->posts[0]->id, 'id' => $this->posts[1]->id]);
     $this->assertModelMissing($this->posts[0]);
     $this->assertModelMissing($this->posts[1]);
+    $this->assertDatabaseMissing('posts', ['deleted_at' => $deletedAt]);
 
     $this->assertDatabaseMissing('post_tag', [
         'post_id' => $this->posts[0]->id,
@@ -52,19 +54,22 @@ it('forces to delete the trashed entries given by array of IDs as well as relate
 });
 
 it('restores the trashed entries given by array of IDs', function() {
+
     $this->delete(action([UserPostController::class, 'destroy'], ['user' => $this->user->id, 'post' => $this->posts[0]->slug]));
     $this->delete(action([UserPostController::class, 'destroy'], ['user' => $this->user->id, 'post' => $this->posts[1]->slug]));
 
+    $deletedAt = Post::withTrashed()->get()->first()->deleted_at;
     $this->assertSoftDeleted($this->posts[0]);
     $this->assertSoftDeleted($this->posts[1]);
-    $this->assertModelExists($this->posts[0]);
-    $this->assertModelExists($this->posts[1]);
+    $this->assertDatabaseHas('posts', ['deleted_at' => $deletedAt]);
 
     $response = $this->post(action([UserPostTrashController::class, 'restore'], ['user' => $this->user->id]), ['ids' => $this->postIds]);
 
     $this->assertDataBaseHas('posts', ['id' => $this->posts[0]->id, 'id' => $this->posts[1]->id]);
     $this->assertModelExists($this->posts[0]);
     $this->assertModelExists($this->posts[1]);
+    $this->assertDatabaseMissing('posts', ['deleted_at' => $deletedAt]);
+
 
     $response->assertRedirect(route('users.posts.index', ['user' => $this->user->id]));
 });

@@ -10,7 +10,7 @@ use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\PostRatingController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostPostmetaController;
-use App\Http\Controllers\UserPostTrashController;
+use App\Http\Controllers\Trash\UserPostTrashController;
 
 /*
 |--------------------------------------------------------------------------

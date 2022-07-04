@@ -234,7 +234,6 @@ class UserPostController extends Controller
         $title = $post->title;
         $summary = $post->summary ?? $post->title;
 
-
         $this->postRepository->deleteEntry($user->id, $post->id);
 
         PostDeleted::dispatch($user, $title, $summary);
