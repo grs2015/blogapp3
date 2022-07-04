@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Post
@@ -226,5 +227,33 @@ class Post extends Model
     public function categories():BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function rate($rating, $user = null)
+    {
+        if ($rating > 5 || $rating < 1) {
+            throw new InvalidArgumentException('Ratings must be between 1-5');
+        }
+
+        // dump(Rating::all());
+
+        $this
+            ->ratings()
+        	->updateOrCreate([
+                'author_id' => $user ? $user->id : auth()->id(),
+                // 'post_id' => $this->id
+            ], compact('rating'));
+
+        // $this->ratings()->create(['rating' => $rating]);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function rating()
+    {
+        return $this->ratings->avg('rating');
     }
 }

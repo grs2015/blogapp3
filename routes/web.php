@@ -3,12 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BaseinfoController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPostController;
+use App\Http\Controllers\PostRatingController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostPostmetaController;
-use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::get('/', function () {
 
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
+Route::post('posts/{post:slug}/rate', [PostRatingController::class, 'store'])->name('posts.rate')->middleware('auth');
 
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
