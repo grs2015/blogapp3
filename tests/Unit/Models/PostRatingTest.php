@@ -41,7 +41,7 @@ it('checks that can be rated once per user', function() {
 
 
     $this->post->rate(5);
-    $this->post->rate(4);
+    $this->post->rate(3);
 
-    expect($this->post->rating())->toEqual(4);
+    expect($this->post->rating())->toEqual(3);
 });
