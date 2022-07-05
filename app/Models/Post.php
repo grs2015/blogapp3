@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Attributes\SearchUsingFullText;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Post
@@ -66,10 +68,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rating[] $ratings
+ * @property-read int|null $ratings_count
+ * @method static \Illuminate\Database\Query\Builder|Post onlyTrashed()
+ * @method static Builder|Post whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Post withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Post withoutTrashed()
  */
 class Post extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
 
     /**
      * Constants for blog state
@@ -256,5 +265,14 @@ class Post extends Model
     public function rating()
     {
         return $this->ratings->avg('rating');
+    }
+
+    #[SearchUsingFullText(['content'])]
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'content' => $this->content
+        ];
     }
 }

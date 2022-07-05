@@ -66,6 +66,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|User currentUser(int $userId)
  * @property string|null $registered_at
  * @method static Builder|User whereRegisteredAt($value)
+ * @property string|null $two_factor_secret
+ * @property string|null $two_factor_recovery_codes
+ * @property string|null $two_factor_confirmed_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereTwoFactorConfirmedAt($value)
+ * @method static Builder|User whereTwoFactorRecoveryCodes($value)
+ * @method static Builder|User whereTwoFactorSecret($value)
+ * @method static \Illuminate\Database\Query\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  */
 class User extends Authenticatable
 {

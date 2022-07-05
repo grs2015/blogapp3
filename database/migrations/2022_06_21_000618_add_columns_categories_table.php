@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->increments('id')->change();
+            // $table->increments('id')->change();
             $table->unsignedInteger('parent_id')->nullable();
             $table->string('title');
             $table->string('meta_title')->nullable();

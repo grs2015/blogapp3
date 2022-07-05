@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->increments('id')->change();
+            // $table->increments('id')->change();
             $table->string('title');
             $table->string('meta_title')->nullable();
             $table->string('slug')->nullable();
