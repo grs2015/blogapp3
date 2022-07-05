@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -69,5 +70,15 @@ class PostRepository implements PostRepositoryInterface
     public function createEntry(int $userId, array $postAttributes):?Model
     {
         return $this->model->whereId($userId)->first()->posts()->create($postAttributes);
+    }
+
+    public function forceDeleteEntry(array $ids): ?Collection
+    {
+        return Post::onlyTrashed()->whereIn('id', $ids)->get();
+    }
+
+    public function restoreEntry(array $ids): void
+    {
+        Post::onlyTrashed()->whereIn('id', $ids)->restore();
     }
 }

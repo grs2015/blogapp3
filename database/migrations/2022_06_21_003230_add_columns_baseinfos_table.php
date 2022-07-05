@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
+
         });
     }
 
@@ -34,7 +35,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('baseinfos', function (Blueprint $table) {
-            //
+
         });
     }
 };

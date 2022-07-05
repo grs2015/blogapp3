@@ -100,7 +100,8 @@ it('checks the deletion of entry', function() {
     $response = $this->delete(action([PostPostmetaController::class, 'destroy'], ['post' => $post->slug, 'postmeta' => Postmeta::first()->id]));
 
     $response->assertRedirect(route('posts.postmetas.index', ['post' => $post->slug]));
-    $this->assertModelMissing($postmeta);
-    $this->assertDatabaseMissing('postmetas', $postmeta->toArray());
+    $this->assertSoftDeleted($postmeta);
+    // $this->assertModelMissing($postmeta);
+    // $this->assertDatabaseMissing('postmetas', $postmeta->toArray());
 });
 
