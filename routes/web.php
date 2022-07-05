@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
@@ -24,8 +25,12 @@ use App\Http\Controllers\Trash\UserPostTrashController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', function() {
+    return Post::search('Similique')->get();
 });
 
 /* ------------------------------- Public part ------------------------------ */
