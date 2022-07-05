@@ -139,6 +139,8 @@ it('checks the stored post is in database as well as in pivot table', function()
 });
 
 it('checks the hero-image upload and its url resides in database after post storing', function() {
+    $this->withoutExceptionHandling();
+
     testTime()->freeze('2022-01-01 00:00:00');
     $user = User::factory()->create();
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();
@@ -152,9 +154,9 @@ it('checks the hero-image upload and its url resides in database after post stor
 
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
 
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test-HiRes.jpg');
     $this->assertDatabaseHas('posts', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => 'uploads/2022-01-01-00-00-00-test-HiRes.jpg'
     ]);
     $response->assertStatus(302);
 });

@@ -8,12 +8,13 @@ use App\Events\PostCreated;
 use App\Events\PostDeleted;
 use App\Events\PostUpdated;
 use Illuminate\Support\Str;
+use App\Services\CacheService;
 use Illuminate\Support\Facades\Cache;
+use Intervention\Image\Facades\Image;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
-use App\Services\CacheService;
 
 class UserPostController extends Controller
 {
@@ -72,12 +73,38 @@ class UserPostController extends Controller
 
         if ($request->has('hero_image')) {
             $file = $request->file('hero_image');
-            $timestamp = now()->format('Y-m-d-H-i-s');
-            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+            // Path for ImageIntervention library
+            $storagePath = storage_path('app/public/uploads');
 
-            $path = Storage::putFileAs('uploads', $file, $filename);
-            // $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
-            $validated['hero_image'] = $path;
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            // $filename = pathinfo($file->getClientOriginalName())
+            $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
+            $filename = pathinfo($filenameWithExtension)['filename'];
+            // Thumbs creation
+            $dims = collect([[100, 100], [200, 200], [640, 480]]);
+            $dims->each(function($item) use ($storagePath, $file, $filename) {
+                $thumbDirectory = "{$storagePath}/thumbs/{$item[0]}x{$item[1]}";
+                $fullPath = "{$thumbDirectory}/{$filename}.{$file->getClientOriginalExtension()}";
+                if (!\File::exists($thumbDirectory)) {
+                    \File::makeDirectory($thumbDirectory, 0755, true);
+                }
+                Image::make($file->getRealPath())->resize($item[0], $item[1], function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($fullPath);
+
+                $path = substr($fullPath, strpos($fullPath, 'uploads'));
+                dump($path);
+            });
+
+            $fullPathLoRes = "{$storagePath}/{$filename}-LoRes.{$file->getClientOriginalExtension()}";
+            Image::make($file->getRealPath())->save($fullPathLoRes, 50);
+            $pathLoRes = substr($fullPathLoRes, strpos($fullPathLoRes, 'uploads'));
+            dump($pathLoRes);
+
+            $pathHiRes = Storage::putFileAs('uploads', $file, "{$filename}-HiRes.{$file->getClientOriginalExtension()}");
+            dump($pathHiRes);
+
+            $validated['hero_image'] = $pathHiRes;
         }
 
         if ($request->has('images')) {

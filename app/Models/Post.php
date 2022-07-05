@@ -78,7 +78,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Post extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes; // Searchable;
 
     /**
      * Constants for blog state
