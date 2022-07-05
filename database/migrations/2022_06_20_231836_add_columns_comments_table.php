@@ -22,8 +22,6 @@ return new class extends Migration
             $table->char('published', 100)->default(Comment::UNPUBLISHED);
 
             $table->foreignId('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-
-            $table->softDeletes();
         });
     }
 
@@ -35,7 +33,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+
         });
     }
 };

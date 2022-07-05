@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Tag extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public $guarded = [];
 

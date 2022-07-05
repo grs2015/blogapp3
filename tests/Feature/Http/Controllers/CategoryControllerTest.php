@@ -275,13 +275,12 @@ it('checks the deletion of cat entry as well as entry in pivot-table', function(
     $response = $this->delete(action([CategoryController::class, 'destroy'], ['category' => Category::first()->slug]));
 
     $response->assertRedirect(action([CategoryController::class, 'index']));
-    $this->assertSoftDeleted($cat);
-    // $this->assertModelMissing($cat);
-    // $this->assertDatabaseMissing('categories', $cat->toArray());
-    // $this->assertDatabaseMissing('category_post', [
-    //     'post_id' => $post->id,
-    //     'category_id' => $cat->id
-    // ]);
+    $this->assertModelMissing($cat);
+    $this->assertDatabaseMissing('categories', $cat->toArray());
+    $this->assertDatabaseMissing('category_post', [
+        'post_id' => $post->id,
+        'category_id' => $cat->id
+    ]);
 });
 
 it('checks the event firing after deletion the category in database', function() {

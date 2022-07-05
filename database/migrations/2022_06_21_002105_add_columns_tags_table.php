@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->text('content')->nullable();
 
-            $table->softDeletes();
         });
     }
 
@@ -32,7 +31,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+
         });
     }
 };

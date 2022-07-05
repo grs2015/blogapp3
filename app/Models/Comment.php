@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Comment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     const PUBLISHED = 'published';
     const PENDING = 'pending';

@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('content')->nullable();
 
             $table->foreignId('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-
-            $table->softDeletes();
         });
     }
 
@@ -32,7 +30,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('postmetas', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+
         });
     }
 };

@@ -248,13 +248,12 @@ it('checks the deletion of entry as well as entry in pivot-table', function() {
     $response = $this->delete(action([TagController::class, 'destroy'], ['tag' => Tag::first()->slug]));
 
     $response->assertRedirect(action([TagController::class, 'index']));
-    $this->assertSoftDeleted($tag);
-    // $this->assertModelMissing($tag);
-    // $this->assertDatabaseMissing('tags', $tag->toArray());
-    // $this->assertDatabaseMissing('post_tag', [
-    //     'post_id' => $post->id,
-    //     'tag_id' => $tag->id
-    // ]);
+    $this->assertModelMissing($tag);
+    $this->assertDatabaseMissing('tags', $tag->toArray());
+    $this->assertDatabaseMissing('post_tag', [
+        'post_id' => $post->id,
+        'tag_id' => $tag->id
+    ]);
 });
 
 it('checks the event firing after deletion the tag in database', function() {

@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Postmeta extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public $guarded = [];
 
