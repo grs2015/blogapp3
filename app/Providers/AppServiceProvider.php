@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\ImageService;
 use Illuminate\Support\ServiceProvider;
+use App\Http\Controllers\BaseinfoController;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**
