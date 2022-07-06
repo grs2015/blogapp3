@@ -103,21 +103,60 @@ class UserPostController extends Controller
             $validated['hero_image'] = $filenamesDB;
         }
 
+        $post = $this->postRepository->createEntry($user->id, $validated);
+
         if ($request->has('images')) {
             $files = $request->allFiles('images');
-            $fileNames = collect([]);
-            collect($files['images'])->each(function($file) use ($fileNames) {
-                $timestamp = now()->format('Y-m-d-H-i-s');
-                $filename = "{$timestamp}-{$file->getClientOriginalName()}";
-                $path = Storage::putFileAs('uploads', $file, $filename);
-                // $fileNames->push(parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH));
-                $fileNames->push($path);
-            });
-            $fileNamesDB = $fileNames->implode(',');
-            $validated['images'] = $fileNamesDB;
+            dump('Ok');
+            dump($post);
+
+            // collect($files['images'])->each(function($file) use ($post) {
+            //     $timestamp = now()->format('Y-m-d-H-i-s');
+            //     // $filename = "{$timestamp}-{$file->getClientOriginalName()}";
+            //     $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
+            //     $filename = pathinfo($filenameWithExtension)['filename'];
+            //     dump($filename);
+
+            //     $fileInt = Image::make($file);
+            //     Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 100));
+            //     Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 60));
+            //     $urlLoRes = Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}");
+            //     $urlHiRes = Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}");
+
+            //     $filenames = collect([]);
+
+            //     $dims = collect([[200, 200], [640, 480]]);
+            //     $dims->each(function($item) use ($file, $filename, $filenames) {
+            //         $image = Image::make($file)->resize($item[0], $item[1], function ($constraint) {
+            //             $constraint->aspectRatio();
+            //         });
+
+            //         Storage::put("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}", $image->stream());
+
+            //         $url = Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}");
+            //         $filenames->push($url);
+            //     });
+
+            //     $urlThumbs = $filenames->implode(',');
+
+            //     $imagesData = [
+            //         'original' => $urlHiRes,
+            //         'lowres' => $urlLoRes,
+            //         'thumbs' => $urlThumbs
+            //     ];
+
+            //     $post->images()->create($imagesData);
+
+            //     dump($post->images);
+
+            //   // $fileNames->push(parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH));
+            //     // $fileNames->push($path);
+            // });
+            // $fileNamesDB = $fileNames->implode(',');
+            // $validated['images'] = $fileNamesDB;
         }
 
-        $post = $this->postRepository->createEntry($user->id, $validated);
+
 
         if ($request->has('tags')) {
             $tagIDs = $request->input('tags');
