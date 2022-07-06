@@ -20,10 +20,12 @@ return new class extends Migration
             $table->string('title');
             $table->string('meta_title')->nullable();
             $table->string('slug')->nullable();
-            $table->text('summary')->nullable()->fulltext();
+            // $table->text('summary')->nullable()->fulltext();
+            $table->text('summary')->nullable();
             $table->char('published', 100)->default(Post::UNPUBLISHED);
             $table->dateTime('published_at')->nullable();
-            $table->text('content')->nullable()->fulltext();
+            // $table->text('content')->nullable()->fulltext();
+            $table->text('content')->nullable();
             $table->unsignedInteger('views')->nullable();
             $table->string('hero_image')->nullable();
             $table->string('images')->nullable();

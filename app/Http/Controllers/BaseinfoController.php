@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Baseinfo;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreBaseinfoRequest;
 use App\Http\Requests\UpdateBaseinfoRequest;
@@ -33,11 +34,21 @@ class BaseinfoController extends Controller
 
         if ($request->has('hero_image')) {
             $file = $request->file('hero_image');
-            $timestamp = now()->format('Y-m-d-H-i-s');
-            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
 
-            $path = Storage::putFileAs('uploads', $file, $filename);
-            $validated['hero_image'] = $path;
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
+            $filename = pathinfo($filenameWithExtension)['filename'];
+            $filenames = collect([]);
+
+            $fileHiRes = Image::make($file);
+            $fileLoRes = $fileHiRes->fit(null, 600, function($constraint) { $constraint->upsize(); });
+            Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileHiRes->stream('jpg', 100));
+            Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileLoRes->stream('jpg', 60));
+            $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $filenames->push($urlHiRes, $urlLoRes);
+            $filenamesDB = $filenames->implode(',');
+            $validated['hero_image'] = $filenamesDB;
         }
 
         $this->baseinfoRepository->createEntry($validated);
@@ -64,18 +75,29 @@ class BaseinfoController extends Controller
         $validated = $request->safe()->except(['hero_image']);
 
         if ($request->has('hero_image')) {
-            $file = $request->file('hero_image');
-            $timestamp = now()->format('Y-m-d-H-i-s');
-            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
-
             try {
-                Storage::disk('public')->delete($baseinfo->hero_image);
+                $namesArr = explode(',', $baseinfo->hero_image);
+                Storage::disk('public')->delete($namesArr);
             } catch(\Exception $e) {
                 throw $e;
             }
 
-            $path = Storage::putFileAs('uploads', $file, $filename);
-            $validated['hero_image'] = $path;
+            $file = $request->file('hero_image');
+
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
+            $filename = pathinfo($filenameWithExtension)['filename'];
+            $filenames = collect([]);
+
+            $fileHiRes = Image::make($file);
+            $fileLoRes = $fileHiRes->fit(null, 600, function($constraint) { $constraint->upsize(); });
+            Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileHiRes->stream('jpg', 100));
+            Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileLoRes->stream('jpg', 60));
+            $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $filenames->push($urlHiRes, $urlLoRes);
+            $filenamesDB = $filenames->implode(',');
+            $validated['hero_image'] = $filenamesDB;
         }
 
         $this->baseinfoRepository->updateEntry($baseinfo->id, $validated);

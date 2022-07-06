@@ -76,9 +76,12 @@ it('checks the hero-image upload and its url resides in database after info stor
 
     $response = $this->post(action([BaseinfoController::class, 'store']), $baseData);
 
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test.jpg');
+    $urlEntry = 'uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseHas('baseinfos', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
     $response->assertStatus(302);
 });
@@ -153,9 +156,12 @@ it('checks the hero-image upload and its url resides in database after info upda
     // Action #1
     $response = $this->post(action([BaseinfoController::class, 'store']), $baseData);
     // Assertion #1
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test.jpg');
+    $urlEntry = 'uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseHas('baseinfos', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
     $response->assertStatus(302);
 
@@ -172,13 +178,19 @@ it('checks the hero-image upload and its url resides in database after info upda
     // Action #2
     $response = $this->put(action([BaseinfoController::class, 'update'], ['baseinfo' => $info->id]), $baseData);
     // Assertion #2
-    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test.jpg');
-    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test.jpg');
+    Storage::disk('public')->assertMissing('uploads/HiRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertMissing('uploads/LoRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-01-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-01-00-00-test.jpg');
+    $urlEntry = 'uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseMissing('baseinfos', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
+    $urlEntry = 'uploads/HiRes-2022-01-01-01-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-01-00-00-test.jpg';
     $this->assertDatabaseHas('baseinfos', [
-        'hero_image' => 'uploads/2022-01-01-01-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
     $response->assertStatus(302);
 });

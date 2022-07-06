@@ -29,7 +29,7 @@ class UpdatePostRequest extends FormRequest
             'summary' => ['string'],
             'content' => ['string'],
             'time_to_read' => ['integer', 'between:1, 100'],
-            'hero_image' => ['image'],
+            'hero_image' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'images' => ['array'],
             'tags' => ['array'],
             'categories' => ['array', 'required']

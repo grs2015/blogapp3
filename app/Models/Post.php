@@ -78,7 +78,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Post extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes; // Searchable;
 
     /**
      * Constants for blog state
@@ -237,6 +237,11 @@ class Post extends Model
     public function categories():BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function galleries():HasMany
+    {
+        return $this->hasMany(Gallery::class);
     }
 
     public function rate($rating, $user = null)

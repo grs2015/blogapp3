@@ -25,13 +25,14 @@ use App\Http\Controllers\Trash\UserPostTrashController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-Route::get('/', function() {
-    return Post::search('Similique')->get();
+Route::get('/', function () {
+    return view('welcome');
 });
+
+
+// Route::get('/', function() {
+//     return Post::search('Similique')->get();
+// });
 
 /* ------------------------------- Public part ------------------------------ */
 
