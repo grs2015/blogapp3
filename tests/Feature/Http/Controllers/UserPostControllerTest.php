@@ -160,11 +160,11 @@ it('checks the hero-image and all thumbnails upload and its url resides in datab
     Storage::disk('public')->assertExists('uploads/100-100-2022-01-01-00-00-00-test.jpg');
     Storage::disk('public')->assertExists('uploads/200-200-2022-01-01-00-00-00-test.jpg');
     Storage::disk('public')->assertExists('uploads/640-480-2022-01-01-00-00-00-test.jpg');
-    $urlEntry = '/storage/uploads/100-100-2022-01-01-00-00-00-test.jpg'.
-                ','.'/storage/uploads/200-200-2022-01-01-00-00-00-test.jpg'.
-                ','.'/storage/uploads/640-480-2022-01-01-00-00-00-test.jpg'.
-                ','.'/storage/uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
-                ','.'/storage/uploads/LoRes-2022-01-01-00-00-00-test.jpg';
+    $urlEntry = 'uploads/100-100-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/200-200-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/640-480-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseHas('posts', [
         'hero_image' => $urlEntry
     ]);
@@ -191,16 +191,16 @@ it('checks the post images upload and their urls are imploded in database after 
     Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_2.jpg');
     Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_2.jpg');
 
-    expect(Post::first()->galleries()->first()->original)->toEqual('/storage/uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
-    expect(Post::first()->galleries()->first()->thumbs)->toEqual('/storage/uploads/200-200-2022-01-01-00-00-00-test_1.jpg,/storage/uploads/640-480-2022-01-01-00-00-00-test_1.jpg');
-    $urlEntry_1 = '/storage/uploads/HiRes-2022-01-01-00-00-00-test_1.jpg';
-    $urlEntry_2 = '/storage/uploads/HiRes-2022-01-01-00-00-00-test_2.jpg';
-    $urlEntry_3 = '/storage/uploads/LoRes-2022-01-01-00-00-00-test_1.jpg';
-    $urlEntry_4 = '/storage/uploads/LoRes-2022-01-01-00-00-00-test_2.jpg';
-    $urlEntry_5 = '/storage/uploads/200-200-2022-01-01-00-00-00-test_2.jpg'.
-                ','.'/storage/uploads/640-480-2022-01-01-00-00-00-test_2.jpg';
-    $urlEntry_6 = '/storage/uploads/200-200-2022-01-01-00-00-00-test_1.jpg'.
-               ','.'/storage/uploads/640-480-2022-01-01-00-00-00-test_1.jpg';
+    expect(Post::first()->galleries()->first()->original)->toEqual('uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
+    expect(Post::first()->galleries()->first()->thumbs)->toEqual('uploads/200-200-2022-01-01-00-00-00-test_1.jpg,uploads/640-480-2022-01-01-00-00-00-test_1.jpg');
+    $urlEntry_1 = 'uploads/HiRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_2 = 'uploads/HiRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_3 = 'uploads/LoRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_4 = 'uploads/LoRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_5 = 'uploads/200-200-2022-01-01-00-00-00-test_2.jpg'.
+                ','.'uploads/640-480-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_6 = 'uploads/200-200-2022-01-01-00-00-00-test_1.jpg'.
+               ','.'uploads/640-480-2022-01-01-00-00-00-test_1.jpg';
     $this->assertDatabaseHas('galleries', [
         'original' => $urlEntry_1,
         'lowres' => $urlEntry_3,
@@ -402,9 +402,14 @@ it('checks the hero-image upload and substitutes the previous one in database af
     // Action #1
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
     // Assertion #1
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test.jpg');
+    $urlEntry = 'uploads/100-100-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/200-200-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/640-480-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseHas('posts', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
     $response->assertStatus(302);
 
@@ -417,16 +422,29 @@ it('checks the hero-image upload and substitutes the previous one in database af
         'categories' => $categoryIds,
     ];
     $post = Post::first();
-    // Action #2
+    // // Action #2
     $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
-    // Assertion #2
-    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test.jpg');
-    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test.jpg');
+    // // Assertion #2
+    Storage::disk('public')->assertMissing('uploads/HiRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertMissing('uploads/LoRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertMissing('uploads/100-100-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertMissing('uploads/200-200-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertMissing('uploads/640-480-2022-01-01-00-00-00-test.jpg');
+    $urlEntry = 'uploads/100-100-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/200-200-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/640-480-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseMissing('posts', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
+    $urlEntry = 'uploads/100-100-2022-01-01-01-00-00-test.jpg'.
+                ','.'uploads/200-200-2022-01-01-01-00-00-test.jpg'.
+                ','.'uploads/640-480-2022-01-01-01-00-00-test.jpg'.
+                ','.'uploads/HiRes-2022-01-01-01-00-00-test.jpg'.
+                ','.'uploads/LoRes-2022-01-01-01-00-00-test.jpg';
     $this->assertDatabaseHas('posts', [
-        'hero_image' => 'uploads/2022-01-01-01-00-00-test.jpg'
+        'hero_image' => $urlEntry
     ]);
     $response->assertStatus(302);
 });
@@ -447,11 +465,27 @@ it('checks the images upload and substitute the previous ones in database after 
     // Action #1
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
     // Assertion #1
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_1.jpg');
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test_2.jpg');
-    $urlEntry = 'uploads/2022-01-01-00-00-00-test_1.jpg'.','.'uploads/2022-01-01-00-00-00-test_2.jpg';
-    $this->assertDatabaseHas('posts', [
-        'images' => $urlEntry
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_2.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_2.jpg');
+    $urlEntry_1 = 'uploads/HiRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_2 = 'uploads/HiRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_3 = 'uploads/LoRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_4 = 'uploads/LoRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_5 = 'uploads/200-200-2022-01-01-00-00-00-test_2.jpg'.
+                ','.'uploads/640-480-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_6 = 'uploads/200-200-2022-01-01-00-00-00-test_1.jpg'.
+               ','.'uploads/640-480-2022-01-01-00-00-00-test_1.jpg';
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_1,
+        'lowres' => $urlEntry_3,
+        'thumbs' => $urlEntry_6,
+    ]);
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_2,
+        'lowres' => $urlEntry_4,
+        'thumbs' => $urlEntry_5,
     ]);
     $response->assertStatus(302);
 
@@ -468,17 +502,55 @@ it('checks the images upload and substitute the previous ones in database after 
     // Action #2
     $response = $this->put(action([UserPostController::class, 'update'], ['user' => $user->id, 'post' => $post->slug]), $postData);
     // Assertion #2
-    $urlEntryNew = 'uploads/2022-01-01-01-00-00-test_3.jpg'.','.'uploads/2022-01-01-01-00-00-test_4.jpg';
-    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test_1.jpg');
-    Storage::disk('public')->assertMissing('uploads/2022-01-01-00-00-00-test_2.jpg');
-    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test_3.jpg');
-    Storage::disk('public')->assertExists('uploads/2022-01-01-01-00-00-test_4.jpg');
-    $this->assertDatabaseMissing('posts', [
-        'images' => $urlEntry
+
+    Storage::disk('public')->assertMissing('uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertMissing('uploads/LoRes-2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertMissing('uploads/HiRes-2022-01-01-00-00-00-test_2.jpg');
+    Storage::disk('public')->assertMissing('uploads/LoRes-2022-01-01-00-00-00-test_2.jpg');
+
+    $urlEntry_1 = 'uploads/HiRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_2 = 'uploads/HiRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_3 = 'uploads/LoRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_4 = 'uploads/LoRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_5 = 'uploads/200-200-2022-01-01-00-00-00-test_2.jpg'.
+                ','.'uploads/640-480-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_6 = 'uploads/200-200-2022-01-01-00-00-00-test_1.jpg'.
+               ','.'uploads/640-480-2022-01-01-00-00-00-test_1.jpg';
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_1,
+        'lowres' => $urlEntry_3,
+        'thumbs' => $urlEntry_6,
     ]);
-    $this->assertDatabaseHas('posts', [
-        'images' => $urlEntryNew
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_2,
+        'lowres' => $urlEntry_4,
+        'thumbs' => $urlEntry_5,
     ]);
+
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-01-00-00-test_3.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-01-00-00-test_3.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-01-00-00-test_4.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-01-00-00-test_4.jpg');
+
+    $urlEntry_1 = 'uploads/HiRes-2022-01-01-01-00-00-test_3.jpg';
+    $urlEntry_2 = 'uploads/HiRes-2022-01-01-01-00-00-test_4.jpg';
+    $urlEntry_3 = 'uploads/LoRes-2022-01-01-01-00-00-test_3.jpg';
+    $urlEntry_4 = 'uploads/LoRes-2022-01-01-01-00-00-test_4.jpg';
+    $urlEntry_5 = 'uploads/200-200-2022-01-01-01-00-00-test_4.jpg'.
+                ','.'uploads/640-480-2022-01-01-01-00-00-test_4.jpg';
+    $urlEntry_6 = 'uploads/200-200-2022-01-01-01-00-00-test_3.jpg'.
+               ','.'uploads/640-480-2022-01-01-01-00-00-test_3.jpg';
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_1,
+        'lowres' => $urlEntry_3,
+        'thumbs' => $urlEntry_6,
+    ]);
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_2,
+        'lowres' => $urlEntry_4,
+        'thumbs' => $urlEntry_5,
+    ]);
+
     $response->assertStatus(302);
 });
 

@@ -90,15 +90,15 @@ class UserPostController extends Controller
 
                 Storage::put("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}", $image->stream());
 
-                $url = Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}");
+                $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}"));
                 $filenames->push($url);
             });
 
             $fileInt = Image::make($file);
             Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 100));
             Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 60));
-            $urlLoRes = Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}");
-            $urlHiRes = Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}");
+            $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
             $filenames->push($urlHiRes, $urlLoRes);
             $filenamesDB = $filenames->implode(',');
             $validated['hero_image'] = $filenamesDB;
@@ -119,8 +119,8 @@ class UserPostController extends Controller
                 $fileInt = Image::make($file);
                 Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 100));
                 Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 60));
-                $urlLoRes = Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}");
-                $urlHiRes = Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}");
+                $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
+                $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
 
                 $filenames = collect([]);
 
@@ -132,7 +132,7 @@ class UserPostController extends Controller
 
                     Storage::put("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}", $image->stream());
 
-                    $url = Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}");
+                    $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}"));
                     $filenames->push($url);
                 });
 
@@ -220,44 +220,94 @@ class UserPostController extends Controller
         }
 
         if ($request->has('hero_image')) {
-            $file = $request->file('hero_image');
-            $timestamp = now()->format('Y-m-d-H-i-s');
-            $filename = "{$timestamp}-{$file->getClientOriginalName()}";
-
             try {
-                Storage::disk('public')->delete($post->hero_image);
-            } catch(\Exception $e) {
-                throw $e;
-            }
-
-            $path = Storage::putFileAs('uploads', $file, $filename);
-            // $url = parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH);
-            $validated['hero_image'] = $path;
-        }
-
-        if ($request->has('images')) {
-            try {
-                $namesArr = explode(',', $post->images);
+                $namesArr = explode(',', $post->hero_image);
                 Storage::disk('public')->delete($namesArr);
             } catch(\Exception $e) {
                 throw $e;
             }
 
-            $files = $request->allFiles('images');
-            $fileNames = collect([]);
-            collect($files['images'])->each(function($file) use ($fileNames) {
-                $timestamp = now()->format('Y-m-d-H-i-s');
-                $filename = "{$timestamp}-{$file->getClientOriginalName()}";
-                $path = Storage::putFileAs('uploads', $file, $filename);
-                // $fileNames->push(parse_url(Storage::url("uploads/{$filename}"), PHP_URL_PATH));
-                $fileNames->push($path);
+            $file = $request->file('hero_image');
+
+            $timestamp = now()->format('Y-m-d-H-i-s');
+            $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
+            $filename = pathinfo($filenameWithExtension)['filename'];
+            $filenames = collect([]);
+            // Thumbs creation
+            $dims = collect([[100, 100], [200, 200], [640, 480]]);
+            $dims->each(function($item) use ($file, $filename, $filenames) {
+                $image = Image::make($file)->resize($item[0], $item[1], function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                Storage::put("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}", $image->stream());
+
+                $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}"));
+                $filenames->push($url);
             });
-            $fileNamesDB = $fileNames->implode(',');
-            $validated['images'] = $fileNamesDB;
+
+            $fileInt = Image::make($file);
+            Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 100));
+            Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 60));
+            $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
+            $filenames->push($urlHiRes, $urlLoRes);
+            $filenamesDB = $filenames->implode(',');
+            $validated['hero_image'] = $filenamesDB;
+        }
+
+        if ($request->has('images')) {
+            try {
+                $postGallery = $post->galleries()->get();
+                $postGallery->each(function($gallery) {
+                    $namesArr = [ $gallery->original, $gallery->lowres, explode(',', $gallery->thumbs)[0], explode(',', $gallery->thumbs)[1]];
+                    Storage::disk('public')->delete($namesArr);
+                });
+            } catch(\Exception $e) {
+                throw $e;
+            }
+
+            $files = $request->allFiles('images');
+
+            collect($files['images'])->each(function($file) use ($post) {
+
+                $timestamp = now()->format('Y-m-d-H-i-s');
+                $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
+                $filename = pathinfo($filenameWithExtension)['filename'];
+
+
+                $fileInt = Image::make($file);
+                Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 100));
+                Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileInt->stream('jpg', 60));
+                $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
+                $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
+
+                $filenames = collect([]);
+
+                $dims = collect([[200, 200], [640, 480]]);
+                $dims->each(function($item) use ($file, $filename, $filenames) {
+                    $image = Image::make($file)->resize($item[0], $item[1], function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                    Storage::put("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}", $image->stream());
+
+                    $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$filename}.{$file->getClientOriginalExtension()}"));
+                    $filenames->push($url);
+                });
+
+                $urlThumbs = $filenames->implode(',');
+
+                $imagesData = [
+                    'original' => $urlHiRes,
+                    'lowres' => $urlLoRes,
+                    'thumbs' => $urlThumbs
+                ];
+                $post->galleries()->create($imagesData);
+            });
         }
 
         $this->postRepository->updateEntry($user->id, $post->id, $validated);
-
 
         if ($request->has('tags')) {
             $tagIDs = $request->input('tags');
