@@ -138,7 +138,7 @@ it('checks the stored post is in database as well as in pivot table', function()
     ]);
 });
 
-it('checks the hero-image upload and its url resides in database after post storing', function() {
+it('checks the hero-image and all thumbnails upload and its url resides in database after post storing', function() {
     $this->withoutExceptionHandling();
 
     testTime()->freeze('2022-01-01 00:00:00');
@@ -154,9 +154,18 @@ it('checks the hero-image upload and its url resides in database after post stor
 
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
 
-    Storage::disk('public')->assertExists('uploads/2022-01-01-00-00-00-test-HiRes.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/100-100-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/200-200-2022-01-01-00-00-00-test.jpg');
+    Storage::disk('public')->assertExists('uploads/640-480-2022-01-01-00-00-00-test.jpg');
+    $urlEntry = '/storage/uploads/100-100-2022-01-01-00-00-00-test.jpg'.
+                ','.'/storage/uploads/200-200-2022-01-01-00-00-00-test.jpg'.
+                ','.'/storage/uploads/640-480-2022-01-01-00-00-00-test.jpg'.
+                ','.'/storage/uploads/HiRes-2022-01-01-00-00-00-test.jpg'.
+                ','.'/storage/uploads/LoRes-2022-01-01-00-00-00-test.jpg';
     $this->assertDatabaseHas('posts', [
-        'hero_image' => 'uploads/2022-01-01-00-00-00-test-HiRes.jpg'
+        'hero_image' => $urlEntry
     ]);
     $response->assertStatus(302);
 });
