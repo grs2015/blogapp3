@@ -10,7 +10,7 @@ class Gallery extends Model
 {
     use HasFactory;
 
-    protected $guarder = [];
+    protected $guarded = [];
 
     public function post():BelongsTo
     {

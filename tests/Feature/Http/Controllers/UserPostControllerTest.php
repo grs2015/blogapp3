@@ -4,11 +4,12 @@ use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Gallery;
 use App\Models\Category;
 use App\Models\Postmeta;
 use App\Events\PostCreated;
-use App\Events\PostDeleted;
 
+use App\Events\PostDeleted;
 use App\Events\PostUpdated;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\UserPostController;
@@ -185,14 +186,31 @@ it('checks the post images upload and their urls are imploded in database after 
 
     $response = $this->post(action([UserPostController::class, 'store'], ['user' => $user->id]), $postData);
 
-    // Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
-    // Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_1.jpg');
-    // Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_2.jpg');
-    // Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_2.jpg');
-    // $urlEntry = 'uploads/2022-01-01-00-00-00-test_1.jpg'.','.'uploads/2022-01-01-00-00-00-test_2.jpg';
-    // $this->assertDatabaseHas('posts', [
-    //     'images' => $urlEntry
-    // ]);
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_1.jpg');
+    Storage::disk('public')->assertExists('uploads/HiRes-2022-01-01-00-00-00-test_2.jpg');
+    Storage::disk('public')->assertExists('uploads/LoRes-2022-01-01-00-00-00-test_2.jpg');
+
+    expect(Post::first()->galleries()->first()->original)->toEqual('/storage/uploads/HiRes-2022-01-01-00-00-00-test_1.jpg');
+    expect(Post::first()->galleries()->first()->thumbs)->toEqual('/storage/uploads/200-200-2022-01-01-00-00-00-test_1.jpg,/storage/uploads/640-480-2022-01-01-00-00-00-test_1.jpg');
+    $urlEntry_1 = '/storage/uploads/HiRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_2 = '/storage/uploads/HiRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_3 = '/storage/uploads/LoRes-2022-01-01-00-00-00-test_1.jpg';
+    $urlEntry_4 = '/storage/uploads/LoRes-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_5 = '/storage/uploads/200-200-2022-01-01-00-00-00-test_2.jpg'.
+                ','.'/storage/uploads/640-480-2022-01-01-00-00-00-test_2.jpg';
+    $urlEntry_6 = '/storage/uploads/200-200-2022-01-01-00-00-00-test_1.jpg'.
+               ','.'/storage/uploads/640-480-2022-01-01-00-00-00-test_1.jpg';
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_1,
+        'lowres' => $urlEntry_3,
+        'thumbs' => $urlEntry_6,
+    ]);
+    $this->assertDatabaseHas('galleries', [
+        'original' => $urlEntry_2,
+        'lowres' => $urlEntry_4,
+        'thumbs' => $urlEntry_5,
+    ]);
     $response->assertStatus(302);
 });
 

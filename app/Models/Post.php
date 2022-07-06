@@ -239,6 +239,11 @@ class Post extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function galleries():HasMany
+    {
+        return $this->hasMany(Gallery::class);
+    }
+
     public function rate($rating, $user = null)
     {
         if ($rating > 5 || $rating < 1) {
