@@ -172,6 +172,8 @@ it('checks the hero-image and all thumbnails upload and its url resides in datab
 });
 
 it('checks the post images upload and their urls are imploded in database after post storing', function() {
+    $this->withoutExceptionHandling();
+
     testTime()->freeze('2022-01-01 00:00:00');
     $user = User::factory()->create();
     $categoryIds = Category::factory()->count(3)->create()->pluck('id')->toArray();

@@ -33,7 +33,7 @@ class BaseinfoController extends Controller
 
         if ($request->has('hero_image')) {
             $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL();
+            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
         $this->baseinfoRepository->createEntry($validated);
@@ -63,7 +63,7 @@ class BaseinfoController extends Controller
 
             $this->imageService->deleteHeroImages($baseinfo->hero_image);
             $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL();
+            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
         $this->baseinfoRepository->updateEntry($baseinfo->id, $validated);

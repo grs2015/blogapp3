@@ -2,24 +2,28 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
+use App\Models\Post;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Intervention\Image\Facades\Image;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class ImageService
 {
     private UploadedFile $file;
+    private array $galleryFiles;
     private string $timestamp;
     private string $filenameWithExtension;
     private string $filename;
     private Collection $filenames;
+    private Collection $thumbFilenames;
+    public string $urlLoRes;
+    public string $urlHiRes;
+    public string $filenamesDB;
+    public string $thumbFilenamesDB;
 
     public function __construct(
-        public ?Model $model = null
-    ) {}
+    ) {  }
 
     public function generateNames(UploadedFile $file)
     {
@@ -28,12 +32,22 @@ class ImageService
         $this->filenameWithExtension = "{$this->timestamp}-{$this->file->getClientOriginalName()}";
         $this->filename = pathinfo($this->filenameWithExtension)['filename'];
         $this->filenames = collect([]);
+        $this->thumbFilenames = collect([]);
     }
 
     public function deleteHeroImages(string $pathToImages):bool
     {
         $namesArr = explode(',', $pathToImages);
         return Storage::disk('public')->delete($namesArr);
+    }
+
+    public function deleteGallery(Post $post):void
+    {
+        $postGallery = $post->galleries()->get();
+        $postGallery->each(function($gallery) {
+            $namesArr = [ $gallery->original, $gallery->lowres, explode(',', $gallery->thumbs)[0], explode(',', $gallery->thumbs)[1]];
+            Storage::disk('public')->delete($namesArr);
+        });
     }
 
     public function storeHeroImages(?int $width = null, ?int $height = 600, ?int $quality = 100):self
@@ -46,18 +60,51 @@ class ImageService
         return $this;
     }
 
-    public function generateHeroURL():string
+    public function generateHeroURL(): self
     {
-        $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
-        $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
-        $this->filenames->push($urlHiRes, $urlLoRes);
-        $filenamesDB = $this->filenames->implode(',');
+        $this->urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+        $this->urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+        $this->filenames->push($this->urlHiRes, $this->urlLoRes);
+        $this->filenamesDB = $this->filenames->implode(',');
+        $this->thumbFilenamesDB = $this->thumbFilenames->implode(',');
 
-        return $filenamesDB;
+        return $this;
     }
 
-    public function storeThumbImages()
+    public function storeThumbHeroImages(array $dimensions):self
     {
+        $dims = collect($dimensions);
+        $dims->each(function($item) {
+            $image = Image::make($this->file)->resize($item[0], $item[1], function ($constraint) {
+                $constraint->aspectRatio();
+            });
 
+            Storage::put("uploads/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}", $image->stream());
+
+            $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+            $this->filenames->push($url);
+            $this->thumbFilenames->push($url);
+        });
+
+        return $this;
+    }
+
+    public function generateGallery(array $files, Post $post, array $dimensions)
+    {
+        $this->galleryFiles = $files;
+
+        collect($this->galleryFiles['images'])->each(function($file) use ($post, $dimensions) {
+
+            $this->generateNames($file);
+            $this->storeThumbHeroImages($dimensions)->storeHeroImages()->generateHeroURL();
+
+            $imagesData = [
+                'original' => $this->urlHiRes,
+                'lowres' => $this->urlLoRes,
+                'thumbs' => $this->thumbFilenamesDB
+            ];
+
+            $post->galleries()->create($imagesData);
+        });
     }
 }
