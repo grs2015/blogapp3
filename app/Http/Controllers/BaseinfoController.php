@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Baseinfo;
-use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreBaseinfoRequest;
 use App\Http\Requests\UpdateBaseinfoRequest;
 use App\Interfaces\BaseinfoRepositoryInterface;
+use App\Services\ImageService;
 
 class BaseinfoController extends Controller
 {
     public function __construct(
-        private BaseinfoRepositoryInterface $baseinfoRepository
+        private BaseinfoRepositoryInterface $baseinfoRepository,
+        private ImageService $imageService
     ) {  }
 
     public function index()
@@ -33,22 +32,8 @@ class BaseinfoController extends Controller
         $validated = $request->safe()->except(['hero_image']);
 
         if ($request->has('hero_image')) {
-            $file = $request->file('hero_image');
-
-            $timestamp = now()->format('Y-m-d-H-i-s');
-            $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
-            $filename = pathinfo($filenameWithExtension)['filename'];
-            $filenames = collect([]);
-
-            $fileHiRes = Image::make($file);
-            $fileLoRes = $fileHiRes->fit(null, 600, function($constraint) { $constraint->upsize(); });
-            Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileHiRes->stream('jpg', 100));
-            Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileLoRes->stream('jpg', 60));
-            $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
-            $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
-            $filenames->push($urlHiRes, $urlLoRes);
-            $filenamesDB = $filenames->implode(',');
-            $validated['hero_image'] = $filenamesDB;
+            $this->imageService->generateNames($request->file('hero_image'));
+            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
         $this->baseinfoRepository->createEntry($validated);
@@ -75,29 +60,10 @@ class BaseinfoController extends Controller
         $validated = $request->safe()->except(['hero_image']);
 
         if ($request->has('hero_image')) {
-            try {
-                $namesArr = explode(',', $baseinfo->hero_image);
-                Storage::disk('public')->delete($namesArr);
-            } catch(\Exception $e) {
-                throw $e;
-            }
 
-            $file = $request->file('hero_image');
-
-            $timestamp = now()->format('Y-m-d-H-i-s');
-            $filenameWithExtension = "{$timestamp}-{$file->getClientOriginalName()}";
-            $filename = pathinfo($filenameWithExtension)['filename'];
-            $filenames = collect([]);
-
-            $fileHiRes = Image::make($file);
-            $fileLoRes = $fileHiRes->fit(null, 600, function($constraint) { $constraint->upsize(); });
-            Storage::put("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}", $fileHiRes->stream('jpg', 100));
-            Storage::put("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}", $fileLoRes->stream('jpg', 60));
-            $urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$filename}.{$file->getClientOriginalExtension()}"));
-            $urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$filename}.{$file->getClientOriginalExtension()}"));
-            $filenames->push($urlHiRes, $urlLoRes);
-            $filenamesDB = $filenames->implode(',');
-            $validated['hero_image'] = $filenamesDB;
+            $this->imageService->deleteHeroImages($baseinfo->hero_image);
+            $this->imageService->generateNames($request->file('hero_image'));
+            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
         $this->baseinfoRepository->updateEntry($baseinfo->id, $validated);

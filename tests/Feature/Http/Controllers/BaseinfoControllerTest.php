@@ -64,6 +64,8 @@ it('checks the stored info in database', function() {
 });
 
 it('checks the hero-image upload and its url resides in database after info storing', function() {
+    $this->withoutExceptionHandling();
+
     testTime()->freeze('2022-01-01 00:00:00');
     Storage::fake('public');
     $file = UploadedFile::fake()->image('test.jpg');
