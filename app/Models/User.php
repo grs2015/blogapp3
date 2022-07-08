@@ -87,6 +87,10 @@ class User extends Authenticatable
     const AUTHOR_USER = 'author';
     const REGULAR_USER = 'regular';
 
+    const ALLOWED = 'allowed';
+    const REJECTED = 'rejected';
+    const PENDING = 'pending';
+
     /**
      * The attributes that are mass assignable.
      *
