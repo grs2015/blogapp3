@@ -2,17 +2,18 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\BaseinfoController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserPostController;
-use App\Http\Controllers\PostRatingController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\PostPostmetaController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\BaseinfoController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Trash\UserTrashController;
+use App\Http\Controllers\Admin\PostCommentController;
+use App\Http\Controllers\Member\PostRatingController;
+use App\Http\Controllers\Admin\PostPostmetaController;
 use App\Http\Controllers\Trash\UserPostTrashController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,7 @@ Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.s
 // Admin part
 Route::middleware('auth')->group(function() {
     Route::prefix('admin')->group(function() {
-        Route::middleware('auth')->group(function() {
+        Route::middleware('role:super-admin|admin')->group(function() {
             Route::name('admin.')->group(function() {
                 // Admin routes
                 Route::name('tags.')->group(function() {
@@ -125,7 +126,7 @@ Route::middleware('auth')->group(function() {
             Route::name('member')->group(function() {
                 // Member routes
                 Route::post('posts/{post:slug}/rate', [PostRatingController::class, 'store'])->name('rate');
-                Route::post('posts/{post:slug}/comment', [PostCommentController::class, 'store'])->name('comment');
+                // Route::post('posts/{post:slug}/comment', [PostCommentController::class, 'store'])->name('comment');
             });
         });
     });
