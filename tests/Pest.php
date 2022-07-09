@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\User;
 use Tests\CreatesApplication;
+use function Pest\Laravel\actingAs;
+
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -43,7 +46,32 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function loginAsMember(User $user = null)
 {
-    // ..
+    $user = $user ?? User::factory()->create();
+    $user->assignRole('member');
+    actingAs($user);
 }
+
+function loginAsAuthor(User $user = null)
+{
+    $user = $user ?? User::factory()->create();
+    $user->assignRole('author');
+    actingAs($user);
+}
+
+function loginAsAdmin(User $user = null)
+{
+    $user = $user ?? User::factory()->create();
+    $user->assignRole('admin');
+    actingAs($user);
+}
+
+function loginAsSuperAdmin(User $user = null)
+{
+    $user = $user ?? User::factory()->create();
+    $user->assignRole('super-admin');
+    actingAs($user);
+}
+
+
