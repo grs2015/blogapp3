@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Baseinfo;
+use App\Services\ImageService;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBaseinfoRequest;
 use App\Http\Requests\UpdateBaseinfoRequest;
 use App\Interfaces\BaseinfoRepositoryInterface;
-use App\Services\ImageService;
 
 class BaseinfoController extends Controller
 {

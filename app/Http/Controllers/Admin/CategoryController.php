@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Events\CategoryCreated;
 use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Interfaces\CategoryRepositoryInterface;

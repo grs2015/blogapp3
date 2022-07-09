@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use App\Models\Postmeta;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostmetaRequest;
 use App\Http\Requests\UpdatePostmetaRequest;
 use App\Interfaces\PostmetaRepositoryInterface;

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Member;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PostRatingController extends Controller
 {
