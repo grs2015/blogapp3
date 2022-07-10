@@ -101,7 +101,8 @@ it('checks the event firing after storing the tag in database', function() {
 
 it('checks the mails been queued from admin after storing the tag in database', function() {
     Mail::fake();
-    $user = User::factory()->author()->create();
+    $user = User::factory()->create();
+    $user->assignRole('author');
     $tagData = [
         'title' => 'Newest tag',
         'content' => 'Content of the newest tag',
@@ -224,7 +225,8 @@ it('checks the event firing after updating the tag in database', function() {
 
 it('checks the mails been queued from admin after updating the tag in database', function() {
     Mail::fake();
-    $user = User::factory()->author()->create();
+    $user = User::factory()->create();
+    $user->assignRole('author');
     $tag = Tag::factory()->create();
     $tagData = [
         'title' => 'Newest tag',
@@ -285,7 +287,8 @@ it('checks the event firing after deletion the tag in database', function() {
 
 it('checks the mails been queued from admin after deleting the tag in database', function() {
     Mail::fake();
-    $user = User::factory()->author()->create();
+    $user = User::factory()->create();
+    $user->assignRole('author');
     $tag = Tag::factory()->create();
 
     $response = $this->delete(action([TagController::class, 'destroy'], ['tag' => $tag->slug]));
