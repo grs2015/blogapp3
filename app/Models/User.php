@@ -78,6 +78,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Query\Builder|User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @property string $status
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read int|null $roles_count
+ * @method static Builder|User permission($permissions)
+ * @method static Builder|User role($roles, $guard = null)
+ * @method static Builder|User whereStatus($value)
  */
 class User extends Authenticatable
 {

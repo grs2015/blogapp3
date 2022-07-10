@@ -75,6 +75,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Post whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Post withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Post withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Gallery[] $galleries
+ * @property-read int|null $galleries_count
  */
 class Post extends Model
 {
