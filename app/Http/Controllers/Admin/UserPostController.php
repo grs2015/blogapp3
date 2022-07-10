@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use App\Models\User;
@@ -12,13 +12,14 @@ use App\Events\PostUpdated;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Services\CacheService;
+use App\Services\ImageService;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
-use App\Services\ImageService;
 
 class UserPostController extends Controller
 {
@@ -105,7 +106,6 @@ class UserPostController extends Controller
         return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
 
         // TODO - Allow storing only for Author users - later test this feature as well (Policies)
-        // TODO - Add library for image processing
     }
 
     /**

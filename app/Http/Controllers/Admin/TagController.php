@@ -7,7 +7,6 @@ use App\Events\TagCreated;
 use App\Events\TagDeleted;
 use App\Events\TagUpdated;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
