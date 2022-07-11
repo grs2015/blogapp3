@@ -46,7 +46,6 @@ class PostCommentController extends Controller
     public function store(StoreCommentRequest $request, Post $post)
     {
         $validated = $request->validated();
-        $validated['published'] = Comment::UNPUBLISHED;
 
         $this->commentRepository->createEntry($post->id, $validated);
 

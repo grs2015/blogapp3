@@ -14,7 +14,7 @@ use App\Mail\TagDeletedNotificationMarkdown;
 use App\Mail\TagUpdatedNotificationMarkdown;
 use App\Http\Controllers\Admin\TagController;
 
-uses()->group('TagController');
+uses()->group('admin');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);

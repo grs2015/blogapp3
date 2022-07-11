@@ -3,7 +3,7 @@
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\UserController;
+// use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\BaseinfoController;
@@ -12,6 +12,7 @@ use App\Http\Controllers\Trash\UserTrashController;
 use App\Http\Controllers\Admin\PostCommentController;
 use App\Http\Controllers\Member\PostRatingController;
 use App\Http\Controllers\Admin\PostPostmetaController;
+use App\Http\Controllers\TagContoller;
 use App\Http\Controllers\Trash\UserPostTrashController;
 
 
@@ -52,50 +53,29 @@ Route::middleware('auth')->group(function() {
         Route::middleware('role:super-admin|admin')->group(function() {
             Route::name('admin.')->group(function() {
                 // Admin routes
-                Route::name('tags.')->group(function() {
-                    Route::get('/tags', [TagController::class, 'index'])->name('index');
-                    Route::get('/tags/create', [TagController::class, 'create'])->name('create');
-                    Route::get('/tags/{tag:slug}', [TagController::class, 'show'])->name('show');
-                    Route::get('/tags/{tag:slug}/edit', [TagController::class, 'edit'])->name('edit');
-                    Route::post('/tags', [TagController::class, 'store'])->name('store');
-                    Route::put('/tags/{tag:slug}', [TagController::class, 'update'])->name('update');
-                    Route::delete('/tags/{tag:slug}', [TagController::class, 'destroy'])->name('delete');
-                });
-
-                Route::name('categories.')->group(function() {
-                    Route::get('/categories', [CategoryController::class, 'index'])->name('index');
-                    Route::get('/categories/create', [CategoryController::class, 'create'])->name('create');
-                    Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('show');
-                    Route::get('/categories/{category:slug}/edit', [CategoryController::class, 'edit'])->name('edit');
-                    Route::post('/categories', [CategoryController::class, 'store'])->name('store');
-                    Route::put('/categories/{category:slug}', [CategoryController::class, 'update'])->name('update');
-                    Route::delete('/categories/{category:slug}', [CategoryController::class, 'destroy'])->name('delete');
-                });
-
+                Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
+                Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
                 Route::resource('posts.postmetas', PostPostmetaController::class);
-                Route::resource('/baseinfo', BaseinfoController::class);
+                Route::resource('baseinfo', BaseinfoController::class);
                 Route::resource('posts.comments', PostCommentController::class);
 
-                Route::name('users.')->group(function() {
-                    Route::get('/users', [UserController::class, 'index'])->name('index');
-                    Route::get('/users/{user}', [UserController::class, 'show'])->name('show');
-                    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('destroy');
+                Route::resource('users', App\Http\Controllers\Admin\UserController::class);
 
-                    Route::post('/users/delete', [UserTrashController::class, 'destroy'])->name('forcedelete');
-                    Route::post('/users/restore', [UserTrashController::class, 'restore'])->name('restore');
+                Route::name('users.')->group(function() {
+                    // Route::get('/users', [UserController::class, 'index'])->name('index');
+                    // Route::get('/users/{user}', [UserController::class, 'show'])->name('show');
+                    // Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('destroy');
+                    // Route::put('/user/{user}', [UserController::class, 'update'])->name('update');
+
+                    Route::post('/users/delete', [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('forcedelete');
+                    Route::post('/users/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('restore');
                 });
 
-                Route::name('users.posts.')->group(function() {
-                    Route::get('/users/{user}/posts', [UserPostController::class, 'index'])->name('index');
-                    Route::get('/users/{user}/posts/create', [UserPostController::class, 'create'])->name('create');
-                    Route::get('/users/{user}/posts/{post:slug}', [UserPostController::class, 'show'])->name('show');
-                    Route::get('/users/{user}/posts/{post:slug}/edit', [UserPostController::class, 'edit'])->name('edit');
-                    Route::post('/users/{user}/posts', [UserPostController::class, 'store'])->name('store');
-                    Route::put('/users/{user}/posts/{post:slug}', [UserPostController::class, 'update'])->name('update');
-                    Route::delete('/users/{user}/posts/{post:slug}', [UserPostController::class, 'destroy'])->name('delete');
+                Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
 
-                    Route::post('/users/{user}/posts/delete', [UserPostTrashController::class, 'destroy'])->name('forcedelete');
-                    Route::post('/users/{user}/posts/restore', [UserPostTrashController::class, 'restore'])->name('restore');
+                Route::name('users.')->group(function() {
+                    Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
+                    Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
                 });
             });
         });
@@ -105,18 +85,18 @@ Route::middleware('auth')->group(function() {
         Route::middleware('role:author')->group(function() {
             Route::name('user')->group(function() {
                 // Users routes
-                Route::name('posts.')->group(function() {
-                    Route::get('/users/{user}/posts', [UserPostController::class, 'index'])->name('index');
-                    Route::get('/users/{user}/posts/create', [UserPostController::class, 'create'])->name('create');
-                    Route::get('/users/{user}/posts/{post:slug}', [UserPostController::class, 'show'])->name('show');
-                    Route::get('/users/{user}/posts/{post:slug}/edit', [UserPostController::class, 'edit'])->name('edit');
-                    Route::post('/users/{user}/posts', [UserPostController::class, 'store'])->name('store');
-                    Route::put('/users/{user}/posts/{post:slug}', [UserPostController::class, 'update'])->name('update');
-                    Route::delete('/users/{user}/posts/{post:slug}', [UserPostController::class, 'destroy'])->name('delete');
+                // Route::name('posts.')->group(function() {
+                //     Route::get('/users/{user}/posts', [UserPostController::class, 'index'])->name('index');
+                //     Route::get('/users/{user}/posts/create', [UserPostController::class, 'create'])->name('create');
+                //     Route::get('/users/{user}/posts/{post:slug}', [UserPostController::class, 'show'])->name('show');
+                //     Route::get('/users/{user}/posts/{post:slug}/edit', [UserPostController::class, 'edit'])->name('edit');
+                //     Route::post('/users/{user}/posts', [UserPostController::class, 'store'])->name('store');
+                //     Route::put('/users/{user}/posts/{post:slug}', [UserPostController::class, 'update'])->name('update');
+                //     Route::delete('/users/{user}/posts/{post:slug}', [UserPostController::class, 'destroy'])->name('delete');
 
-                    Route::post('/users/{user}/posts/delete', [UserPostTrashController::class, 'destroy'])->name('forcedelete');
-                    Route::post('/users/{user}/posts/restore', [UserPostTrashController::class, 'restore'])->name('restore');
-                });
+                //     Route::post('/users/{user}/posts/delete', [UserPostTrashController::class, 'destroy'])->name('forcedelete');
+                //     Route::post('/users/{user}/posts/restore', [UserPostTrashController::class, 'restore'])->name('restore');
+                // });
             });
         });
     });

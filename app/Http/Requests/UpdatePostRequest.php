@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Post;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostRequest extends FormRequest
@@ -32,7 +34,9 @@ class UpdatePostRequest extends FormRequest
             'hero_image' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'images' => ['array'],
             'tags' => ['array'],
-            'categories' => ['array', 'required']
+            'categories' => ['array', 'required'],
+            'published' => [Rule::in([Post::PUBLISHED, Post::UNPUBLISHED, Post::PENDING, Post::DRAFT])],
+            'favorite' => [Rule::in([Post::FAVORITE, Post::NONFAVORITE])]
         ];
     }
 }

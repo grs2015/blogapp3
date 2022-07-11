@@ -5,7 +5,7 @@ use App\Models\Comment;
 use App\Http\Controllers\Admin\PostCommentController;
 
 
-uses()->group('PCC');
+uses()->group('admin');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);

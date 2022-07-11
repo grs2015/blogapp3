@@ -13,7 +13,7 @@ use App\Mail\CategoryUpdatedNotificationMarkdown;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
-uses()->group('Cat');
+uses()->group('admin');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);
@@ -101,7 +101,8 @@ it('checks the event firing after storing the cat in database', function() {
 
 it('checks the mails been queued from admin after storing the cat in database', function() {
     Mail::fake();
-    $user = User::factory()->author()->create();
+    $user = User::factory()->create();
+    $user->assignRole('author');
     $catData = [
         'title' => 'Newest cat',
         'content' => 'Content of the newest cat',
@@ -246,7 +247,8 @@ it('checks the event firing after updating the cat in database', function() {
 
 it('checks the mails been queued from admin after updating the cat in database', function() {
     Mail::fake();
-    $user = User::factory()->author()->create();
+    $user = User::factory()->create();
+    $user->assignRole('author');
     $cat = Category::factory()->create();
     $catData = [
         'title' => 'Newest cat',
@@ -307,7 +309,8 @@ it('checks the event firing after deletion the category in database', function()
 
 it('checks the mails been queued from admin after deleting the category in database', function() {
     Mail::fake();
-    $user = User::factory()->author()->create();
+    $user = User::factory()->create();
+    $user->assignRole('author');
     $cat = Category::factory()->create();
 
     $response = $this->delete(action([CategoryController::class, 'destroy'], ['category' => $cat->slug]));

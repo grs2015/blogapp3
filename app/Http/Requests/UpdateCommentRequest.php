@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Comment;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCommentRequest extends FormRequest
@@ -26,7 +28,8 @@ class UpdateCommentRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'content' => ['string'],
-            'published_at' => ['date']
+            'published_at' => ['date'],
+            'published' => [Rule::in([Comment::PUBLISHED, Comment::UNPUBLISHED, Comment::PENDING])]
         ];
     }
 }

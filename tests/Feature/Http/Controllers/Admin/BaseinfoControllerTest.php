@@ -5,7 +5,7 @@ use Illuminate\Http\UploadedFile;
 use function Spatie\PestPluginTestTime\testTime;
 use App\Http\Controllers\Admin\BaseinfoController;
 
-uses()->group('BIC');
+uses()->group('admin');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);

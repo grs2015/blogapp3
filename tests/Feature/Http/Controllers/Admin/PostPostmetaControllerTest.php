@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\PostPostmetaController;
 
 
 
-uses()->group('PPMC');
+uses()->group('admin');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);
