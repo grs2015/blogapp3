@@ -36,11 +36,34 @@
 
                 <div>
                     <p style="font-weight: bold; font-size: 20px; color: blue;">The post of User: {{ $user->first_name }}</p>
-                    <p><span style="font-weight: bold;">Post ID: </span>{{ $post->id }}</p>
+                    <p style="font-weight: bold; font-size: 20px; color: blue;">Single Post with all relationships:</p>
+
+                        <p><span style="font-weight: bold;">User of post: </span>{{ $post->user->first_name }}</p>
+                        <p><span style="font-weight: bold;">Post ID: </span>{{ $post->id }}</p>
                         <p><span style="font-weight: bold;">Post title: </span>{{ $post->title }}</p>
-                        <p><span style="font-weight: bold;">Post published status: </span>{{ $post->published }}</p>
+                        <p><span style="font-weight: bold;">Post published: </span>{{ $post->published }}</p>
                         <p><span style="font-weight: bold;">Post slug: </span>{{ $post->slug }}</p>
-                    <div style="height: 1px; background-color: green;"></div>
+                        <p><span style="font-weight: bold;">Post views: </span>{{ $views }}</p>
+
+
+                        @foreach ($post->comments as $comment)
+                            <p><span style="font-weight: bold;">Comment ID: </span>{{ $comment->id }}</p>
+                            <p><span style="font-weight: bold;">Comment Title: </span>{{ $comment->title }}</p>
+                        @endforeach
+                        @foreach ($post->categories as $category)
+                            <p><span style="font-weight: bold;">Category ID: </span>{{ $category->id }}</p>
+                            <p><span style="font-weight: bold;">Category Title: </span>{{ $category->title }}</p>
+                        @endforeach
+                        @foreach ($post->tags as $tag)
+                            <p><span style="font-weight: bold;">Tag ID: </span>{{ $tag->id }}</p>
+                            <p><span style="font-weight: bold;">Tag Title: </span>{{ $tag->title }}</p>
+                        @endforeach
+                        @foreach ($post->postmetas as $postmeta)
+                            <p><span style="font-weight: bold;">Postmeta ID: </span>{{ $postmeta->id }}</p>
+                            <p><span style="font-weight: bold;">Postmeta Key: </span>{{ $postmeta->key }}</p>
+                        @endforeach
+                        <div style="height: 1px; background-color: green;"></div>
+
                 </div>
             </div>
         </div>

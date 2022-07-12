@@ -19,6 +19,13 @@ class PostController extends Controller
     {
         $post = Post::where('author_id', $post->author_id)->where('id', $post->id)->firstOrFail();
 
-        return view('public.post.show', ['post' => $post, 'user' => $post->user]);
+        if (!in_array($post->id, session()->get('viewed_posts', []) )) {
+            $post->increment('views');
+            session()->push('viewed_posts', $post->id);
+        }
+
+        $views = Post::whereId($post->id)->first()->views;
+
+        return view('public.post.show', ['post' => $post, 'user' => $post->user, 'views' => $views ]);
     }
 }
