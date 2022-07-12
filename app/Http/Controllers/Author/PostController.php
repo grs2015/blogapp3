@@ -3,51 +3,43 @@
 namespace App\Http\Controllers\Author;
 
 use App\Models\Post;
-use App\Models\User;
-use App\Models\Gallery;
-use Illuminate\Http\File;
 use App\Events\PostCreated;
 use App\Events\PostDeleted;
 use App\Events\PostUpdated;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Services\CacheService;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Intervention\Image\Facades\Image;
 use App\Http\Requests\StorePostRequest;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
 
 class PostController extends Controller
 {
-    // private PostRepositoryInterface $postRepository;
-
     public function __construct(
-      private PostRepositoryInterface $postRepository,
-      private ImageService $imageService
-    ) {}
+        private PostRepositoryInterface $postRepository,
+        private ImageService $imageService
+    )
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
 
-    // public function __construct(PostRepositoryInterface $postRepository)
-    // {
-    //     $this->postRepository = $postRepository;
-    // }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user, CacheService $cacheService)
+    public function index(CacheService $cacheService)
     {
-        // TODO - Add policy in order to show posts only for those who created them
+        // $posts = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
+        //     return $this->postRepository->getAllEntries(auth()->user()->id);
+        // });
 
-        $posts = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($user) {
-            return $this->postRepository->getAllEntries($user->id);
-        });
+        $posts = Post::where('author_id', auth()->user()->id)->with(['comments', 'postmetas'])->get();
 
-        return view('post.index', ['posts' => $posts, 'user' => $user ]);
+        return view('author.post.index', ['posts' => $posts, 'user' => auth()->user()]);
     }
 
     /**
@@ -55,11 +47,9 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(User $user)
+    public function create()
     {
-    // TODO - Allow use create form only for Author users - Policies
-
-        return view('post.create');
+        return view('author.post.create');
     }
 
     /**
@@ -68,7 +58,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostRequest $request, User $user)
+    public function store(StorePostRequest $request)
     {
         $validated = $request->safe()->except(['tags', 'categories', 'hero_image', 'images']);
         $validated['views'] = 0;
@@ -84,7 +74,7 @@ class PostController extends Controller
                 ->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
-        $post = $this->postRepository->createEntry($user->id, $validated);
+        $post = $this->postRepository->createEntry(auth()->user()->id, $validated);
 
         if ($request->has('images')) {
 
@@ -101,11 +91,9 @@ class PostController extends Controller
             $post->categories()->sync($catsIDs);
         }
 
-        PostCreated::dispatch($user, $title, $summary);
+        PostCreated::dispatch(auth()->user(), $title, $summary);
 
-        return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
-
-        // TODO - Allow storing only for Author users - later test this feature as well (Policies)
+        return redirect()->action([PostController::class, 'index']);
     }
 
     /**
@@ -114,14 +102,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, Post $post)
+    public function show(Post $post)
     {
-        // TODO - View increment functionality
-        // TODO - Add policy in order to show post only for those who created it
+        $post = Post::where('author_id', $post->author_id)->where('id', $post->id)->firstOrFail();
+        // $post = $this->postRepository->getEntryById($post->author_id, $post->id);
 
-        $post = $this->postRepository->getEntryById($user->id, $post->id);
-
-        return view('post.show', ['post' => $post, 'user' => $user]);
+        return view('author.post.show', ['post' => $post, 'user' => $post->user]);
     }
 
     /**
@@ -130,13 +116,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user, Post $post)
+    public function edit(Post $post)
     {
-        // TODO - Allow edit form only for Author users - Policies
+        $post = Post::where('author_id', $post->author_id)->where('id', $post->id)->firstOrFail();
+        // $post = $this->postRepository->getEntryById($post->author_id, $post->id);
 
-        $post = $this->postRepository->getEntryById($user->id, $post->id);
-
-        return view('post.edit', ['post' => $post, 'user' => $user]);
+        return view('author.post.edit', ['post' => $post, 'user' => $post->user]);
     }
 
     /**
@@ -146,11 +131,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostRequest $request, User $user, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        // TODO - add policy in order to update post only for those who created it
         // TODO - email notification (for admin if updated by author, and for author if updated by admin)
-        // TODO - published/favorite can be set only by admin user
         // TODO - add necessary exceptions/test for them
 
         $validated = $request->safe()->except(['published', 'views', 'favorite', 'tags', 'categories', 'hero_image', 'images']);
@@ -175,7 +158,7 @@ class PostController extends Controller
             $this->imageService->generateGallery($request->allFiles('images'), $post, [[200, 200], [640, 480]]);
         }
 
-        $this->postRepository->updateEntry($user->id, $post->id, $validated);
+        $this->postRepository->updateEntry(auth()->user()->id, $post->id, $validated);
 
         if ($request->has('tags')) {
             $tagIDs = $request->input('tags');
@@ -187,9 +170,9 @@ class PostController extends Controller
             $post->categories()->sync($catsIDs);
         }
 
-        PostUpdated::dispatch($user, $title, $summary);
+        PostUpdated::dispatch(auth()->user(), $title, $summary);
 
-        return redirect()->action([UserPostController::class, 'edit'], ['user' => $user->id, 'post' => $post->slug]);
+        return redirect()->action([PostController::class, 'edit'], ['post' => $post->slug]);
     }
 
     /**
@@ -198,15 +181,15 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user, Post $post)
+    public function destroy(Post $post)
     {
         $title = $post->title;
         $summary = $post->summary ?? $post->title;
 
-        $this->postRepository->deleteEntry($user->id, $post->id);
+        $this->postRepository->deleteEntry(auth()->user()->id, $post->id);
 
-        PostDeleted::dispatch($user, $title, $summary);
+        PostDeleted::dispatch(auth()->user(), $title, $summary);
 
-        return redirect()->action([UserPostController::class, 'index'], ['user' => $user->id]);
+        return redirect()->action([PostController::class, 'index']);
     }
 }

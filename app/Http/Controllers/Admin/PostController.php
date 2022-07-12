@@ -77,7 +77,7 @@ class PostController extends Controller
             $post->categories()->sync($catsIDs);
         }
 
-        return redirect()->action([PostController::class, 'index'], ['user' => Auth::user()->id]);
+        return redirect()->action([PostController::class, 'index']);
     }
 
     /**
