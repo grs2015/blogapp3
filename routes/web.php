@@ -2,18 +2,18 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagContoller;
 // use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\BaseinfoController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Trash\UserTrashController;
 use App\Http\Controllers\Admin\PostCommentController;
+
 use App\Http\Controllers\Member\PostRatingController;
-use App\Http\Controllers\Admin\PostPostmetaController;
-use App\Http\Controllers\TagContoller;
-use App\Http\Controllers\Trash\UserPostTrashController;
+
 
 
 /*
@@ -55,24 +55,17 @@ Route::middleware('auth')->group(function() {
                 // Admin routes
                 Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
                 Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
-                Route::resource('posts.postmetas', PostPostmetaController::class);
-                Route::resource('baseinfo', BaseinfoController::class);
-                Route::resource('posts.comments', PostCommentController::class);
+                Route::resource('posts.postmetas', App\Http\Controllers\Admin\PostPostmetaController::class);
+                Route::resource('baseinfo', App\Http\Controllers\Admin\BaseinfoController::class);
+                Route::resource('posts.comments', App\Http\Controllers\Admin\PostCommentController::class);
 
                 Route::resource('users', App\Http\Controllers\Admin\UserController::class);
-
                 Route::name('users.')->group(function() {
-                    // Route::get('/users', [UserController::class, 'index'])->name('index');
-                    // Route::get('/users/{user}', [UserController::class, 'show'])->name('show');
-                    // Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('destroy');
-                    // Route::put('/user/{user}', [UserController::class, 'update'])->name('update');
-
                     Route::post('/users/delete', [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('forcedelete');
                     Route::post('/users/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('restore');
                 });
 
                 Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
-
                 Route::name('users.')->group(function() {
                     Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
                     Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
@@ -82,9 +75,14 @@ Route::middleware('auth')->group(function() {
     });
 
     Route::prefix('author')->group(function() {
-        Route::middleware('role:author')->group(function() {
-            Route::name('user')->group(function() {
+        Route::middleware('role:author|admin')->group(function() {
+            Route::name('author.')->group(function() {
                 // Users routes
+                Route::resource('tags', App\Http\Controllers\Author\TagController::class)->only(['index', 'show']);
+                Route::resource('categories', App\Http\Controllers\Author\CategoryController::class)->only(['index', 'show']);
+
+                Route::resource('posts.postmetas', App\Http\Controllers\Author\PostPostmetaController::class);
+
                 // Route::name('posts.')->group(function() {
                 //     Route::get('/users/{user}/posts', [UserPostController::class, 'index'])->name('index');
                 //     Route::get('/users/{user}/posts/create', [UserPostController::class, 'create'])->name('create');

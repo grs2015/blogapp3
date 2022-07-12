@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Models\Post;
 use App\Models\User;
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Interfaces\PostRepositoryInterface;
 
-class UserPostController extends Controller
+class PostController extends Controller
 {
     // private PostRepositoryInterface $postRepository;
 
