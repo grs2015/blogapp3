@@ -22,13 +22,13 @@ class TagController extends Controller
     {
         $tags = $this->tagRepository->getAllEntries();
 
-        return view('tag.index', ['tags' => $tags]);
+        return view('author.tag.index', ['tags' => $tags]);
     }
 
     public function show(Tag $tag)
     {
         $tag = $this->tagRepository->getEntryById($tag->id);
 
-        return view('tag.show', ['tag' => $tag]);
+        return view('author.tag.show', ['tag' => $tag]);
     }
 }
