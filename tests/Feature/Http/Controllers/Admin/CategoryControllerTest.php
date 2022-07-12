@@ -20,7 +20,7 @@ beforeEach(function() {
     loginAsAdmin();
 });
 /* ------------------------------ @index method ----------------------------- */
-it('renders the tag page with tags data', function() {
+it('renders the category page with category data', function() {
     $tags = Category::factory()->count(5)->create();
     $catTitle = Category::inRandomOrder()->first()->title;
 
