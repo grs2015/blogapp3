@@ -2,7 +2,7 @@
 
 use App\Models\Comment;
 
-uses()->group('CommentModel');
+uses()->group('models');
 
 it('check if published comment is published', function() {
     $publishedComment = Comment::factory()->published()->create();

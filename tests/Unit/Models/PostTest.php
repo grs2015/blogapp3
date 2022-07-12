@@ -2,7 +2,7 @@
 
 use App\Models\Post;
 
-uses()->group('PostModel');
+uses()->group('models');
 
 it('test slug attribute when the post is created', function() {
     $post = Post::factory()->create(['title' => 'New Post Entry']);

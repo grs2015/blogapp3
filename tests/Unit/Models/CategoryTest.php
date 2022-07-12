@@ -2,7 +2,7 @@
 
 use App\Models\Category;
 
-uses()->group('CategoryModel');
+uses()->group('models');
 
 it('test slug attribute when the category is created', function() {
     $category = Category::factory()->create(['title' => 'New Category Entry']);
