@@ -43,6 +43,14 @@ Route::name('posts.')->group(function() {
     Route::get('/posts/{post:slug}', [App\Http\Controllers\Public\PostController::class, 'show'])->name('show');
 });
 
+Route::name('public.')->group(function() {
+    Route::resource('baseinfo', App\Http\Controllers\Public\BaseinfoController::class)->only(['index']);
+    Route::resource('categories', App\Http\Controllers\Public\CategoryController::class)->only(['index', 'show']);
+    Route::resource('tags', App\Http\Controllers\Public\TagController::class)->only(['index', 'show']);
+});
+
+
+
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
 // Here goes the root with Auth middleware
