@@ -38,10 +38,10 @@ Route::get('/', function () {
 
 /* ------------------------------- Public part ------------------------------ */
 
-// TODO - public routes for index/show methods
-
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::name('posts.')->group(function() {
+    Route::get('/posts', [App\Http\Controllers\Public\PostController::class, 'index'])->name('index');
+    Route::get('/posts/{post:slug}', [App\Http\Controllers\Public\PostController::class, 'show'])->name('show');
+});
 
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function() {
     });
 
     Route::prefix('author')->group(function() {
-        Route::middleware('role:author|admin')->group(function() {
+        Route::middleware('role:author|admin|super-admin')->group(function() {
             Route::name('author.')->group(function() {
                 // Users routes
                 Route::resource('tags', App\Http\Controllers\Author\TagController::class)->only(['index', 'show']);
@@ -87,9 +87,10 @@ Route::middleware('auth')->group(function() {
     });
 
     Route::prefix('member')->group(function() {
-        Route::middleware('role:member')->group(function() {
+        Route::middleware('role:member|admin|super-admin')->group(function() {
             Route::name('member')->group(function() {
                 // Member routes
+                Route::resource('posts.comments', App\Http\Controllers\Member\PostCommentController::class)->only(['create', 'store']);
                 Route::post('posts/{post:slug}/rate', [PostRatingController::class, 'store'])->name('rate');
                 // Route::post('posts/{post:slug}/comment', [PostCommentController::class, 'store'])->name('comment');
             });
