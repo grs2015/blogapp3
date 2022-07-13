@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('intro')->nullable();
             $table->text('profile')->nullable();
             $table->string('avatar')->nullable();
-            $table->char('role', 100)->default(User::REGULAR_USER);
+            $table->char('status', 100)->default(User::PENDING);
 
             $table->softDeletes();
         });

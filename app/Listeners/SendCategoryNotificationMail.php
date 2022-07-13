@@ -17,7 +17,7 @@ class SendCategoryNotificationMail
 {
     public function handleCategoryCreatedNotification(CategoryCreated $event)
     {
-        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+        foreach(User::role('author')->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new CategoryCreatedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }
@@ -25,7 +25,7 @@ class SendCategoryNotificationMail
 
     public function handleCategoryUpdatedNotification(CategoryUpdated $event)
     {
-        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+        foreach(User::role('author')->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new CategoryUpdatedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }
@@ -33,7 +33,7 @@ class SendCategoryNotificationMail
 
     public function handleCategoryDeletedNotification(CategoryDeleted $event)
     {
-        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+        foreach(User::role('author')->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new CategoryDeletedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }

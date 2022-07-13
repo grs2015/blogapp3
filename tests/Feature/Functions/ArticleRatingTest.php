@@ -1,19 +1,22 @@
 <?php
 
 use App\Models\Post;
-use App\Models\User;
-use function Pest\Laravel\actingAs;
+use App\Http\Controllers\Member\PostRatingController;
 
 uses()->group('ArticleRating');
 
-it('checks if post can be rated', function() {
-    // $this->withoutExceptionHandling();
+beforeEach(function() {
+    $this->seed(RolePermissionSeeder::class);
+});
 
-    actingAs(User::factory()->create());
+it('checks if post can be rated', function() {
+    $this->withoutExceptionHandling();
+
+    loginAsMember();
 
     $post = Post::factory()->create();
 
-    $this->post("/posts/{$post->slug}/rate", ['rating' => 5]);
+    $this->post(action([PostRatingController::class, 'store'], ['post' => $post->slug]), ['rating' => 5]);
 
     expect($post->rating())->toEqual(5);
 });
@@ -23,7 +26,7 @@ it('checks if post cannot be rated by guests', function() {
 
     $post = Post::factory()->create();
 
-    $response = $this->post("/posts/{$post->slug}/rate");
+    $response = $this->post(action([PostRatingController::class, 'store'], ['post' => $post->slug]));
 
     $response->assertRedirect('login');
 
@@ -32,15 +35,15 @@ it('checks if post cannot be rated by guests', function() {
 
 it('checks the valid rating', function() {
 
-    actingAs(User::factory()->create());
+    loginAsMember();
 
     $post = Post::factory()->create();
 
-    $response = $this->post("/posts/{$post->slug}/rate");
+    $response = $this->post(action([PostRatingController::class, 'store'], ['post' => $post->slug]));
 
     $response->assertSessionHasErrors('rating');
 
-    $response = $this->post("/posts/{$post->slug}/rate", ['rating' => 'Bad']);
+    $response = $this->post(action([PostRatingController::class, 'store'], ['post' => $post->slug]), ['rating' => 'Bad']);
 
     $response->assertSessionHasErrors('rating');
 });
@@ -48,15 +51,15 @@ it('checks the valid rating', function() {
 it('checks if post can be updated with rating', function() {
     // $this->withoutExceptionHandling();
 
-    actingAs(User::factory()->create());
+    loginAsMember();
 
     $post = Post::factory()->create();
 
-    $this->post("/posts/{$post->slug}/rate", ['rating' => 5]);
+    $this->post(action([PostRatingController::class, 'store'], ['post' => $post->slug]), ['rating' => 5]);
 
     expect($post->rating())->toEqual(5);
 
-    $this->post("/posts/{$post->slug}/rate", ['rating' => 2]);
+    $this->post(action([PostRatingController::class, 'store'], ['post' => $post->slug]), ['rating' => 2]);
 
     $this->assertDatabaseHas('ratings', ['rating' => 2]);
 

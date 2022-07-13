@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Post;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostRequest extends FormRequest
@@ -23,7 +26,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $commonRules = [
             'title' => ['string', 'required'],
             'meta_title' => ['string'],
             'summary' => ['string'],
@@ -32,7 +35,20 @@ class UpdatePostRequest extends FormRequest
             'hero_image' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'images' => ['array'],
             'tags' => ['array'],
-            'categories' => ['array', 'required']
+            'categories' => ['array', 'required'],
+        ];
+
+        if (Auth::user()->hasRole('author')) {
+            return [
+                ...$commonRules,
+                'published' => [Rule::in([Post::PENDING, Post::DRAFT])]
+            ];
+        }
+
+        return [
+            ...$commonRules,
+            'published' => [Rule::in([Post::PUBLISHED, Post::UNPUBLISHED, Post::PENDING, Post::DRAFT])],
+            'favorite' => [Rule::in([Post::FAVORITE, Post::NONFAVORITE])]
         ];
     }
 }

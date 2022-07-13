@@ -15,7 +15,7 @@ class SendTagNotificationMail
 {
     public function handleTagCreatedNotification(TagCreated $event)
     {
-        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+        foreach(User::role('author')->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new TagCreatedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }
@@ -23,7 +23,7 @@ class SendTagNotificationMail
 
     public function handleTagUpdatedNotification(TagUpdated $event)
     {
-        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+        foreach(User::role('author')->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new TagUpdatedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }
@@ -31,7 +31,7 @@ class SendTagNotificationMail
 
     public function handleTagDeletedNotification(TagDeleted $event)
     {
-        foreach(User::whereAuthor()->get()->pluck('email') as $author_email) {
+        foreach(User::role('author')->get()->pluck('email') as $author_email) {
             Mail::to($author_email)->later(now()->addMinutes(10), new TagDeletedNotificationMarkdown($event->title, $event->content));
             // send(new TagCreatedNotificationMarkdown($event->title, $event->content));
         }

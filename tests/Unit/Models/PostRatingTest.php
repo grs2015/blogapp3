@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Rating;
 use function Pest\Laravel\actingAs;
 
-uses()->group('PostRating');
+uses()->group('models');
 
 beforeEach(function () {
     $this->post = Post::factory()->create();
