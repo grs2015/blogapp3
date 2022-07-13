@@ -1,17 +1,18 @@
 <?php
 
 use App\Models\Post;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TagContoller;
 // use App\Http\Controllers\UserController;
+use App\Http\Controllers\TagContoller;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\BaseinfoController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Trash\UserTrashController;
-use App\Http\Controllers\Admin\PostCommentController;
 
+use App\Http\Controllers\Admin\PostCommentController;
 use App\Http\Controllers\Member\PostRatingController;
 
 
@@ -28,7 +29,20 @@ use App\Http\Controllers\Member\PostRatingController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Public/Index', [
+        'name' => 'Grigorii'
+    ]);
+});
+
+Route::get('/language/{locale}', function($locale) {
+    if (!in_array($locale, ['de', 'en', 'pl'])) {
+        abort(400);
+    }
+    App::setLocale($locale);
+
+    // dump(App::getLocale());
+
+    return redirect()->back();
 });
 
 
