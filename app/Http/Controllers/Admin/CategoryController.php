@@ -8,9 +8,11 @@ use App\Events\CategoryCreated;
 use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Interfaces\CategoryRepositoryInterface;
+use App\Services\CacheService;
 
 class CategoryController extends Controller
 {
@@ -19,9 +21,11 @@ class CategoryController extends Controller
     ) {  }
 
 
-    public function index()
+    public function index(CacheService $cacheService)
     {
-        $cats = $this->categoryRepository->getAllEntries();
+        $cats = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
+            return Category::all();
+        });
 
         return view('category.index', ['cats' => $cats]);
     }
@@ -37,23 +41,25 @@ class CategoryController extends Controller
         $title = $validated['title'];
         $content = $validated['content'] ?? 'No content provided';
 
-        $this->categoryRepository->createEntry($validated);
+        Category::createEntity($validated);
 
         CategoryCreated::dispatch($title, $content);
 
         return redirect()->action([CategoryController::class, 'index']);
     }
 
-    public function show(Category $category)
+    public function show(Category $category, CacheService $cacheService)
     {
-        $cat = $this->categoryRepository->getEntryById($category->id);
+        $cat = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($category){
+            return Category::getEntityById($category->id);
+        });
 
         return view('category.show', ['category' => $cat]);
     }
 
     public function edit(Category $category)
     {
-        $cat = $this->categoryRepository->getEntryById($category->id);
+        $cat = Category::getEntityById($category->id);
 
         return view('category.edit', ['category' => $cat]);
     }
@@ -69,7 +75,8 @@ class CategoryController extends Controller
         $title = $validated['title'];
         $content = $validated['content'] ?? 'No content provided';
 
-        $this->categoryRepository->updateEntry($category->id, $validated);
+        Category::updateEntity($category->id, $validated);
+
         $category->refresh();
 
         CategoryUpdated::dispatch($title, $content);
@@ -82,9 +89,12 @@ class CategoryController extends Controller
         $title = $category->title;
         $content = $category->content ?? 'No content provided';
 
-        $category->posts()->detach();
+        Category::detachPosts($category->id);
+        Category::destroyEntity($category->id);
 
-        $this->categoryRepository->deleteEntry($category->id);
+        // $category->posts()->detach();
+
+        // $this->categoryRepository->deleteEntry($category->id);
 
         CategoryDeleted::dispatch($title, $content);
 

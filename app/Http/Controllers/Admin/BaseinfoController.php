@@ -40,7 +40,7 @@ class BaseinfoController extends Controller
             $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
-        Baseinfo::createBaseinfo($validated);
+        Baseinfo::createEntity($validated);
 
         return redirect()->action([BaseinfoController::class, 'index']);
     }
@@ -48,7 +48,7 @@ class BaseinfoController extends Controller
     public function show(Baseinfo $baseinfo, CacheService $cacheService)
     {
         $info = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($baseinfo) {
-            return Baseinfo::getBaseinfoById($baseinfo->id);
+            return Baseinfo::getEntityById($baseinfo->id);
         });
 
         return view('baseinfo.show', compact(['info']));
@@ -56,7 +56,7 @@ class BaseinfoController extends Controller
 
     public function edit(Baseinfo $baseinfo)
     {
-        $info = Baseinfo::getBaseinfoById($baseinfo->id);
+        $info = Baseinfo::getEntityById($baseinfo->id);
 
         return view('baseinfo.edit', compact(['info']));
     }
@@ -72,14 +72,14 @@ class BaseinfoController extends Controller
             $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
-        Baseinfo::updateBaseinfo($baseinfo->id, $validated);
+        Baseinfo::updateEntity($baseinfo->id, $validated);
 
         return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $baseinfo->id]);
     }
 
     public function destroy(Baseinfo $baseinfo)
     {
-        Baseinfo::destroyBaseinfo($baseinfo->id);
+        Baseinfo::destroyEntity($baseinfo->id);
 
         return redirect()->action([BaseinfoController::class, 'index']);
     }

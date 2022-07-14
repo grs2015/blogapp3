@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Builders\CategoryBuilder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Category
@@ -72,5 +74,16 @@ class Category extends Model
     public function posts():BelongsToMany
     {
         return $this->belongsToMany(Post::class);
+    }
+
+    /**
+     * Custom Builder
+     *
+     * @param [type] $query
+     * @return CategoryBuilder
+     */
+    public function newEloquentBuilder($query): CategoryBuilder
+    {
+        return new CategoryBuilder($query);
     }
 }
