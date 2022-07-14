@@ -5,20 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Baseinfo;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StoreBaseinfoRequest;
 use App\Http\Requests\UpdateBaseinfoRequest;
 use App\Interfaces\BaseinfoRepositoryInterface;
+use App\Services\CacheService;
 
 class BaseinfoController extends Controller
 {
     public function __construct(
-        private BaseinfoRepositoryInterface $baseinfoRepository,
         private ImageService $imageService
     ) {  }
 
-    public function index()
+    public function index(CacheService $cacheService)
     {
-        $infos = $this->baseinfoRepository->getAllEntries();
+        $infos = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
+            return Baseinfo::all();
+        });
 
         return view('baseinfo.index', compact(['infos']));
     }
@@ -37,21 +40,23 @@ class BaseinfoController extends Controller
             $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
-        $this->baseinfoRepository->createEntry($validated);
+        Baseinfo::createBaseinfo($validated);
 
         return redirect()->action([BaseinfoController::class, 'index']);
     }
 
-    public function show(Baseinfo $baseinfo)
+    public function show(Baseinfo $baseinfo, CacheService $cacheService)
     {
-        $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
+        $info = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($baseinfo) {
+            return Baseinfo::getBaseinfoById($baseinfo->id);
+        });
 
         return view('baseinfo.show', compact(['info']));
     }
 
     public function edit(Baseinfo $baseinfo)
     {
-        $info = $this->baseinfoRepository->getEntryById($baseinfo->id);
+        $info = Baseinfo::getBaseinfoById($baseinfo->id);
 
         return view('baseinfo.edit', compact(['info']));
     }
@@ -67,14 +72,14 @@ class BaseinfoController extends Controller
             $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
-        $this->baseinfoRepository->updateEntry($baseinfo->id, $validated);
+        Baseinfo::updateBaseinfo($baseinfo->id, $validated);
 
         return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $baseinfo->id]);
     }
 
     public function destroy(Baseinfo $baseinfo)
     {
-        $this->baseinfoRepository->deleteEntry($baseinfo->id);
+        Baseinfo::destroyBaseinfo($baseinfo->id);
 
         return redirect()->action([BaseinfoController::class, 'index']);
     }

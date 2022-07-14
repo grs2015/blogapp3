@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Builders\BaseinfoBuilder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Baseinfo
@@ -42,4 +43,9 @@ class Baseinfo extends Model
     use HasFactory;
 
     public $guarded = [];
+
+    public function newEloquentBuilder($query): BaseinfoBuilder
+    {
+        return new BaseinfoBuilder($query);
+    }
 }

@@ -5,7 +5,7 @@ use Illuminate\Http\UploadedFile;
 use function Spatie\PestPluginTestTime\testTime;
 use App\Http\Controllers\Admin\BaseinfoController;
 
-uses()->group('admin');
+uses()->group('admin', 'baseinfo');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);
@@ -102,6 +102,8 @@ it('checks the hero-image upload and its url resides in database after info stor
 
 /* ------------------------------ @show method ------------------------------ */
 it('renders single info entry by given ID', function() {
+    $this->withoutExceptionHandling();
+
     $base = Baseinfo::factory()->create();
 
     $response = $this->get(action([BaseinfoController::class, 'show'], ['baseinfo' => $base->id]));

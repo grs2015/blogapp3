@@ -34,18 +34,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/language/{locale}', function($locale) {
-    if (!in_array($locale, ['de', 'en', 'pl'])) {
-        abort(400);
-    }
-    App::setLocale($locale);
-
-    // dump(App::getLocale());
-
-    return redirect()->back();
-});
-
-
 // Route::get('/', function() {
 //     return Post::search('Similique')->get();
 // });
