@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Builders\CategoryBuilder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Category
@@ -35,6 +37,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
  * @property-read int|null $posts_count
+ * @method static CategoryBuilder|Category createEntity(array $baseAttributes)
+ * @method static CategoryBuilder|Category destroyEntity(int $entityId)
+ * @method static CategoryBuilder|Category detachPosts(int $entityId)
+ * @method static CategoryBuilder|Category getEntityById(int $entityId)
+ * @method static CategoryBuilder|Category updateEntity(int $entityId, array $newAttributes)
  */
 class Category extends Model
 {
@@ -72,5 +79,16 @@ class Category extends Model
     public function posts():BelongsToMany
     {
         return $this->belongsToMany(Post::class);
+    }
+
+    /**
+     * Custom Builder
+     *
+     * @param [type] $query
+     * @return CategoryBuilder
+     */
+    public function newEloquentBuilder($query): CategoryBuilder
+    {
+        return new CategoryBuilder($query);
     }
 }

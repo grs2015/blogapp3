@@ -34,18 +34,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/language/{locale}', function($locale) {
-    if (!in_array($locale, ['de', 'en', 'pl'])) {
-        abort(400);
-    }
-    App::setLocale($locale);
-
-    // dump(App::getLocale());
-
-    return redirect()->back();
-});
-
-
 // Route::get('/', function() {
 //     return Post::search('Similique')->get();
 // });
@@ -77,8 +65,8 @@ Route::middleware('auth')->group(function() {
                 // Admin routes
                 Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
                 Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
-                Route::resource('posts.postmetas', App\Http\Controllers\Admin\PostPostmetaController::class);
                 Route::resource('baseinfo', App\Http\Controllers\Admin\BaseinfoController::class);
+                Route::resource('posts.postmetas', App\Http\Controllers\Admin\PostPostmetaController::class);
                 Route::resource('posts.comments', App\Http\Controllers\Admin\PostCommentController::class);
 
                 Route::resource('users', App\Http\Controllers\Admin\UserController::class);
