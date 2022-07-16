@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
 use App\Models\Baseinfo;
+use Illuminate\Http\Request;
+use App\Services\CacheService;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\StoreBaseinfoRequest;
-use App\Http\Requests\UpdateBaseinfoRequest;
-use App\Interfaces\BaseinfoRepositoryInterface;
-use App\Services\CacheService;
+use App\ViewModels\GetBaseinfoViewModel;
+use App\DataTransferObjects\BaseinfoData;
+use App\Actions\Blog\UpsertBaseinfoAction;
+use App\ViewModels\UpsertBaseinfoViewModel;
 
 class BaseinfoController extends Controller
 {
@@ -19,66 +22,52 @@ class BaseinfoController extends Controller
 
     public function index(CacheService $cacheService)
     {
-        $infos = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
-            return Baseinfo::all();
-        });
-
-        return view('baseinfo.index', compact(['infos']));
+        return Inertia::render('Baseinfo/Index', [
+            'model' => new GetBaseinfoViewModel($cacheService)
+        ]);
     }
 
     public function create()
     {
-        return view('baseinfo.create');
-    }
-
-    public function store(StoreBaseinfoRequest $request)
-    {
-        $validated = $request->safe()->except(['hero_image']);
-
-        if ($request->has('hero_image')) {
-            $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
-        }
-
-        Baseinfo::createEntity($validated);
-
-        return redirect()->action([BaseinfoController::class, 'index']);
-    }
-
-    public function show(Baseinfo $baseinfo, CacheService $cacheService)
-    {
-        $info = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() use ($baseinfo) {
-            return Baseinfo::getEntityById($baseinfo->id);
-        });
-
-        return view('baseinfo.show', compact(['info']));
+        return Inertia::render('Baseinfo/Form', [
+            'model' => new UpsertBaseinfoViewModel()
+        ]);
     }
 
     public function edit(Baseinfo $baseinfo)
     {
-        $info = Baseinfo::getEntityById($baseinfo->id);
-
-        return view('baseinfo.edit', compact(['info']));
+        return Inertia::render('Baseinfo/Form', [
+            'model' => new UpsertBaseinfoViewModel($baseinfo)
+        ]);
     }
 
-    public function update(UpdateBaseinfoRequest $request, Baseinfo $baseinfo)
+    public function show(Baseinfo $baseinfo)
     {
-        $validated = $request->safe()->except(['hero_image']);
+        return Inertia::render('Baseinfo/Show', [
+            'model' => new UpsertBaseinfoViewModel($baseinfo)
+        ]);
+    }
 
-        if ($request->has('hero_image')) {
+    public function store(BaseinfoData $data, Request $request, ImageService $imageService)
+    {
+        UpsertBaseinfoAction::execute($data, $request->file('hero_image'), $imageService);
 
-            $this->imageService->deleteHeroImages($baseinfo->hero_image);
-            $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeHeroImages()->generateHeroURL()->filenamesDB;
+        return redirect()->action([BaseinfoController::class, 'index']);
+    }
+
+    public function update(BaseinfoData $data, Request $request, ImageService $imageService)
+    {
+        UpsertBaseinfoAction::execute($data, $request->file('hero_image'), $imageService);
+
+        return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $data->id]);
+    }
+
+    public function destroy(Baseinfo $baseinfo, ImageService $imageService)
+    {
+        if ($baseinfo->hero_image) {
+            $imageService->deleteHeroImages(Baseinfo::getEntityById($baseinfo->id)->hero_image);
         }
 
-        Baseinfo::updateEntity($baseinfo->id, $validated);
-
-        return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $baseinfo->id]);
-    }
-
-    public function destroy(Baseinfo $baseinfo)
-    {
         Baseinfo::destroyEntity($baseinfo->id);
 
         return redirect()->action([BaseinfoController::class, 'index']);
