@@ -37,6 +37,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
  * @property-read int|null $posts_count
+ * @method static CategoryBuilder|Category createEntity(array $baseAttributes)
+ * @method static CategoryBuilder|Category destroyEntity(int $entityId)
+ * @method static CategoryBuilder|Category detachPosts(int $entityId)
+ * @method static CategoryBuilder|Category getEntityById(int $entityId)
+ * @method static CategoryBuilder|Category updateEntity(int $entityId, array $newAttributes)
  */
 class Category extends Model
 {

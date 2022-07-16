@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Builders\BaseinfoBuilder;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -37,6 +39,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|Baseinfo whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Baseinfo whereWebsite($value)
  * @mixin \Eloquent
+ * @method static BaseinfoBuilder|Baseinfo createEntity(array $baseAttributes)
+ * @method static BaseinfoBuilder|Baseinfo destroyEntity(int $entityId)
+ * @method static BaseinfoBuilder|Baseinfo getEntityById(int $entityId)
+ * @method static BaseinfoBuilder|Baseinfo updateEntity(int $entityId, array $newAttributes)
  */
 class Baseinfo extends Model
 {
@@ -47,5 +53,12 @@ class Baseinfo extends Model
     public function newEloquentBuilder($query): BaseinfoBuilder
     {
         return new BaseinfoBuilder($query);
+    }
+
+    public function fullAddress(): Attribute
+    {
+        return new Attribute(
+            get: fn() => "{$this->website} {$this->phone}"
+        );
     }
 }
