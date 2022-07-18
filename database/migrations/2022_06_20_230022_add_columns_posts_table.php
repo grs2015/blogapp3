@@ -23,6 +23,7 @@ return new class extends Migration
             // $table->text('summary')->nullable()->fulltext();
             $table->text('summary')->nullable();
             $table->char('published', 100)->default(Post::UNPUBLISHED);
+            $table->char('status', 100)->nullable();
             $table->dateTime('published_at')->nullable();
             // $table->text('content')->nullable()->fulltext();
             $table->text('content')->nullable();

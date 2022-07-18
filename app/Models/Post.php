@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\FavoriteStatus;
+use App\Enums\PostStatus;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Laravel\Scout\Searchable;
+use App\Models\Builders\PostBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -281,5 +284,20 @@ class Post extends Model
             'title' => $this->title,
             'content' => $this->content
         ];
+    }
+
+    protected $casts = [
+        'status' => PostStatus::class,
+        'favorite' => FavoriteStatus::class,
+    ];
+
+    protected $attributes = [
+        'status' => PostStatus::Draft,
+        'favorite' => FavoriteStatus::Nonfavorite
+    ];
+
+    public function newEloquentBuilder($query): PostBuilder
+    {
+        return new PostBuilder($query);
     }
 }

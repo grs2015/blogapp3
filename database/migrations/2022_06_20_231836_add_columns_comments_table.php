@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content')->nullable();
             $table->dateTime('published_at')->nullable();
-            $table->char('published', 100)->default(Comment::UNPUBLISHED);
+            $table->char('status', 100)->nullable();
 
             $table->foreignId('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
         });

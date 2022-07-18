@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\UserStatus;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Builders\UserBuilder;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -127,6 +129,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'status' => UserStatus::class,
     ];
 
     /**
@@ -193,5 +196,14 @@ class User extends Authenticatable
     public function posts():HasMany
     {
         return $this->hasMany(Post::class, 'author_id');
+    }
+
+    protected $attributes = [
+        'status' => UserStatus::Pending,
+    ];
+
+    public function newEloquentBuilder($query): UserBuilder
+    {
+        return new UserBuilder($query);
     }
 }

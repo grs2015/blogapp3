@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\CommentStatus;
 use Illuminate\Support\Str;
+use App\Models\Builders\CommentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Comment
@@ -36,6 +38,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\Post|null $post
  * @method static Builder|Comment wherePending()
  * @method static Builder|Comment whereUnpublished()
+ * @method static CommentBuilder|Comment createCommentEntity(int $postId, array $commentAttributes)
+ * @method static CommentBuilder|Comment createEntity(array $baseAttributes)
+ * @method static CommentBuilder|Comment destroyEntity(int $entityId)
+ * @method static CommentBuilder|Comment getAllCommentEntities(int $postId)
+ * @method static CommentBuilder|Comment getCommentEntityById(int $postId, int $commentId)
+ * @method static CommentBuilder|Comment getEntityById(int $entityId)
+ * @method static CommentBuilder|Comment updateEntity(int $entityId, array $newAttributes)
  */
 class Comment extends Model
 {
@@ -46,6 +55,14 @@ class Comment extends Model
     const UNPUBLISHED = 'unpublished';
 
     public $guarded = [];
+
+    protected $casts = [
+        'status' => CommentStatus::class
+    ];
+
+    protected $attributes = [
+        'status' => CommentStatus::Pending
+    ];
 
     /**
      * Checks the Published status of the comment
@@ -111,5 +128,15 @@ class Comment extends Model
     public function post():BelongsTo
     {
         return $this->belongsTo(Post::class);
+    }
+    /**
+     * Custom query builder
+     *
+     * @param [type] $query
+     * @return CommentBuilder
+     */
+    public function newEloquentBuilder($query): CommentBuilder
+    {
+        return new CommentBuilder($query);
     }
 }
