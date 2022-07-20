@@ -88,7 +88,7 @@ it('renders single cat entry with Inertia', function() {
 
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
-        ->component('Category/Form')
+        ->component('Category/Show')
         ->has('model', fn(Assert $page) => $page
             ->has('category', fn(Assert $page) => $page
                 ->where('title', $title)

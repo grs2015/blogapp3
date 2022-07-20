@@ -3,28 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use Inertia\Inertia;
 use App\Models\Comment;
+use App\Services\CacheService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use App\DataTransferObjects\CommentData;
+use App\ViewModels\GetCommentsViewModel;
+use App\Actions\Blog\UpsertCommentAction;
 use App\Http\Requests\StoreCommentRequest;
+use App\ViewModels\UpsertCommentViewModel;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Interfaces\CommentRepositoryInterface;
 
 class PostCommentController extends Controller
 {
-
-    public function __construct(
-        private CommentRepositoryInterface $commentRepository
-    ) {  }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Post $post)
+    public function index(Post $post, CacheService $cacheService)
     {
-        $comments = $this->commentRepository->getAllEntries($post->id);
-
-        return view('comment.index', compact('comments', 'post'));
+        return Inertia::render('Comment/Index', [
+            'model' => new GetCommentsViewModel($cacheService, $post)
+        ]);
     }
 
     /**
@@ -34,35 +37,9 @@ class PostCommentController extends Controller
      */
     public function create()
     {
-        return view('comment.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreCommentRequest $request, Post $post)
-    {
-        $validated = $request->validated();
-
-        $this->commentRepository->createEntry($post->id, $validated);
-
-        return redirect()->action([PostCommentController::class, 'index'], ['post' => $post->slug]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post, Comment $comment)
-    {
-        $comment = $this->commentRepository->getEntryById($post->id, $comment->id);
-
-        return view('comment.show', compact('post', 'comment'));
+        return Inertia::render('Comment/Form', [
+            'model' => new UpsertCommentViewModel()
+        ]);
     }
 
     /**
@@ -73,9 +50,35 @@ class PostCommentController extends Controller
      */
     public function edit(Post $post, Comment $comment)
     {
-        $comment = $this->commentRepository->getEntryById($post->id, $comment->id);
+        return Inertia::render('Comment/Form', [
+            'model' => new UpsertCommentViewModel($comment)
+        ]);
+    }
 
-        return view('comment.edit', compact('post', 'comment'));
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post, Comment $comment)
+    {
+        return Inertia::render('Comment/Show', [
+            'model' => new UpsertCommentViewModel($comment)
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CommentData $data, Post $post)
+    {
+        UpsertCommentAction::execute($data);
+
+        return redirect()->action([PostCommentController::class, 'index'], ['post' => $post->slug]);
     }
 
     /**
@@ -85,13 +88,11 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCommentRequest $request, Post $post, Comment $comment)
+    public function update(CommentData $data, Post $post)
     {
-        $validated = $request->validated();
+        UpsertCommentAction::execute($data);
 
-        $this->commentRepository->updateEntry($post->id, $comment->id, $validated);
-
-        return redirect()->action([PostCommentController::class, 'edit'], ['post' => $post->slug, 'comment' => $comment->id]);
+        return redirect()->action([PostCommentController::class, 'edit'], ['post' => $post->slug, 'comment' => $data->id]);
     }
 
     /**
@@ -102,7 +103,7 @@ class PostCommentController extends Controller
      */
     public function destroy(Post $post, Comment $comment)
     {
-        $this->commentRepository->deleteEntry($post->id, $comment->id);
+        $comment->delete();
 
         return redirect()->action([PostCommentController::class, 'index'], ['post' => $post->slug]);
     }
