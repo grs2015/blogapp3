@@ -4,16 +4,19 @@ use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
+
 use App\Events\CategoryCreated;
 use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
+use Illuminate\Support\Facades\Cache;
+use Inertia\Testing\AssertableInertia as Assert;
 use App\Mail\CategoryCreatedNotificationMarkdown;
 use App\Mail\CategoryDeletedNotificationMarkdown;
 use App\Mail\CategoryUpdatedNotificationMarkdown;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
-uses()->group('admin');
+uses()->group('admin', 'category');
 
 beforeEach(function() {
     $this->seed(RolePermissionSeeder::class);
@@ -21,30 +24,85 @@ beforeEach(function() {
 });
 /* ------------------------------ @index method ----------------------------- */
 it('renders the category page with category data', function() {
-    $tags = Category::factory()->count(5)->create();
-    $catTitle = Category::inRandomOrder()->first()->title;
+    Category::factory()->count(5)->create();
+    $catTitle = Category::first()->title;
 
     $response = $this->get(action([CategoryController::class, 'index']));
 
     $response->assertOk();
-    $response->assertSee('All cats:');
-    $response->assertSee($catTitle);
-
-    loginAsSuperAdmin();
-
-    $response = $this->get(action([CategoryController::class, 'index']));
-
-    $response->assertOk();
-    $response->assertSee('All cats:');
-    $response->assertSee($catTitle);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Category/Index')
+        ->has('model', fn(Assert $page) => $page
+            ->has('categories', 5)
+            ->has('categories.0', fn(Assert $page) => $page
+                ->where('title', $catTitle)
+                ->etc()
+            )
+        )
+    );
 });
 /* ----------------------------- @create method ----------------------------- */
-it('renders create cat form', function() {
-    $this->get(action([CategoryController::class, 'create']))->assertSee('Form for cat creation');
+it('renders create cat form with Inertia', function() {
+    $response = $this->get(action([CategoryController::class, 'create']));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Category/Form')
+        ->has('model', fn(Assert $page) => $page
+            ->has('category')
+            ->missing('category.address')
+            ->etc()
+            )
+        );
 });
 
+/* ------------------------------ @edit method ------------------------------ */
+it('renders edit category form with Inertia', function() {
+    $this->withoutExceptionHandling();
+
+    $cat = Category::factory()->create();
+    $title = $cat->title;
+
+    $response = $this->get(action([CategoryController::class, 'edit'], ['category' => $cat->slug]));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Category/Form')
+        ->has('model', fn(Assert $page) => $page
+            ->has('category', fn(Assert $page) => $page
+                ->where('title', $title)
+                ->etc()
+            )
+        )
+    );
+});
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single cat entry with Inertia', function() {
+    $this->withoutExceptionHandling();
+
+    $cat = Category::factory()->create();
+    $title = $cat->title;
+
+    $response = $this->get(action([CategoryController::class, 'show'], ['category' => $cat->slug]));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Category/Form')
+        ->has('model', fn(Assert $page) => $page
+            ->has('category', fn(Assert $page) => $page
+                ->where('title', $title)
+                ->etc()
+            )
+        )
+    );
+});
+
+
 /* ------------------------------ @store method ----------------------------- */
-it('checks the validation and redirect', function() {
+it('checks the category data validation and redirect', function() {
+    $this->withoutExceptionHandling();
+
     $catData = [
         'title' => 'New Cat',
         'meta_title' => 'Meta information',
@@ -133,36 +191,14 @@ it('test the content of the CategoryCreatedNotificationMarkdown mailable', funct
     $mailable->assertSeeInHtml('Category Content');
 });
 
-/* ------------------------------ @show method ------------------------------ */
-it('renders single cat entry by given slug', function() {
-    $cat = Category::factory()->create();
-
-    $response = $this->get(action([CategoryController::class, 'show'], ['category' => $cat->slug]));
-
-    $response->assertSee($cat->title);
-    $response->assertSee($cat->content);
-    $response->assertSee($cat->slug);
-    $response->assertDontSee($cat->summary);
-});
-
-/* ------------------------------ @edit method ------------------------------ */
-it('renders edit form for cat by given slug', function() {
-    $cat = Category::factory()->create();
-
-    $response = $this->get(action([CategoryController::class, 'edit'], ['category' => $cat->slug]));
-
-    $response->assertSee($cat->title);
-    $response->assertSee($cat->content);
-    $response->assertSee($cat->slug);
-    $response->assertDontSee($cat->summary);
-});
 /* ----------------------------- @update method ----------------------------- */
 it('checks the validation and redirect at update', function() {
     $cat = Category::factory()->create();
 
     $catData = [
         'title' => 'Updated category',
-        'content' => 'Content of updated category'
+        'content' => 'Content of updated category',
+        'id' => $cat->id
     ];
 
     $response = $this->put(action([CategoryController::class, 'update'], ['category' => $cat->slug]), $catData);
@@ -178,7 +214,8 @@ it('checks the incorrect parent_id validation at update', function() {
 
     $catData = [
         'title' => 'Updated Category',
-        'parent_id' => 5
+        'parent_id' => 5,
+        'id' => $cat->find(3)->id
     ];
 
     $response = $this->put(action([CategoryController::class, 'update'], ['category' => $cat->find(3)->slug]), $catData);
@@ -191,7 +228,8 @@ it('checks the updated cat is in database', function() {
 
     $catData = [
         'title' => 'Updated category',
-        'content' => 'Content of updated category'
+        'content' => 'Content of updated category',
+        'id' => $cat->id
     ];
 
     $response = $this->put(action([CategoryController::class, 'update'], ['category' => $cat->slug]), $catData);
@@ -211,6 +249,7 @@ it('checks if the cat slug attribute updated according updated title attribute',
 
     $catData = [
         'title' => 'Updated Cat',
+        'id' => $cat->id
     ];
 
     $this->put(action([CategoryController::class, 'update'], ['category' => $cat->slug]), $catData);
@@ -235,6 +274,7 @@ it('checks the event firing after updating the cat in database', function() {
     $catData = [
         'title' => 'Newest cat',
         'content' => 'Content of the newest cat',
+        'id' => $cat->id
     ];
     Event::fake();
 
@@ -253,6 +293,7 @@ it('checks the mails been queued from admin after updating the cat in database',
     $catData = [
         'title' => 'Newest cat',
         'content' => 'Content of the newest cat',
+        'id' => $cat->id
     ];
 
     $response = $this->put(action([CategoryController::class, 'update'], ['category' => $cat->slug]), $catData);
