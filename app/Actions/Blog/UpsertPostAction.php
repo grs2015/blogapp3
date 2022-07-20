@@ -13,7 +13,7 @@ use App\DataTransferObjects\PostData;
 
 class UpsertPostAction
 {
-    public static function execute(PostData $data, ImageService $imageService, ?Collection $files)
+    public static function execute(PostData $data, ImageService $imageService, ?Collection $files): Post
     {
         if ($files->has('hero_image')) {
             if ($data->id) {
@@ -38,5 +38,7 @@ class UpsertPostAction
         if ($data->categories) {
             $post->categories()->sync($data->categories->toCollection()->pluck('id'));
         }
+
+        return $post;
     }
 }

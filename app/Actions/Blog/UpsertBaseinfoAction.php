@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
 
 class UpsertBaseinfoAction
 {
-    public static function execute(BaseinfoData $data, ?UploadedFile $file, ImageService $imageService)
+    public static function execute(BaseinfoData $data, ?UploadedFile $file, ImageService $imageService): Baseinfo
     {
         if ($data->hero_image) {
             if ($data->id) {
