@@ -4,6 +4,8 @@ namespace App\Models\Builders;
 
 use App\Enums\PostStatus;
 use App\Enums\FavoriteStatus;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class PostBuilder extends BaseBuilder
 {
@@ -41,5 +43,15 @@ class PostBuilder extends BaseBuilder
     {
         $this->model->status = FavoriteStatus::Nonfavorite;
         $this->model->save();
+    }
+
+    public function restoreTrashed(array $ids): void
+    {
+        $this->onlyTrashed()->whereIn('id', $ids)->restore();
+    }
+
+    public function getTrashedCollection(array $ids): ?Collection
+    {
+        return $this->onlyTrashed()->whereIn('id', $ids)->get();
     }
 }

@@ -2,22 +2,35 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Tag;
 use App\Models\Post;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Services\CacheService;
 use App\Services\ImageService;
+use App\DataTransferObjects\TagData;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\DataTransferObjects\PostData;
+use App\DataTransferObjects\UserData;
+use App\ViewModels\GetPostsViewModel;
 use Illuminate\Http\RedirectResponse;
+use App\Actions\Blog\UpsertPostAction;
 use App\Http\Requests\PostTrashRequest;
 use App\Http\Requests\StorePostRequest;
+use App\ViewModels\UpsertPostViewModel;
 use App\Http\Requests\UpdatePostRequest;
-use App\Interfaces\PostRepositoryInterface;
+use App\DataTransferObjects\CategoryData;
+use App\ViewModels\GetSinglePostViewModel;
+use App\Actions\Blog\ForceDeletePostAction;
+use App\DataTransferObjects\ForceDeletePostData;
 
 class PostController extends Controller
 {
     public function __construct(
-        private PostRepositoryInterface $postRepository,
         private ImageService $imageService
       ) {}
     /**
@@ -25,11 +38,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(CacheService $cacheService)
     {
-        $posts = Post::with(['user', 'comments', 'postmetas'])->get();
-
-        return view('admin.post.index', compact(['posts']));
+        return Inertia::render('Post/Index', [
+            'model' => new GetPostsViewModel($cacheService)
+        ]);
     }
 
     /**
@@ -39,59 +52,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.post.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePostRequest $request)
-    {
-        $validated = $request->safe()->except(['tags', 'categories', 'hero_image', 'images']);
-        $validated['views'] = 0;
-
-        if ($request->has('hero_image')) {
-
-            $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeThumbHeroImages([[100, 100], [200, 200], [640, 480]])
-                ->storeHeroImages()->generateHeroURL()->filenamesDB;
-        }
-
-        $post = $this->postRepository->createEntry(Auth::user()->id, $validated);
-
-        if ($request->has('images')) {
-
-            $this->imageService->generateGallery($request->allFiles('images'), $post, [[200, 200], [640, 480]]);
-        }
-
-        if ($request->has('tags')) {
-            $tagIDs = $request->input('tags');
-            $post->tags()->sync($tagIDs);
-        }
-
-        if ($request->has('categories')) {
-            $catsIDs = $request->input('categories');
-            $post->categories()->sync($catsIDs);
-        }
-
-        return redirect()->action([PostController::class, 'index']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        $post = Post::where('author_id', $post->author_id)->where('id', $post->id)->firstOrFail();
-        // $post = $this->postRepository->getEntryById($post->author_id, $post->id);
-
-        return view('admin.post.show', ['post' => $post, 'user' => $post->user]);
+        return Inertia::render('Post/Form', [
+            'model' => new UpsertPostViewModel()
+        ]);
     }
 
     /**
@@ -102,9 +65,35 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $post = Post::where('author_id', $post->author_id)->firstWhere('id', $post->id);
+        return Inertia::render('Post/Form', [
+            'model' => new UpsertPostViewModel($post)
+        ]);
+    }
 
-        return view('admin.post.edit', ['post' => $post, 'user' => $post->user]);
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post)
+    {
+        return Inertia::render('Post/Show', [
+            'model' => new GetSinglePostViewModel($post)
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(PostData $data, Request $request, ImageService $imageService)
+    {
+        UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
+
+        return redirect()->action([PostController::class, 'index']);
     }
 
     /**
@@ -114,41 +103,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(PostData $data, Request $request, ImageService $imageService)
     {
-        $validated = $request->safe()->except(['views', 'tags', 'categories', 'hero_image', 'images']);
+        UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
 
-        if ($request->has('title')) {
-            $validated['slug'] = Str::slug($validated['title'], '-');
-        }
-
-        if ($request->has('hero_image')) {
-
-            $this->imageService->deleteHeroImages($post->hero_image);
-            $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeThumbHeroImages([[100, 100], [200, 200], [640, 480]])
-                ->storeHeroImages()->generateHeroURL()->filenamesDB;
-        }
-
-        if ($request->has('images')) {
-
-            $this->imageService->deleteGallery($post);
-            $this->imageService->generateGallery($request->allFiles('images'), $post, [[200, 200], [640, 480]]);
-        }
-
-        $this->postRepository->updateEntry($post->author_id, $post->id, $validated);
-
-        if ($request->has('tags')) {
-            $tagIDs = $request->input('tags');
-            $post->tags()->sync($tagIDs);
-        }
-
-        if ($request->has('categories')) {
-            $catsIDs = $request->input('categories');
-            $post->categories()->sync($catsIDs);
-        }
-
-        return redirect()->action([PostController::class, 'edit'], ['post' => $post->slug]);
+        return redirect()->action([PostController::class, 'edit'], ['post' => $data->slug]);
     }
 
     /**
@@ -159,29 +118,22 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->postRepository->deleteEntry($post->author_id, $post->id);
+        $post->delete();
 
         return redirect()->action([PostController::class, 'index']);
     }
 
-    public function delete(PostTrashRequest $request): RedirectResponse
+    public function delete(ForceDeletePostData $data, ImageService $imageService)
     {
-        $postToDelete = $this->postRepository->forceDeleteEntry($request->ids);
-        $postToDelete->each(function($item) {
-            $item->tags()->detach();
-            $item->categories()->detach();
-            $item->forceDelete();
-        });
+        ForceDeletePostAction::execute($data, $imageService);
 
         return redirect()->action([PostController::class, 'index']);
     }
 
-    public function restore(PostTrashRequest $request): RedirectResponse
+    public function restore(PostTrashRequest $request)
     {
-        $this->postRepository->restoreEntry($request->ids);
+        Post::restoreTrashed($request->ids);
 
         return redirect()->action([PostController::class, 'index']);
     }
-
-
 }
