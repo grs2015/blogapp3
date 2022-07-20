@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             // $table->text('summary')->nullable()->fulltext();
             $table->text('summary')->nullable();
-            $table->char('published', 100)->default(Post::UNPUBLISHED);
+            $table->char('published', 100)->nullable();
             $table->char('status', 100)->nullable();
             $table->dateTime('published_at')->nullable();
             // $table->text('content')->nullable()->fulltext();
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('hero_image')->nullable();
             $table->string('images')->nullable();
             $table->unsignedSmallInteger('time_to_read')->nullable();
-            $table->char('favorite', 100)->default(Post::NONFAVORITE);
+            $table->char('favorite', 100)->nullable();
 
             $table->foreignId('author_id')->constrained('users')->cascadeOnUpdate()->restrictOnDelete();
 
