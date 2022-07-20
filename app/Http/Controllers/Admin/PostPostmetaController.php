@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use Inertia\Inertia;
 use App\Models\Postmeta;
 use App\Http\Controllers\Controller;
+use App\DataTransferObjects\PostmetaData;
+
+use App\ViewModels\GetPostmetasViewModel;
+use App\Actions\Blog\UpsertPostmetaAction;
 use App\Http\Requests\StorePostmetaRequest;
+use App\ViewModels\UpsertPostmetaViewModel;
 use App\Http\Requests\UpdatePostmetaRequest;
 use App\Interfaces\PostmetaRepositoryInterface;
 
 class PostPostmetaController extends Controller
 {
-    public function __construct(
-        private PostmetaRepositoryInterface $postmetaRepository
-    ) {}
     /**
      * Display a listing of the resource.
      *
@@ -21,9 +24,9 @@ class PostPostmetaController extends Controller
      */
     public function index(Post $post)
     {
-        $postmetas = $this->postmetaRepository->getAllEntries($post->id);
-
-        return view('postmeta.index', compact('postmetas', 'post'));
+        return Inertia::render('Postmeta/Index', [
+            'model' => new GetPostmetasViewModel($post)
+        ]);
     }
 
     /**
@@ -33,35 +36,9 @@ class PostPostmetaController extends Controller
      */
     public function create()
     {
-        return view('postmeta.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePostmetaRequest $request, Post $post)
-    {
-        $validated = $request->validated();
-
-        $this->postmetaRepository->createEntry($post->id, $validated);
-
-        return redirect()->action([PostPostmetaController::class, 'index'], ['post' => $post->slug]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post, Postmeta $postmeta)
-    {
-        $postmeta = $this->postmetaRepository->getEntryById($post->id, $postmeta->id);
-
-        return view('postmeta.show', compact('post', 'postmeta'));
+        return Inertia::render('Postmeta/Form', [
+            'model' => new UpsertPostmetaViewModel()
+        ]);
     }
 
     /**
@@ -72,9 +49,35 @@ class PostPostmetaController extends Controller
      */
     public function edit(Post $post, Postmeta $postmeta)
     {
-        $postmeta = $this->postmetaRepository->getEntryById($post->id, $postmeta->id);
+        return Inertia::render('Postmeta/Form', [
+            'model' => new UpsertPostmetaViewModel($postmeta)
+        ]);
+    }
 
-        return view('postmeta.edit', compact('post', 'postmeta'));
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post, Postmeta $postmeta)
+    {
+        return Inertia::render('Postmeta/Show', [
+            'model' => new UpsertPostmetaViewModel($postmeta)
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(PostmetaData $data, Post $post)
+    {
+        UpsertPostmetaAction::execute($data);
+
+        return redirect()->action([PostPostmetaController::class, 'index'], ['post' => $post->slug]);
     }
 
     /**
@@ -84,13 +87,11 @@ class PostPostmetaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostmetaRequest $request, Post $post, Postmeta $postmeta)
+    public function update(PostmetaData $data, Post $post)
     {
-        $validated = $request->validated();
+        UpsertPostmetaAction::execute($data);
 
-        $this->postmetaRepository->updateEntry($post->id, $postmeta->id, $validated);
-
-        return redirect()->action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'postmeta' => $postmeta->id]);
+        return redirect()->action([PostPostmetaController::class, 'edit'], ['post' => $post->slug, 'postmeta' => $data->id]);
     }
 
     /**
@@ -101,7 +102,7 @@ class PostPostmetaController extends Controller
      */
     public function destroy(Post $post, Postmeta $postmeta)
     {
-        $this->postmetaRepository->deleteEntry($post->id, $postmeta->id);
+        $postmeta->delete();
 
         return redirect()->action([PostPostmetaController::class, 'index'], ['post' => $post->slug]);
     }
