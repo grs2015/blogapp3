@@ -4,8 +4,8 @@ namespace App\Models\Builders;
 
 class CategoryBuilder extends BaseBuilder
 {
-    public function detachPosts(int $entityId)
+    public function detachPosts()
     {
-        return $this->where('id', $entityId)->first()->posts()->detach();
+        return $this->model->posts()->detach();
     }
 }
