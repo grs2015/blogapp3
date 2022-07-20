@@ -4,8 +4,10 @@ namespace App\Models;
 
 
 use Illuminate\Support\Str;
+use Spatie\LaravelData\WithData;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Builders\CategoryBuilder;
+use App\DataTransferObjects\CategoryData;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,9 +47,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, WithData;
 
     public $guarded = [];
+
+    protected $dataClass = CategoryData::class;
 
     /**
      * Get the route key for the model.

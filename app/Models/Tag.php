@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Spatie\LaravelData\WithData;
+use App\DataTransferObjects\TagData;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Tag
@@ -36,9 +38,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Tag extends Model
 {
-    use HasFactory;
+    use HasFactory, WithData;
 
     public $guarded = [];
+
+    protected $dataClass = TagData::class;
 
     /**
      * Get the route key for the model.
