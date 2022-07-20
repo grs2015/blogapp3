@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use App\Enums\PostStatus;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Lazy;
@@ -21,10 +22,12 @@ use App\DataTransferObjects\CategoryData;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 
+
 class PostData extends Data
 {
     public function __construct(
         public readonly ?int $id,
+        public readonly int $author_id,
         public readonly ?int $parent_id,
         public readonly ?string $title,
         public readonly ?string $meta_title,
@@ -36,7 +39,7 @@ class PostData extends Data
         public readonly ?string $content,
         public ?int $views,
         public ?string $hero_image,
-        public ?string $images,
+        // public ?array $images,
         public readonly ?int $time_to_read,
         #[WithCast(EnumCast::class)]
         public readonly ?FavoriteStatus $favorite = FavoriteStatus::Nonfavorite,
@@ -73,8 +76,9 @@ class PostData extends Data
             ...$request->all(),
             'tags' => TagData::collection(Tag::whereIn('id', $request->collect('tag_ids'))->get()),
             'categories' => CategoryData::collection(Category::whereIn('id', $request->collect('cat_ids'))->get()),
-            'user' => UserData::from(User::findOrFail($request->author_id))
-        ]);
+            'user' => UserData::from(User::findOrFail($request->author_id)),
+            'slug' => Str::slug($request->title, '-')
+        ])->except('comments', 'postmetas', 'galleries');
     }
 
     public static function rules(): array
@@ -88,9 +92,9 @@ class PostData extends Data
             'hero_image' => ['nullable', 'sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'images' => ['nullable', 'sometimes', 'array'],
             'tag_ids' => ['nullable', 'sometimes', 'array'],
-            'cat_ids' => ['required', 'sometimes', 'array'],
-            'published' => [new Enum(PostStatus::class)],
-            'favorite' => [new Enum(FavoriteStatus::class)],
+            'cat_ids' => ['required', 'array'],
+            'published' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
+            'favorite' => ['nullable', 'sometimes', new Enum(FavoriteStatus::class)],
             'author_id' => ['required', 'exists:users,id'],
         ];
     }

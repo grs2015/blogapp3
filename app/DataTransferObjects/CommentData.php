@@ -22,24 +22,7 @@ class CommentData extends Data
         public readonly string $title,
         public readonly ?string $content,
         public readonly ?Carbon $published_at,
-        public readonly null|Lazy|PostData $post
     ) {}
-
-    public static function fromModel(Comment $comment): self
-    {
-        return self::from([
-            ...$comment->toArray(),
-            'post' => Lazy::whenLoaded('post', $comment, fn() => PostData::from($comment->post))
-        ]);
-    }
-
-    public static function fromRequest(Request $request): self
-    {
-        return self::from([
-            ...$request->all(),
-            'post' => PostData::from(Post::findOrFail($request->post_id))
-        ]);
-    }
 
     public static function rules(): array
     {

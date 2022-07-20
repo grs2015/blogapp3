@@ -31,8 +31,8 @@ class UserData extends Data
         #[WithCast(EnumCast::class)]
         public readonly ?UserStatus $status = UserStatus::Pending,
         public readonly ?Collection $roles,
-        #[DataCollectionOf(PostData::class)]
-        public readonly null|Lazy|DataCollection $posts,
+        // #[DataCollectionOf(PostData::class)]
+        // public readonly null|Lazy|DataCollection $posts,
     ) {}
 
     public static function fromModel(User $user): self
