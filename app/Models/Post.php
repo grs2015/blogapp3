@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\PostStatus;
 use Illuminate\Support\Str;
+use App\Enums\FavoriteStatus;
 use InvalidArgumentException;
 use Laravel\Scout\Searchable;
+use Spatie\LaravelData\WithData;
+use App\Models\Builders\PostBuilder;
+use App\DataTransferObjects\PostData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -80,7 +85,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Post extends Model
 {
-    use HasFactory, SoftDeletes; // Searchable;
+    use HasFactory, SoftDeletes, WithData; // Searchable;
 
     /**
      * Constants for blog state
@@ -96,6 +101,8 @@ class Post extends Model
     const NONFAVORITE = 'usual';
 
     public $guarded = [];
+
+    protected $dataClass = PostData::class;
 
     /**
      * Get the route key for the model.
@@ -281,5 +288,21 @@ class Post extends Model
             'title' => $this->title,
             'content' => $this->content
         ];
+    }
+
+    protected $casts = [
+        'status' => PostStatus::class,
+        'favorite' => FavoriteStatus::class,
+    ];
+
+    protected $attributes = [
+        'status' => PostStatus::Draft,
+        'favorite' => FavoriteStatus::Nonfavorite,
+        'views' => 0
+    ];
+
+    public function newEloquentBuilder($query): PostBuilder
+    {
+        return new PostBuilder($query);
     }
 }

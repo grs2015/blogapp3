@@ -53,6 +53,7 @@ Route::name('public.')->group(function() {
 
 
 
+
 /* ------------------------------- Admin part ------------------------------- */
 // Dashboard
 // Here goes the root with Auth middleware
@@ -80,6 +81,7 @@ Route::middleware('auth')->group(function() {
                     Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
                     Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
                 });
+
             });
         });
     });

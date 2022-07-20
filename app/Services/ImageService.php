@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Post;
+use Illuminate\Http\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Intervention\Image\Facades\Image;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageService
 {
-    private UploadedFile $file;
+    private UploadedFile|File $file;
     private array $galleryFiles;
     private string $timestamp;
     private string $filenameWithExtension;
@@ -25,7 +26,7 @@ class ImageService
     public function __construct(
     ) {  }
 
-    public function generateNames(UploadedFile $file)
+    public function generateNames(UploadedFile|File $file)
     {
         $this->file = $file;
         $this->timestamp = now()->format('Y-m-d-H-i-s');
@@ -44,6 +45,9 @@ class ImageService
     public function deleteGallery(Post $post):void
     {
         $postGallery = $post->galleries()->get();
+        if ($postGallery->isEmpty()) {
+            return;
+        }
         $postGallery->each(function($gallery) {
             $namesArr = [ $gallery->original, $gallery->lowres, explode(',', $gallery->thumbs)[0], explode(',', $gallery->thumbs)[1]];
             Storage::disk('public')->delete($namesArr);
