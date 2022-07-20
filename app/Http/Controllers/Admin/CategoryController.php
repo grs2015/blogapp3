@@ -47,7 +47,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return Inertia::render('Category/Form', [
+        return Inertia::render('Category/Show', [
             'model' => new UpsertCategoryViewModel($category)
         ]);
     }

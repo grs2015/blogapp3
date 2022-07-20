@@ -22,7 +22,16 @@ class CommentData extends Data
         public readonly string $title,
         public readonly ?string $content,
         public readonly ?Carbon $published_at,
+        public readonly int $post_id
     ) {}
+
+    public static function fromRequest(Request $request): self
+    {
+        return self::from([
+            ...$request->all(),
+            'status' => $request->status ?? CommentStatus::Pending
+        ]);
+    }
 
     public static function rules(): array
     {
@@ -31,7 +40,7 @@ class CommentData extends Data
             'content' => ['nullable', 'sometimes', 'string'],
             'published_at' => ['nullable', 'sometimes', 'date'],
             'post_id' => ['required', 'exists:posts,id'],
-            'status' => [new Enum(CommentStatus::class)]
+            'status' => ['nullable', 'sometimes', new Enum(CommentStatus::class)]
         ];
     }
 }
