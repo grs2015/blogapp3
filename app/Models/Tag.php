@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Spatie\LaravelData\WithData;
+use App\Models\Builders\TagBuilder;
 use App\DataTransferObjects\TagData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,5 +71,16 @@ class Tag extends Model
     public function posts():BelongsToMany
     {
         return $this->belongsToMany(Post::class);
+    }
+
+    /**
+     * Custom Builder
+     *
+     * @param [type] $query
+     * @return TagBuilder
+     */
+    public function newEloquentBuilder($query): TagBuilder
+    {
+        return new TagBuilder($query);
     }
 }
