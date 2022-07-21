@@ -10,6 +10,7 @@ use App\Events\TagUpdated;
 use Database\Seeders\RolePermissionSeeder;
 use App\Mail\TagCreatedNotificationMarkdown;
 use App\Mail\TagDeletedNotificationMarkdown;
+use Inertia\Testing\AssertableInertia as Assert;
 
 use App\Mail\TagUpdatedNotificationMarkdown;
 use App\Http\Controllers\Admin\TagController;
@@ -23,32 +24,85 @@ beforeEach(function() {
 
 /* ------------------------------ @index method ----------------------------- */
 it('renders the tag page with tags data', function() {
-    // $this->withoutExceptionHandling();
     Tag::factory()->count(5)->create();
-    $tagTitle = Tag::inRandomOrder()->first()->title;
+    $tagTitle = Tag::first()->title;
 
     $response = $this->get(action([TagController::class, 'index']));
 
     $response->assertOk();
-    $response->assertSee('All tags');
-    $response->assertSee($tagTitle);
-
-    loginAsSuperAdmin();
-
-    $response = $this->get(action([TagController::class, 'index']));
-
-    $response->assertOk();
-    $response->assertSee('All tags');
-    $response->assertSee($tagTitle);
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Tag/Index')
+        ->has('model', fn(Assert $page) => $page
+            ->has('tags', 5)
+            ->has('tags.0', fn(Assert $page) => $page
+                ->where('title', $tagTitle)
+                ->etc()
+            )
+        )
+    );
 });
 
 /* ----------------------------- @create method ----------------------------- */
-it('renders create tag form', function() {
-    $this->get(action([TagController::class, 'create']))->assertSee('Form for tag creation');
+it('renders create tag form with Inertia', function() {
+    $response = $this->get(action([TagController::class, 'create']));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Tag/Form')
+        ->has('model', fn(Assert $page) => $page
+            ->has('tag')
+            ->missing('tag.address')
+            ->etc()
+            )
+        );
+});
+
+/* ------------------------------ @edit method ------------------------------ */
+it('renders edit tag form with Inertia', function() {
+    $this->withoutExceptionHandling();
+
+    $tag = Tag::factory()->create();
+    $title = $tag->title;
+
+    $response = $this->get(action([TagController::class, 'edit'], ['tag' => $tag->slug]));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Tag/Form')
+        ->has('model', fn(Assert $page) => $page
+            ->has('tag', fn(Assert $page) => $page
+                ->where('title', $title)
+                ->etc()
+            )
+        )
+    );
+});
+
+/* ------------------------------ @show method ------------------------------ */
+it('renders single tag entry with Inertia', function() {
+    $this->withoutExceptionHandling();
+
+    $tag = Tag::factory()->create();
+    $title = $tag->title;
+
+    $response = $this->get(action([TagController::class, 'show'], ['tag' => $tag->slug]));
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Tag/Show')
+        ->has('model', fn(Assert $page) => $page
+            ->has('tag', fn(Assert $page) => $page
+                ->where('title', $title)
+                ->etc()
+            )
+        )
+    );
 });
 
 /* ------------------------------ @store method ----------------------------- */
-it('checks the validation and redirect', function() {
+it('checks the tag data validation and redirect', function() {
+    $this->withoutExceptionHandling();
+
     $tagData = [
         'title' => 'New Tag',
         'meta_title' => 'Meta information',
@@ -84,6 +138,7 @@ it('checks the stored tag is in database', function() {
     $response->assertSessionHasNoErrors();
     $this->assertDatabaseHas('tags', ['title' => 'New Tag']);
 });
+
 
 it('checks the event firing after storing the tag in database', function() {
     Event::fake();
@@ -123,37 +178,14 @@ it('checks the mails been queued from admin after storing the tag in database', 
     });
 });
 
-/* ------------------------------ @show method ------------------------------ */
-it('renders single tag entry by given slug', function() {
-    $tag = Tag::factory()->create();
-
-    $response = $this->get(action([TagController::class, 'show'], ['tag' => $tag->slug]));
-
-    $response->assertSee($tag->title);
-    $response->assertSee($tag->content);
-    $response->assertSee($tag->slug);
-    $response->assertDontSee($tag->summary);
-});
-
-/* ------------------------------ @edit method ------------------------------ */
-it('renders edit form for tag by given slug', function() {
-    $tag = Tag::factory()->create();
-
-    $response = $this->get(action([TagController::class, 'edit'], ['tag' => $tag->slug]));
-
-    $response->assertSee($tag->title);
-    $response->assertSee($tag->content);
-    $response->assertSee($tag->slug);
-    $response->assertDontSee($tag->summary);
-});
-
 /* ----------------------------- @update method ----------------------------- */
 it('checks the validation and redirect at update', function() {
     $tag = Tag::factory()->create();
 
     $tagData = [
         'title' => 'Updated tag',
-        'content' => 'Content of updated tag'
+        'content' => 'Content of updated tag',
+        'id' => $tag->id
     ];
 
     $response = $this->put(action([TagController::class, 'update'], ['tag' => $tag->slug]), $tagData);
@@ -169,7 +201,8 @@ it('checks the updated tag is in database', function() {
 
     $tagData = [
         'title' => 'Updated tag',
-        'content' => 'Content of updated tag'
+        'content' => 'Content of updated tag',
+        'id' => $tag->id
     ];
 
     $response = $this->put(action([TagController::class, 'update'], ['tag' => $tag->slug]), $tagData);
@@ -189,6 +222,7 @@ it('checks if the tag slug attribute updated according updated title attribute',
 
     $tagData = [
         'title' => 'Updated Tag',
+        'id' => $tag->id
     ];
 
     $this->put(action([TagController::class, 'update'], ['tag' => $tag->slug]), $tagData);
@@ -213,6 +247,7 @@ it('checks the event firing after updating the tag in database', function() {
     $tagData = [
         'title' => 'Newest tag',
         'content' => 'Content of the newest tag',
+        'id' => $tag->id
     ];
     Event::fake();
 
@@ -231,6 +266,7 @@ it('checks the mails been queued from admin after updating the tag in database',
     $tagData = [
         'title' => 'Newest tag',
         'content' => 'Content of the newest tag',
+        'id' => $tag->id
     ];
 
     $response = $this->put(action([TagController::class, 'update'], ['tag' => $tag->slug]), $tagData);
@@ -273,6 +309,8 @@ it('checks the deletion of entry as well as entry in pivot-table', function() {
         'tag_id' => $tag->id
     ]);
 });
+
+
 
 it('checks the event firing after deletion the tag in database', function() {
     $tag = Tag::factory()->create();

@@ -3,12 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Tag;
+use Inertia\Inertia;
 use App\Events\TagCreated;
 use App\Events\TagDeleted;
 use App\Events\TagUpdated;
 use Illuminate\Support\Str;
+use App\DataTransferObjects\TagData;
 use App\Http\Controllers\Controller;
+use App\ViewModels\GetTagsViewModel;
+use App\Actions\Blog\DeleteTagAction;
+use App\Actions\Blog\UpsertTagAction;
 use App\Http\Requests\StoreTagRequest;
+use App\ViewModels\UpsertTagViewModel;
 use App\Http\Requests\UpdateTagRequest;
 use App\Interfaces\TagRepositoryInterface;
 
@@ -21,72 +27,58 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = $this->tagRepository->getAllEntries();
-
-        return view('tag.index', ['tags' => $tags]);
+        return Inertia::render('Tag/Index', [
+            'model' => new GetTagsViewModel()
+        ]);
     }
 
     public function create()
     {
-        return view('tag.create');
-    }
-
-    public function store(StoreTagRequest $request)
-    {
-        $validated = $request->validated();
-        $title = $validated['title'];
-        $content = $validated['content'] ?? null;
-
-        $this->tagRepository->createEntry($validated);
-
-        TagCreated::dispatch($title, $content);
-
-        return redirect()->action([TagController::class, 'index']);
-    }
-
-    public function show(Tag $tag)
-    {
-        $tag = $this->tagRepository->getEntryById($tag->id);
-
-        return view('tag.show', ['tag' => $tag]);
+        return Inertia::render('Tag/Form', [
+           'model' => new UpsertTagViewModel()
+        ]);
     }
 
     public function edit(Tag $tag)
     {
-        $tag = $this->tagRepository->getEntryById($tag->id);
-
-        return view('tag.edit', ['tag' => $tag]);
+        return Inertia::render('Tag/Form', [
+            'model' => new UpsertTagViewModel($tag)
+        ]);
     }
 
-    public function update(UpdateTagRequest $request, Tag $tag)
+    public function show(Tag $tag)
     {
-        $validated = $request->validated();
+        return Inertia::render('Tag/Show', [
+            'model' => new UpsertTagViewModel($tag)
+        ]);
+    }
 
-        if ($request->has('title')) {
-            $validated['slug'] = Str::slug($validated['title'], '-');
-        }
+    public function store(TagData $data)
+    {
+        UpsertTagAction::execute($data);
 
-        $title = $validated['title'];
-        $content = $validated['content'] ?? null;
+        return redirect()->action([TagController::class, 'index']);
+    }
 
-        $this->tagRepository->updateEntry($tag->id, $validated);
-        $tag->refresh();
+    public function update(TagData $data)
+    {
+        UpsertTagAction::execute($data);
 
-        TagUpdated::dispatch($title, $content);
-
-        return redirect()->action([TagController::class, 'edit'], ['tag' => $tag->slug]);
+        return redirect()->action([TagController::class, 'edit'], ['tag' => $data->slug]);
     }
 
     public function destroy(Tag $tag)
     {
-        $title = $tag->title;
-        $content = $tag->content ?? 'No content provided';
+        DeleteTagAction::execute($tag);
 
-        $tag->posts()->detach();
+        // $title = $tag->title;
+        // $content = $tag->content ?? 'No content provided';
 
-        $this->tagRepository->deleteEntry($tag->id);
+        // $tag->posts()->detach();
 
-        TagDeleted::dispatch($title, $content);
+        // $this->tagRepository->deleteEntry($tag->id);
+
+        // TagDeleted::dispatch($title, $content);
 
         return redirect()->action([TagController::class, 'index']);
     }
