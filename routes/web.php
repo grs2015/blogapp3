@@ -59,11 +59,13 @@ Route::name('public.')->group(function() {
 // Here goes the root with Auth middleware
 
 // Admin part
-Route::middleware('auth')->group(function() {
+// Route::middleware('auth')->group(function() {
     Route::prefix('admin')->group(function() {
-        Route::middleware('role:super-admin|admin')->group(function() {
+        // Route::middleware('role:super-admin|admin')->group(function() {
             Route::name('admin.')->group(function() {
                 // Admin routes
+                Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
+
                 Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
                 Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
                 Route::resource('baseinfo', App\Http\Controllers\Admin\BaseinfoController::class);
@@ -83,7 +85,7 @@ Route::middleware('auth')->group(function() {
                 });
 
             });
-        });
+        // });
     });
 
     Route::prefix('author')->group(function() {
@@ -109,4 +111,4 @@ Route::middleware('auth')->group(function() {
         });
     });
 
-});
+// });
