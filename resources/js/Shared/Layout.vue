@@ -6,5 +6,5 @@
     <div>
         Layout
     </div>
-    <slot />
+    <slot></slot>
 </template>
