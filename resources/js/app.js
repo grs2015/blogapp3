@@ -8,6 +8,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { Quasar } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
+import { ZiggyVue } from 'ziggy';
+import { Ziggy } from './ziggy';
 
 InertiaProgress.init()
 
@@ -18,14 +20,15 @@ createInertiaApp({
     return page
 },
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .use(i18nVue, {
+    const app = createApp({ render: () => h(App, props) })
+    app.use(plugin)
+    .use(i18nVue, {
         resolve: (lang) => import(`../../lang/${lang}.json`)
-        })
-      .use(Quasar, {
+    })
+    .use(Quasar, {
         plugins: {}, // import Quasar plugins and add here
-      })
-      .mount(el)
+    })
+    .use(ZiggyVue, Ziggy)
+    .mount(el)
   },
 })
