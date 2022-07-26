@@ -1,3 +1,9 @@
 {
-    "Welcome to your Jetstream application!": "Herzlich willkommen hier!"
+    "Welcome to your Jetstream application!": "Herzlich willkommen hier!",
+    "Dashboard": "Armaturenbrett",
+    "Posts": "Beiträge",
+    "Categories": "Kategorien",
+    "Tags": "Stichworte",
+    "Users": "Benutzer",
+    "Welcome": "Willkommen"
 }

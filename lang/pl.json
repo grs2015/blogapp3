@@ -1,3 +1,10 @@
 {
-    "Welcome to your Jetstream application!": "Witamy na przetłumaczonej stronie Jetstream application!"
+    "Welcome to your Jetstream application!": "Witamy na przetłumaczonej stronie Jetstream application!",
+    "Dashboard": "Pulpit",
+    "Posts": "Posty",
+    "Categories": "Kategorii",
+    "Tags": "Tegi",
+    "Users": "Użytkownicy",
+    "Welcome": "Witam"
 }
+

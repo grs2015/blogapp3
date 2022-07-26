@@ -1,3 +1,9 @@
 {
-    "Welcome to your Jetstream application!": "Welcome to your Translated Jetstream application!"
+    "Welcome to your Jetstream application!": "Welcome to your Translated Jetstream application!",
+    "Dashboard": "Dashboard",
+    "Posts": "Posts",
+    "Categories": "Categories",
+    "Tags": "Tags",
+    "Users": "Users",
+    "Welcome": "Welcome"
 }

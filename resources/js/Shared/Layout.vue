@@ -1,110 +1,96 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-white">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          @click="toggleLeftDrawer"
-          aria-label="Menu"
-          icon="menu"
-        />
+    <q-layout view="lHh Lpr lFf" class="bg-white">
+        <q-header elevated>
+            <q-toolbar>
+                <div class="row flex-center" style="width: 100%">
+                    <div class="col-auto row items-center">
+                        <q-btn flat dense round @click="toggleLeftDrawer" aria-label="Menu" icon="menu" class="q-mr-sm" />
+                        <q-separator vertical color="grey-5" />
+                        <q-toolbar-title shrink>{{ $t('Dashboard') }}</q-toolbar-title>
+                    </div>
+                    <div class="col row justify-center">
+                        <q-input dark dense standout v-model="text" input-class="text-right" style="width: 300px; max-width: 100%">
+                            <template #append>
+                                <q-icon v-if="text === ''" name="search" />
+                                <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
+                            </template>
+                        </q-input>
+                    </div>
+                    <div class="col-auto row justify-end">
+                        <q-btn-group class="q-mr-md" outline>
+                            <q-btn round @click="loadLanguageAsync('de')">
+                                <q-avatar>
+                                    <q-img src="/images/germany.png" />
+                                </q-avatar>
+                            </q-btn>
+                            <q-btn round @click="loadLanguageAsync('pl')">
+                                <q-avatar>
+                                    <q-img src="/images/poland.png" />
+                                </q-avatar>
+                            </q-btn>
+                            <q-btn round @click="loadLanguageAsync('en')">
+                                <q-avatar>
+                                    <q-img src="/images/great-britain.png" />
+                                </q-avatar>
+                            </q-btn>
+                        </q-btn-group>
+                        <q-btn color="green" icon="account_circle">
+                            <q-menu anchor="bottom right" self="top right" :offset="[0, 10]">
+                                <q-item clickable>
+                                    <q-item-section>Account Settings</q-item-section>
+                                </q-item>
+                                <q-item clickable>
+                                    <q-item-section>Logout</q-item-section>
+                                </q-item>
+                            </q-menu>
+                        </q-btn>
+                    </div>
+                </div>
+            </q-toolbar>
+        </q-header>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      class="bg-grey-2"
-    >
-      <q-list>
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable target="_blank" rel="noopener" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>https://quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://github.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>GitHub</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="http://chat.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>https://chat.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://forum.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="record_voice_over" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>https://forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://twitter.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable target="_blank" rel="noopener" href="https://facebook.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>@QuasarFramework</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <slot></slot>
-    </q-page-container>
-  </q-layout>
+        <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-2">
+            <q-img img-class="my-custom-image" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+            <q-list>
+                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/admin')" name="code">
+                    {{ $t('Dashboard') }}
+                </nav-link>
+                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/posts')" name="code">
+                    {{ $t('Posts') }}
+                </nav-link>
+                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/categories')" name="code">
+                    {{ $t('Categories') }}
+                </nav-link>
+                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/tags')" name="code">
+                    {{ $t('Tags') }}
+                </nav-link>
+                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/users')" name="code">
+                    {{ $t('Users') }}
+                </nav-link>
+            </q-list>
+        </q-drawer>
+        <q-page-container>
+            <q-page padding>
+                <slot></slot>
+            </q-page>
+        </q-page-container>
+    </q-layout>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
+import { loadLanguageAsync } from 'laravel-vue-i18n';
+import { usePage } from '@inertiajs/inertia-vue3';
+import NavLink from '@/Shared/NavLink.vue'
 
-export default {
-  name: 'MyLayout',
+const leftDrawerOpen = ref(false)
+const text = ref('')
 
-  setup () {
-    const leftDrawerOpen = ref(false)
+const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
-    function toggleLeftDrawer () {
-      leftDrawerOpen.value = !leftDrawerOpen.value
-    }
-
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer
-    }
-  }
-}
 </script>
+
+<style lang="sass">
+.my-custom-image
+  filter: sepia()
+</style>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <H1>Welcome</H1>
+  <div class="q-pt-sm">
+    {{ $t('Welcome') }}
   </div>
 </template>
 
@@ -13,5 +13,9 @@
 </script> -->
 
 <script setup>
+
+import { usePage } from '@inertiajs/inertia-vue3';
+
+
 
 </script>
