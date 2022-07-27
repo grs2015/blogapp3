@@ -30,5 +30,6 @@ createInertiaApp({
     })
     .use(ZiggyVue, Ziggy)
     .mount(el)
+
   },
 })

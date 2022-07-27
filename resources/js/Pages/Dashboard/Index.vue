@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pt-sm">
+  <div>
     {{ $t('Welcome') }}
   </div>
 </template>

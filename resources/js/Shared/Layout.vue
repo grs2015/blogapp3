@@ -50,12 +50,12 @@
         </q-header>
 
         <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-2">
-            <q-img img-class="my-custom-image" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+            <q-img img-class="my-custom-image" src="/images/parallax2.jpg" />
             <q-list>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/admin')" name="code">
+                <nav-link :href="route('admin.index')" :active="usePage().component.value.startsWith('Dashboard')" name="code">
                     {{ $t('Dashboard') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/posts')" name="code">
+                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value.startsWith('Post')" name="code">
                     {{ $t('Posts') }}
                 </nav-link>
                 <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/categories')" name="code">
@@ -85,6 +85,8 @@ import NavLink from '@/Shared/NavLink.vue'
 
 const leftDrawerOpen = ref(false)
 const text = ref('')
+
+
 
 const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
