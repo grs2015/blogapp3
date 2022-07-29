@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Category;
+use App\Filters\PostFilter;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\CacheService;
@@ -38,10 +39,10 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CacheService $cacheService)
+    public function index(Request $request, CacheService $cacheService, PostFilter $filters)
     {
         return Inertia::render('Post/Index', [
-            'model' => new GetPostsViewModel($cacheService)
+            'model' => new GetPostsViewModel($cacheService, $request, $filters)
         ]);
     }
 
