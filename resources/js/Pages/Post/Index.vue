@@ -1,7 +1,7 @@
 <template>
     <Head title="Blog posts"></Head>
     <Breadcrumbs :data="breadcrumbsData" />
-    {{ model }}
+    <PostTable :paginatedData="model.posts" />
 </template>
 
 <script setup>
@@ -9,6 +9,7 @@
 import { Inertia } from '@inertiajs/inertia'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import Breadcrumbs from '@/Shared/Breadcrumbs.vue'
+import PostTable from '@/Shared/Tables/PostTable.vue'
 import { postsBreadcrumbs } from '@/breadcrumbsData.js'
 import { ref } from 'vue'
 
