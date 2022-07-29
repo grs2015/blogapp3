@@ -19,7 +19,7 @@ class CacheService
             return $currentUrl;
         }
 
-        ksort($currentQuaryParams);
+        ksort($currentQueryParams);
         $queryString = http_build_query($currentQueryParams);
         return "{$currentUrl}?{$queryString}";
     }
