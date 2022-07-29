@@ -5,5 +5,16 @@
     "Categories": "Kategorien",
     "Tags": "Stichworte",
     "Users": "Benutzer",
-    "Welcome": "Willkommen"
+    "Welcome": "Willkommen",
+    "Records per page": "Einträge pro Seite",
+    "Title": "Titel",
+    "Author": "Autor",
+    "Status": "Status",
+    "Favorite": "Favorite",
+    "Views": "Ansichten",
+    "No data available": "Keine Daten verfügbar",
+    "Search": "Suche",
+    "ADD POST": "Beitrag hinzufügen",
+    "Edit post": "Beitrag bearbeiten",
+    "Delete post": "Beitrag entfernen"
 }

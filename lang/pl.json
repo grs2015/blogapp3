@@ -5,6 +5,17 @@
     "Categories": "Kategorii",
     "Tags": "Tegi",
     "Users": "Użytkownicy",
-    "Welcome": "Witam"
+    "Welcome": "Witam",
+    "Records per page": "Rekordów na stronie",
+    "Title": "Nazwa",
+    "Author": "Autor",
+    "Status": "Stan",
+    "Favorite": "Odznaczone",
+    "Views": "Przeglądy",
+    "No data available": "Brak danych",
+    "Search": "Szukaj",
+    "ADD POST": "Dodaj post",
+    "Edit post": "Edytuj post",
+    "Delete post": "Usuń post"
 }
 

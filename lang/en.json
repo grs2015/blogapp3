@@ -5,5 +5,16 @@
     "Categories": "Categories",
     "Tags": "Tags",
     "Users": "Users",
-    "Welcome": "Welcome"
+    "Welcome": "Welcome",
+    "Records per page": "Records per page",
+    "Title": "Title",
+    "Author": "Author",
+    "Status": "Status",
+    "Favorite": "Favorite",
+    "Views": "Views",
+    "No data available": "No data available",
+    "Search": "Search",
+    "Add post": "Add post",
+    "Edit post": "Edit post",
+    "Delete post": "Delete post"
 }

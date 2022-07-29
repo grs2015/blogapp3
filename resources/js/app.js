@@ -23,7 +23,10 @@ createInertiaApp({
     const app = createApp({ render: () => h(App, props) })
     app.use(plugin)
     .use(i18nVue, {
-        resolve: (lang) => import(`../../lang/${lang}.json`)
+        resolve: async lang => {
+            const langs = import.meta.glob('../../lang/*.json');
+            return await langs[`../../lang/${lang}.json`]();
+        }
     })
     .use(Quasar, {
         plugins: {}, // import Quasar plugins and add here
