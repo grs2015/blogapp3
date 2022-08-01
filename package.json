@@ -1,29 +1,23 @@
 {
     "private": true,
     "scripts": {
-        "test:unit": "jest --no-cache",
-        "test": "npm run test:unit",
-        "test:unit:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand",
+        "test": "vitest",
+        "coverage": "vitest run --coverage",
         "dev": "vite",
         "build": "vite build"
     },
     "devDependencies": {
-        "@babel/core": "^7.18.9",
-        "@babel/preset-env": "^7.18.9",
         "@quasar/vite-plugin": "^1.0.10",
         "@vitejs/plugin-vue": "^3.0.1",
         "@vue/compiler-sfc": "^3.2.37",
-        "@vue/test-utils": "^2.0.0-rc.18",
-        "@vue/vue3-jest": "^28.0.1",
+        "@vue/test-utils": "^2.0.2",
         "axios": "^0.25",
-        "babel-jest": "^28.1.3",
-        "jest": "^28.1.3",
-        "jest-environment-jsdom": "^28.1.3",
         "laravel-vite-plugin": "^0.5.2",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "sass": "^1.32.12",
         "vite": "^3.0.3",
+        "vitest": "^0.20.2",
         "vue": "^3.2.37",
         "vue-loader": "^16.2.0"
     },
@@ -32,22 +26,9 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",
         "@quasar/extras": "^1.15.0",
+        "jsdom": "^20.0.0",
         "laravel-vue-i18n": "^2.1.3",
         "quasar": "^2.7.5",
-        "webpack-node-externals": "^3.0.0",
         "ziggy-js": "^1.4.6"
-    },
-    "jest": {
-        "transform": {
-            "^.+\\.jsx?$": "babel-jest",
-            "^.+\\.vue$": "@vue/vue3-jest"
-        },
-        "testEnvironment": "jsdom",
-        "testEnvironmentOptions": {
-            "customExportConditions": [
-                "node",
-                "node-addons"
-            ]
-        }
     }
 }

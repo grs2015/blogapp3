@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "allowJs": true,
+        "checkJs": true,
+        "skipLibCheck": true,
+        "types": ["vitest/globals"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["resources/js/*"]
+        }
+    },
+    "include": [
+        "resources/**/*.ts",
+        "resources/**/*.tsx",
+        "resources/**/*.d.ts",
+        "resources/**/*.vue",
+    ]
+}
