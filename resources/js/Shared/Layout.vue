@@ -86,8 +86,6 @@ import NavLink from '@/Shared/NavLink.vue'
 const leftDrawerOpen = ref(false)
 const text = ref('')
 
-
-
 const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
 </script>

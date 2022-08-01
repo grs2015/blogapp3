@@ -1,13 +1,13 @@
 <template>
-    <Head title="Blog posts"></Head>
+    <Head title="Blog posts" />
     <Breadcrumbs :data="breadcrumbsData" />
     <PostTable :paginatedData="model.posts" />
 </template>
 
 <script setup>
 
-import { Inertia } from '@inertiajs/inertia'
-import { Head, Link } from '@inertiajs/inertia-vue3'
+// import { Inertia } from '@inertiajs/inertia'
+import { Head } from '@inertiajs/inertia-vue3'
 import Breadcrumbs from '@/Shared/Breadcrumbs.vue'
 import PostTable from '@/Shared/Tables/PostTable.vue'
 import { postsBreadcrumbs } from '@/breadcrumbsData.js'
