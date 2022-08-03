@@ -1,33 +1,86 @@
-<script setup>
+<script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { trans } from 'laravel-vue-i18n';
-// import columns from '@/postTableColumns.js'
-import { Inertia } from '@inertiajs/inertia'
+import { Inertia, PageProps } from '@inertiajs/inertia'
+import { PostData, LinkData, tablePagination } from '@/Interfaces/PaginatedData';
 import { usePage } from '@inertiajs/inertia-vue3';
 
-const props = defineProps({ paginatedData: Object })
 
-const rows = ref(props.paginatedData.data)
+interface Paginated {
+    paginatedData: {
+        current_page: number;
+        data: Array<PostData>;
+        first_page_url: string;
+        from: number;
+        last_page: number;
+        last_page_url: string;
+        links: Array<LinkData>;
+        next_page_url: string | null;
+        path: string;
+        per_page: number;
+        prev_page_url: string | null;
+        to: number;
+        total: number;
+    },
+    sortingData: {
+        column: string;
+        descending: string;
+    }
+}
+
+// interface Sortable {
+//     sortingData: {
+//         column: string;
+//         descending: string;
+//     }
+// }
+
+interface pageActions extends PageProps
+{
+    sorting: {
+        column: string;
+        descending: string;
+    }
+}
+
+const props = defineProps<Paginated>()
+
+const rows = computed(() => {
+    loading.value = false
+    return props.paginatedData.data
+})
 const filter = ref('')
 const loading = ref(false)
 const loadingResetButton = ref(false)
-const pagination = ref({
-    sortBy: usePage().props.value.sorting.column,
-    descending: (usePage().props.value.sorting.descending === 'true'),
+
+const pagination = ref<tablePagination>({
+    // sortBy: usePage<pageActions>().props.value.sorting.column,
+    // descending: usePage<pageActions>().props.value.sorting.descending === 'true',
+    sortBy: props.sortingData.column,
+    descending: props.sortingData.descending === 'true',
     page: props.paginatedData.current_page,
     rowsPerPage: props.paginatedData.per_page,
     rowsNumber: props.paginatedData.total
 })
 
-const columns = [
+type tableColumns = {
+    name: string;
+    label: string;
+    field: string | ((row: PostData) => string);
+    required?: boolean;
+    align?: "left" | "right" | "center";
+    sortable?: boolean;
+}
+
+const columns:tableColumns[] = [
     {
         name: 'postTitle',
         required: true,
         label: trans('Title'),
         align: 'left',
         sortable: true,
-        field: row => row.title,
+        field: (row : PostData) => row.title,
         style: "width: 30%"
     },
     {
@@ -35,7 +88,7 @@ const columns = [
         required: true,
         label: trans('Author'),
         align: 'left',
-        field: row => row.user.first_name
+        field: (row : PostData) => row.user.first_name
     },
     {
         name: 'postStatus',
@@ -43,8 +96,7 @@ const columns = [
         label: trans('Status'),
         align: 'right',
         sortable: true,
-        field: row => row.status,
-
+        field: (row : PostData) => row.status,
     },
     {
         name: 'postFavorite',
@@ -52,7 +104,7 @@ const columns = [
         label: trans('Favorite'),
         align: 'right',
         sortable: true,
-        field: row => row.favorite
+        field: (row : PostData) => row.favorite
     },
     {
         name: 'postViews',
@@ -60,7 +112,7 @@ const columns = [
         label: trans('Views'),
         align: 'right',
         sortable: true,
-        field: row => row.views
+        field: (row : PostData) => row.views
     },
     {
         name: 'postActions',
@@ -71,7 +123,7 @@ const columns = [
     }
 ]
 
-const onRequest = (props) => {
+const onRequest = (props: { pagination : tablePagination, filter: string }) => {
     loading.value = true
     const { page, rowsPerPage, sortBy, descending } = props.pagination
     const filter = props.filter
@@ -80,13 +132,27 @@ const onRequest = (props) => {
     pagination.value.rowsPerPage = rowsPerPage
     pagination.value.sortBy = sortBy
     pagination.value.descending = descending
-
 }
 
 const reset = () => {
     loading.value = true
     loadingResetButton.value = true
     Inertia.get('/admin/posts')
+}
+
+const editPost = (row: Object) => {
+    let postSlug = row['slug']
+    Inertia.get(`/admin/posts/${postSlug}/edit`)
+}
+
+const deletePost = (row: Object) => {
+    let postSlug = row['slug']
+    loading.value = true
+    Inertia.delete(`/admin/posts/${postSlug}`)
+}
+
+const addPost = () => {
+    Inertia.get('/admin/posts/create')
 }
 
 </script>
@@ -104,7 +170,7 @@ const reset = () => {
                     </q-th>
                 </q-tr>
             </template>
-            <template v-slot:no-data="{ icon, message, filter }">
+            <template v-slot:no-data>
                 <div class="full-width row flex-center text-primary q-gutter-sm">
                     <q-icon size="2em" name="sentiment_dissatisfied" color="red" />
                     <span class="text-red">
@@ -115,12 +181,12 @@ const reset = () => {
             <template v-slot:body-cell-postActions="props">
                 <q-td :props="props" auto-width>
                     <div class="row flex-center q-gutter-x-sm no-wrap">
-                        <q-btn outline color="accent" icon="edit">
+                        <q-btn outline color="accent" icon="edit" @click="editPost(props.row)" data-test="edit-button">
                             <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                 {{ $t('Edit post') }}
                             </q-tooltip>
                         </q-btn>
-                        <q-btn outline color="red" icon="delete">
+                        <q-btn outline color="red" icon="delete" @click="deletePost(props.row)" data-test="delete-button">
                             <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                 {{ $t('Delete post') }}
                             </q-tooltip>
@@ -146,7 +212,7 @@ const reset = () => {
             <template v-slot:top>
                 <div class="q-table__title text-primary">{{ $t('Posts') }}</div>
                 <q-space />
-                <q-input clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot>
+                <q-input clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot data-test="search-input">
                     <template v-slot:append>
                         <q-icon name="search" color="primary" />
                     </template>
@@ -156,10 +222,10 @@ const reset = () => {
                         </div>
                     </template>
                 </q-input>
-                <q-btn class="q-ml-md" color="primary" outline :disable="loading" @click="reset"
+                <q-btn class="q-ml-md" color="primary" outline :disable="loading" @click="reset" data-test="refresh-button"
                     :loading="loadingResetButton" icon="restart_alt" />
                 <q-separator vertical spaced inset />
-                <q-btn color="green" unelevated>
+                <q-btn color="green" unelevated @click="addPost" data-test="add-button">
                     <q-icon left name="post_add" />
                     <div>{{ $t('ADD POST') }}</div>
                 </q-btn>

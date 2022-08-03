@@ -14,9 +14,9 @@
 <script setup>
 import { Link } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
+import { usePage } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({ data: Array })
 const link = ref('/admin/posts')
-
 
 </script>
