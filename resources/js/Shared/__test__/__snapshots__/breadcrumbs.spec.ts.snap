@@ -1,0 +1,59 @@
+// Vitest Snapshot v1
+
+exports[`Breadcrumbs Component > checks rendered text/links at component 1`] = `
+<div>
+  <div
+    class="q-breadcrumbs text-orange"
+  >
+    <div
+      class="flex items-center justify-start q-gutter-sm"
+    >
+      <div
+        class="flex items-center text-primary"
+      >
+        <a
+          class="q-breadcrumbs__el q-link flex inline items-center relative-position q-link--focusable"
+          href="/admin"
+        >
+          <i
+            aria-hidden="true"
+            class="q-icon notranslate material-icons q-breadcrumbs__el-icon q-breadcrumbs__el-icon--with-label"
+            role="presentation"
+          >
+            home
+          </i>
+          Dashboard
+        </a>
+      </div>
+      <div
+        class="q-breadcrumbs__separator"
+      >
+        <i
+          aria-hidden="true"
+          class="q-icon text-primary notranslate material-icons"
+          role="presentation"
+          style="font-size: 1.5em;"
+        >
+          chevron_right
+        </i>
+      </div>
+      <div
+        class="flex items-center q-breadcrumbs--last"
+      >
+        <span
+          class="q-breadcrumbs__el q-link flex inline items-center relative-position q-link--focusable"
+        >
+          <i
+            aria-hidden="true"
+            class="q-icon notranslate material-icons q-breadcrumbs__el-icon q-breadcrumbs__el-icon--with-label"
+            role="presentation"
+          >
+            widgets
+          </i>
+          Posts
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

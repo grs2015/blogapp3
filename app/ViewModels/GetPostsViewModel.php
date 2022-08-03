@@ -53,4 +53,9 @@ class GetPostsViewModel extends ViewModel
 
         return $paginated->appends(request()->query());
     }
+
+    public function sorting(): array
+    {
+        return array("column" => $this->request->query('column'), "descending" => $this->request->query('descending'));
+    }
 }

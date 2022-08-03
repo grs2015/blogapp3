@@ -1,0 +1,19 @@
+// Vitest Snapshot v1
+
+exports[`Post/Index component > makes a snapshot 1`] = `
+<div
+  data-v-app=""
+>
+  
+  <head-stub
+    title="Blog posts"
+  />
+  <breadcrumbs-stub
+    data="[object Object],[object Object]"
+  />
+  <post-table-stub
+    paginateddata="[object Object]"
+  />
+  
+</div>
+`;
