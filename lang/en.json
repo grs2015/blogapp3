@@ -16,5 +16,22 @@
     "Search": "Search",
     "Add post": "Add post",
     "Edit post": "Edit post",
-    "Delete post": "Delete post"
+    "Delete post": "Delete post",
+    "Create Post": "Create Post",
+    "Post Title": "Post Title",
+    "Short description": "Short description",
+    "Post contents": "Post contents",
+    "Pick post category": "Pick post category",
+    "Pick post tag": "Pick post tag",
+    "Post publish date": "Post publish date",
+    "Post time to read (mins. approx.)": "Post time to read (mins. approx.)",
+    "Post Status": "Post Status",
+    "Favorite Post": "Favorite Post",
+    "Pick hero-image for your post": "Pick hero-image for your post",
+    "Pick images for your post gallery": "Pick images for your post gallery",
+    "Cancel": "Cancel",
+    "Submit": "Submit",
+    "Start creating here...": "Start creating here...",
+    "Reset": "Reset",
+    "You can lose all of your data put in the form": "You can lose all of your data put in the form"
 }

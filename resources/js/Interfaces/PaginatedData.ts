@@ -68,3 +68,26 @@ export enum Status {
     Pending = 'pending',
     Unpublished = 'unpublished',
 }
+
+export interface categoryData {
+    content?: string,
+    id: number,
+    meta_title?: string,
+    parent_id?: number,
+    slug: string,
+    title: string
+}
+
+export interface tagData {
+    content?: string,
+    id: number,
+    meta_title?: string,
+    slug: string,
+    title: string
+}
+
+export interface breadcrumbsData {
+    label: string,
+    icon: string,
+    route?: string
+}

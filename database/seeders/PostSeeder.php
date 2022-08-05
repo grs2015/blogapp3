@@ -21,8 +21,8 @@ class PostSeeder extends Seeder
         Post::factory(5)
         ->hasComments(3)
         ->hasPostmetas(3)
-        ->hasTags(3)
-        ->hasCategories(3)
+        ->hasTags(1)
+        ->hasCategories(1)
         ->state(new Sequence(
             ['status' => PostStatus::Draft],
             ['status' => PostStatus::Pending],

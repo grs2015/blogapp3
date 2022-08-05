@@ -5,7 +5,7 @@ import { InertiaProgress } from '@inertiajs/progress'
 import { i18nVue } from 'laravel-vue-i18n'
 import Layout from '@/Shared/Layout.vue'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { Quasar } from 'quasar'
+import { Quasar, Notify } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
 // import route from 'ziggy-js';
@@ -30,7 +30,7 @@ createInertiaApp({
         },
     })
     .use(Quasar, {
-        plugins: {}, // import Quasar plugins and add here
+        plugins: { Notify },
     })
     .use(ZiggyVue, Ziggy)
     // .mixin({ methods: { route: (name, params, absolute) => route(name, params, absolute, Ziggy) } })

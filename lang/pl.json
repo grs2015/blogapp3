@@ -16,6 +16,23 @@
     "Search": "Szukaj",
     "ADD POST": "Dodaj post",
     "Edit post": "Edytuj post",
-    "Delete post": "Usuń post"
+    "Delete post": "Usuń post",
+    "Create Post": "Utwórz Post",
+    "Post Title": "Tytuł Posta",
+    "Short description": "Któtki opis",
+    "Post contents": "Zawartość posta",
+    "Pick post category": "Wybierz kategorię posta",
+    "Pick post tag": "Wybierz teg posta",
+    "Post publish date": "Data publikacju posta",
+    "Post time to read (mins. approx.)": "Czas przeczytanie posta (mins.)",
+    "Post Status": "Status posta",
+    "Favorite Post": "Odznaczony post",
+    "Pick hero-image for your post": "Wybierz image plik do swego posta",
+    "Pick images for your post gallery": "Wybierz image pliki do galerii swego posta",
+    "Cancel": "Cofnąć",
+    "Submit": "Potwierdzić",
+    "Start creating here...": "Zacznij stwarzać tutaj...",
+    "Reset": "Zresetuj",
+    "You can lose all of your data put in the form": "Możesz zgubić wszystkie dane wprowadzone do formularza"
 }
 

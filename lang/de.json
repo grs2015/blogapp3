@@ -16,5 +16,22 @@
     "Search": "Suche",
     "ADD POST": "Beitrag hinzufügen",
     "Edit post": "Beitrag bearbeiten",
-    "Delete post": "Beitrag entfernen"
+    "Delete post": "Beitrag entfernen",
+    "Create Post": "Beitrag erstellen",
+    "Post Title": "Titel des Beitrags",
+    "Short description": "Kurze Beschreibung",
+    "Post contents": "Inhalte posten",
+    "Pick post category": "Post-Kategorie auswählen",
+    "Pick post tag": "Post-Tag auswählen",
+    "Post publish date": "Post Erscheinungsdatum",
+    "Post time to read (mins. approx.)": "Postzeit zum Lesen (Min. ca.)",
+    "Post Status": "Poststatus",
+    "Favorite Post": "Lieblingsbeitrag",
+    "Pick hero-image for your post": "Wählen Sie ein Heldenbild für Ihren Beitrag",
+    "Pick images for your post gallery": "Wählen Sie Bilder für Ihre Post-Galerie aus",
+    "Cancel": "Absagen",
+    "Submit": "Einreichen",
+    "Start creating here...": "Beginnen Sie hier mit der Erstellung...",
+    "Reset": "Zurücksetzen",
+    "You can lose all of your data put in the form": "Sie können alle Ihre Daten im Formular verlieren"
 }

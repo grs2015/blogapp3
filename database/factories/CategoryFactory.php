@@ -18,8 +18,8 @@ class CategoryFactory extends Factory
     {
         return [
             'parent_id' => 1,
-            'title' => $this->faker->word(),
-            'meta_title' => $this->faker->word(),
+            'title' => $this->faker->sentence(),
+            'meta_title' => $this->faker->sentence(),
             'content' => $this->faker->text()
         ];
     }
