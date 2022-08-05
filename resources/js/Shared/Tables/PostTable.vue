@@ -4,8 +4,7 @@ import { ref, computed } from 'vue'
 import { trans } from 'laravel-vue-i18n';
 import { Inertia, PageProps } from '@inertiajs/inertia'
 import { PostData, LinkData, tablePagination } from '@/Interfaces/PaginatedData';
-import { usePage } from '@inertiajs/inertia-vue3';
-
+// import { usePage } from '@inertiajs/inertia-vue3';
 
 interface Paginated {
     paginatedData: {
@@ -28,13 +27,6 @@ interface Paginated {
         descending: string;
     }
 }
-
-// interface Sortable {
-//     sortingData: {
-//         column: string;
-//         descending: string;
-//     }
-// }
 
 interface pageActions extends PageProps
 {

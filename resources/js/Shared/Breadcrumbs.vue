@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { Link } from '@inertiajs/inertia-vue3';
+import { ref } from 'vue';
+import { usePage } from '@inertiajs/inertia-vue3';
+
+interface breadcrumbsData {
+    data: Array<{
+        label: string,
+        icon: string,
+        route?: string
+    }>
+
+}
+
+const props = defineProps<breadcrumbsData>()
+const link = ref('/admin/posts')
+
+</script>
+
 <template>
     <Link as="div" :href="link">
         <q-breadcrumbs class="text-orange">
@@ -10,13 +29,3 @@
         </q-breadcrumbs>
     </Link>
 </template>
-
-<script setup>
-import { Link } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue';
-import { usePage } from '@inertiajs/inertia-vue3';
-
-const props = defineProps({ data: Array })
-const link = ref('/admin/posts')
-
-</script>
