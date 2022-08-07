@@ -85,7 +85,8 @@ class ImageService
 
             Storage::put("uploads/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}", $image->stream());
 
-            $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+            // $url = str_replace('/storage/', '', Storage::url("uploads/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+            $url = Storage::url("uploads/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}");
             $this->filenames->push($url);
             $this->thumbFilenames->push($url);
         });

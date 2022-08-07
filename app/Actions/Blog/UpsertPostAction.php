@@ -20,7 +20,7 @@ class UpsertPostAction
                 $imageService->deleteHeroImages(Post::getEntityById($data->id)->hero_image);
             }
             $imageService->generateNames($files->get('hero_image'));
-            $data->hero_image = $imageService->storeThumbHeroImages([[100, 100], [200, 200], [640, 480]])
+            $data->hero_image = $imageService->storeThumbHeroImages([[200, 200], [640, 480]])
                     ->storeHeroImages()->generateHeroURL()->filenamesDB;
         }
 
