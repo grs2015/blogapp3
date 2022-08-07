@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { trans } from 'laravel-vue-i18n';
 import { Inertia, PageProps } from '@inertiajs/inertia'
 import { PostData, LinkData, tablePagination } from '@/Interfaces/PaginatedData';
+import { useQuasar } from 'quasar'
 // import { usePage } from '@inertiajs/inertia-vue3';
 
 interface Paginated {
@@ -37,6 +38,7 @@ interface pageActions extends PageProps
 }
 
 const props = defineProps<Paginated>()
+const $q = useQuasar()
 
 const rows = computed(() => {
     loading.value = false
@@ -140,7 +142,24 @@ const editPost = (row: Object) => {
 const deletePost = (row: Object) => {
     let postSlug = row['slug']
     loading.value = true
-    Inertia.delete(`/admin/posts/${postSlug}`)
+    Inertia.delete(`/admin/posts/${postSlug}`, {
+        onSuccess: () => onDeleteSuccess(),
+        onError: () => onDeleteFail()
+    })
+}
+
+const onDeleteFail = () => {
+    $q.notify({
+        type: 'negative',
+        message: "Something went wrong with post deletion"
+    })
+}
+
+const onDeleteSuccess = () => {
+    $q.notify({
+        type: 'positive',
+        message: "The post have been deleted successfully"
+    })
 }
 
 const addPost = () => {
@@ -173,12 +192,12 @@ const addPost = () => {
             <template v-slot:body-cell-postActions="props">
                 <q-td :props="props" auto-width>
                     <div class="row flex-center q-gutter-x-sm no-wrap">
-                        <q-btn outline color="accent" icon="edit" @click="editPost(props.row)" data-test="edit-button">
+                        <q-btn outline color="accent" icon="edit" :disable="loading" @click="editPost(props.row)" data-test="edit-button">
                             <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                 {{ $t('Edit post') }}
                             </q-tooltip>
                         </q-btn>
-                        <q-btn outline color="red" icon="delete" @click="deletePost(props.row)" data-test="delete-button">
+                        <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
                             <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                 {{ $t('Delete post') }}
                             </q-tooltip>
