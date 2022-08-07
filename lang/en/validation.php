@@ -152,6 +152,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'cat_ids' => [
+            'required' => 'At least one category should be picked'
+        ]
     ],
 
     /*

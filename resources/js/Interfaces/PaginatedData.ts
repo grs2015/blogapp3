@@ -19,18 +19,25 @@ export interface PostData {
     'author_id'?: number | null;
     'content'?: string | null;
     'favorite': Favorite;
-    'hero_image'?: string | null;
+    'hero_image'?: File | string | string[] | null,
     'id': number;
     'meta_title'?: string | null;
-    'parent_id': number;
+    'parent_id'?: number | null;
     'published_at'?: string | null;
-    'slug': string;
+    'slug'?: string | null;
     'status': Status;
     'summary'?: string | null;
     'time_to_read': number;
     'title': string;
-    'user': UserData;
-    'views': string;
+    'user'?: UserData | null;
+    'views'?: string | null;
+    'galleries'?: Array<GalleryData> | null,
+    'postmetas'?: Array<PostmetaData> | null,
+    'tag_ids'?: Array<number> | null,
+    'cat_ids': Array<number>,
+    'categories'?: Array<categoryData> | null,
+    'tags'?: Array<tagData> | null,
+    'images'?: Array<File> | null,
 }
 
 export interface SortingData {
@@ -47,6 +54,21 @@ export interface LinkData {
 type UserData = {
     'email': string;
     'first_name': string;
+}
+
+type PostmetaData = {
+    id?: number | null,
+    post_id: number,
+    key: string,
+    content: string
+}
+
+export interface GalleryData {
+    id: number;
+    post_id: number;
+    original: string;
+    lowres: string;
+    thumbs: string;
 }
 
 export interface tablePagination {

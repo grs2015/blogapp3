@@ -1,5 +1,3 @@
-import { Status } from '@/Interfaces/PaginatedData'
-
 export const statusOptions = [
     {
         label: 'Unpublished',
