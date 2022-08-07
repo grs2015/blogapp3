@@ -295,6 +295,7 @@ class Post extends Model
     protected $casts = [
         'status' => PostStatus::class,
         'favorite' => FavoriteStatus::class,
+        'published_at' => 'immutable_datetime:Y-m-d',
     ];
 
     protected $attributes = [

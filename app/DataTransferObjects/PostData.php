@@ -19,8 +19,10 @@ use Illuminate\Validation\Rules\Enum;
 use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\DataCollection;
 use App\DataTransferObjects\CategoryData;
+use DateTime;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 
 
 class PostData extends Data
@@ -35,11 +37,12 @@ class PostData extends Data
         public readonly ?string $summary,
         #[WithCast(EnumCast::class)]
         public readonly ?PostStatus $status = PostStatus::Draft,
-        public readonly ?Carbon $published_at,
+        #[WithCast(DateTimeInterfaceCast::class)]
+        public readonly ?DateTime $published_at,
         public readonly ?string $content,
         public ?int $views,
         public ?string $hero_image,
-        // public ?array $images,
+        // public ?string $images,
         public readonly ?int $time_to_read,
         #[WithCast(EnumCast::class)]
         public readonly ?FavoriteStatus $favorite = FavoriteStatus::Nonfavorite,
@@ -93,9 +96,10 @@ class PostData extends Data
             'images' => ['nullable', 'sometimes', 'array'],
             'tag_ids' => ['nullable', 'sometimes', 'array'],
             'cat_ids' => ['required', 'array'],
-            'published' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
+            'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
             'favorite' => ['nullable', 'sometimes', new Enum(FavoriteStatus::class)],
             'author_id' => ['required', 'exists:users,id'],
         ];
     }
+
 }

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'cache_time' => 60
+    'cache_time' => 0
 ];
