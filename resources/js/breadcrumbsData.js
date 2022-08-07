@@ -16,7 +16,6 @@ export const postCreateBreadcrumbs = [
         label: "Dashboard",
         icon: "home",
         route: "/admin"
-
     },
     {
         label: "Posts",
@@ -28,3 +27,20 @@ export const postCreateBreadcrumbs = [
         icon: "edit",
     }
 ];
+
+export const postEditBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Posts",
+        icon: "widgets",
+        route: "/admin/posts"
+    },
+    {
+        label: "Edit",
+        icon: "edit",
+    }
+]

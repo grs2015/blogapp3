@@ -4,8 +4,8 @@ import { Head } from '@inertiajs/inertia-vue3'
 import Breadcrumbs from '@/Shared/Breadcrumbs.vue'
 import PostTable from '@/Shared/Tables/PostTable.vue'
 import { postsBreadcrumbs } from '@/breadcrumbsData.js'
-import { ref, Ref } from 'vue'
-import { Paginated, SortingData } from '@/Interfaces/PaginatedData'
+import { ref, watch } from 'vue'
+import { Paginated, SortingData, breadcrumbsData } from '@/Interfaces/PaginatedData'
 
 interface Props {
     model: {
@@ -14,16 +14,16 @@ interface Props {
     }
 }
 
-type breadType = Ref<({label: string; icon: string; route: string; } | {label: string; icon: string; route?: undefined;})[]>
-
 const props = defineProps<Props>()
 
-const breadcrumbsData = ref(postsBreadcrumbs)
+watch(props, () => console.log('Page Index props changed'))
+
+const breadcrumbs = ref<breadcrumbsData[]>(postsBreadcrumbs)
 
 </script>
 
 <template>
     <Head title="Blog posts" />
-    <Breadcrumbs :data="breadcrumbsData" />
+    <Breadcrumbs :data="breadcrumbs" />
     <PostTable :paginatedData="props.model.posts" :sortingData="props.model.sorting"/>
 </template>
