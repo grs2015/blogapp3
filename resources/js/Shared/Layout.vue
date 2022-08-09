@@ -58,7 +58,7 @@
                 <nav-link :href="route('admin.posts.index')" :active="usePage().component.value === 'Post/Index'" name="code">
                     {{ $t('Posts') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Category/Index'" name="code">
+                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value === 'Category/Index'" name="code">
                     {{ $t('Categories') }}
                 </nav-link>
                 <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Tag/Index'" name="code">

@@ -43,4 +43,17 @@ export const postEditBreadcrumbs = [
         label: "Edit",
         icon: "edit",
     }
-]
+];
+
+export const catsBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+
+    },
+    {
+        label: "Categories",
+        icon: "category",
+    },
+];

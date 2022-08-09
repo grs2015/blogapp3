@@ -1,63 +1,5 @@
 // Vitest Snapshot v1
 
-exports[`Breadcrumbs Component > checks rendered text/links at component 1`] = `
-<div>
-  <div
-    class="q-breadcrumbs text-orange"
-  >
-    <div
-      class="flex items-center justify-start q-gutter-sm"
-    >
-      <div
-        class="flex items-center text-primary"
-      >
-        <a
-          class="q-breadcrumbs__el q-link flex inline items-center relative-position q-link--focusable"
-          href="/admin"
-        >
-          <i
-            aria-hidden="true"
-            class="q-icon notranslate material-icons q-breadcrumbs__el-icon q-breadcrumbs__el-icon--with-label"
-            role="presentation"
-          >
-            home
-          </i>
-          Dashboard
-        </a>
-      </div>
-      <div
-        class="q-breadcrumbs__separator"
-      >
-        <i
-          aria-hidden="true"
-          class="q-icon text-primary notranslate material-icons"
-          role="presentation"
-          style="font-size: 1.5em;"
-        >
-          chevron_right
-        </i>
-      </div>
-      <div
-        class="flex items-center q-breadcrumbs--last"
-      >
-        <span
-          class="q-breadcrumbs__el q-link flex inline items-center relative-position q-link--focusable"
-        >
-          <i
-            aria-hidden="true"
-            class="q-icon notranslate material-icons q-breadcrumbs__el-icon q-breadcrumbs__el-icon--with-label"
-            role="presentation"
-          >
-            widgets
-          </i>
-          Posts
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`PostTable component > checks the data from parent component is defined on current component 1`] = `
 <div
   class="q-mt-md"
@@ -79,7 +21,7 @@ exports[`PostTable component > checks the data from parent component is defined 
       />
       <label
         class="q-field row no-wrap items-start q-field--standard q-input q-field--labeled q-field--dense"
-        for="f_82bc9507-9a9b-4b65-9935-41f007b3aff2"
+        for="f_a951f5a6-868e-4a37-a281-76e9775aa42e"
       >
         <!---->
         <div
@@ -95,7 +37,7 @@ exports[`PostTable component > checks the data from parent component is defined 
               <input
                 class="q-field__native q-placeholder"
                 data-test="search-input"
-                id="f_82bc9507-9a9b-4b65-9935-41f007b3aff2"
+                id="f_a951f5a6-868e-4a37-a281-76e9775aa42e"
                 tabindex="0"
                 type="text"
               />
@@ -451,7 +393,7 @@ exports[`PostTable component > checks the data from parent component is defined 
         </span>
         <label
           class="q-field row no-wrap items-start q-field--borderless q-select q-field--auto-height q-select--without-input q-select--without-chips q-select--single q-field--float q-field--dense q-table__select inline q-table__bottom-item"
-          for="f_df5a5592-cbe7-470f-a2da-308bbcb43c80"
+          for="f_b99af646-e1dd-48db-a16a-6d0b5bb7030d"
         >
           <!---->
           <div
@@ -472,11 +414,11 @@ exports[`PostTable component > checks the data from parent component is defined 
                   </span>
                   <input
                     aria-autocomplete="none"
-                    aria-controls="f_df5a5592-cbe7-470f-a2da-308bbcb43c80_lb"
+                    aria-controls="f_b99af646-e1dd-48db-a16a-6d0b5bb7030d_lb"
                     aria-expanded="false"
-                    aria-owns="f_df5a5592-cbe7-470f-a2da-308bbcb43c80_lb"
+                    aria-owns="f_b99af646-e1dd-48db-a16a-6d0b5bb7030d_lb"
                     class="q-select__focus-target"
-                    id="f_df5a5592-cbe7-470f-a2da-308bbcb43c80"
+                    id="f_b99af646-e1dd-48db-a16a-6d0b5bb7030d"
                     readonly=""
                     role="combobox"
                     tabindex="0"

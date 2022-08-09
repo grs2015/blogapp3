@@ -98,7 +98,8 @@ export interface categoryData {
     meta_title?: string,
     parent_id?: number,
     slug: string,
-    title: string
+    title: string,
+    icon?: string
 }
 
 export interface tagData {
