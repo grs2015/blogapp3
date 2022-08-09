@@ -18,17 +18,17 @@
                     </div>
                     <div class="col-auto row justify-end">
                         <q-btn-group class="q-mr-md" outline>
-                            <q-btn round @click="loadLanguageAsync('de')">
+                            <q-btn round @click="loadLanguageAsync('de')" data-test="DE">
                                 <q-avatar>
                                     <q-img src="/images/germany.png" />
                                 </q-avatar>
                             </q-btn>
-                            <q-btn round @click="loadLanguageAsync('pl')">
+                            <q-btn round @click="loadLanguageAsync('pl')" data-test="PL">
                                 <q-avatar>
                                     <q-img src="/images/poland.png" />
                                 </q-avatar>
                             </q-btn>
-                            <q-btn round @click="loadLanguageAsync('en')">
+                            <q-btn round @click="loadLanguageAsync('en')" data-test="EN">
                                 <q-avatar>
                                     <q-img src="/images/great-britain.png" />
                                 </q-avatar>
@@ -50,21 +50,21 @@
         </q-header>
 
         <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-2">
-            <q-img img-class="my-custom-image" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+            <q-img img-class="my-custom-image" src="/images/parallax2.jpg" />
             <q-list>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/admin')" name="code">
+                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Dashboard/Index'" name="code">
                     {{ $t('Dashboard') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/posts')" name="code">
+                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value === 'Post/Index'" name="code">
                     {{ $t('Posts') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/categories')" name="code">
+                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Category/Index'" name="code">
                     {{ $t('Categories') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/tags')" name="code">
+                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Tag/Index'" name="code">
                     {{ $t('Tags') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().url.value.startsWith('/users')" name="code">
+                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'User/Index'" name="code">
                     {{ $t('Users') }}
                 </nav-link>
             </q-list>

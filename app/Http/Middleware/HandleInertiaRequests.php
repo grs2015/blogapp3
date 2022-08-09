@@ -37,7 +37,12 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            // 'sorting' => function() use ($request) {
+            //     return [
+            //         'column' => $request->query('column'),
+            //         'descending' => $request->query('descending')
+            //     ];
+            // }
         ]);
     }
 }

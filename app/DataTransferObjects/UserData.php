@@ -40,7 +40,7 @@ class UserData extends Data
         return self::from([
             ...$user->toArray(),
             'posts' => Lazy::whenLoaded('posts', $user, fn() => PostData::collection($user->posts)),
-            'roles' => $user->roles
+            // 'roles' => $user->roles
         ]);
     }
 }

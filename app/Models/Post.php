@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PostStatus;
 use Illuminate\Support\Str;
+use App\Filters\QueryFilter;
 use App\Enums\FavoriteStatus;
 use InvalidArgumentException;
 use Laravel\Scout\Searchable;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 
 /**
  * App\Models\Post
@@ -293,6 +295,7 @@ class Post extends Model
     protected $casts = [
         'status' => PostStatus::class,
         'favorite' => FavoriteStatus::class,
+        'published_at' => 'immutable_datetime:Y-m-d',
     ];
 
     protected $attributes = [
@@ -304,5 +307,10 @@ class Post extends Model
     public function newEloquentBuilder($query): PostBuilder
     {
         return new PostBuilder($query);
+    }
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }

@@ -5,11 +5,12 @@ import { InertiaProgress } from '@inertiajs/progress'
 import { i18nVue } from 'laravel-vue-i18n'
 import Layout from '@/Shared/Layout.vue'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { Quasar } from 'quasar'
+import { Quasar, Notify } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
-import { ZiggyVue } from 'ziggy';
+// import route from 'ziggy-js';
 import { Ziggy } from './ziggy';
+import { ZiggyVue } from 'ziggy';
 
 InertiaProgress.init()
 
@@ -23,12 +24,17 @@ createInertiaApp({
     const app = createApp({ render: () => h(App, props) })
     app.use(plugin)
     .use(i18nVue, {
-        resolve: (lang) => import(`../../lang/${lang}.json`)
+        resolve: async lang => {
+            const langs = import.meta.glob('../../lang/*.json');
+            return await langs[`../../lang/${lang}.json`]();
+        },
     })
     .use(Quasar, {
-        plugins: {}, // import Quasar plugins and add here
+        plugins: { Notify },
     })
     .use(ZiggyVue, Ziggy)
+    // .mixin({ methods: { route: (name, params, absolute) => route(name, params, absolute, Ziggy) } })
     .mount(el)
+
   },
 })

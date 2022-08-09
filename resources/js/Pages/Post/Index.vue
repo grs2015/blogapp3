@@ -1,9 +1,29 @@
-<template>
+<script setup lang="ts">
 
-</template>
+import { Head } from '@inertiajs/inertia-vue3'
+import Breadcrumbs from '@/Shared/Breadcrumbs.vue'
+import PostTable from '@/Shared/Tables/PostTable.vue'
+import { postsBreadcrumbs } from '@/breadcrumbsData.js'
+import { ref, watch } from 'vue'
+import { Paginated, SortingData, breadcrumbsData } from '@/Interfaces/PaginatedData'
 
-<script setup>
+interface Props {
+    model: {
+        posts: Paginated,
+        sorting: SortingData
+    }
+}
 
-defineProps({ model: Object })
+const props = defineProps<Props>()
+
+watch(props, () => console.log('Page Index props changed'))
+
+const breadcrumbs = ref<breadcrumbsData[]>(postsBreadcrumbs)
 
 </script>
+
+<template>
+    <Head title="Blog posts" />
+    <Breadcrumbs :data="breadcrumbs" />
+    <PostTable :paginatedData="props.model.posts" :sortingData="props.model.sorting"/>
+</template>
