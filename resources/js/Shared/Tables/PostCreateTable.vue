@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
 import { categoryData, Favorite, PostData, Status, tagData } from '@/Interfaces/PaginatedData'
-import { ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { statusOptions, favOptions } from '@/postData'
-import { useForm, usePage, Link } from '@inertiajs/inertia-vue3'
+import { useForm, Link } from '@inertiajs/inertia-vue3'
 import { useQuasar } from 'quasar'
+import { Inertia } from '@inertiajs/inertia'
+import { trans } from 'laravel-vue-i18n';
 
 
 interface Props {
@@ -16,10 +18,15 @@ interface Props {
 }
 
 const $q = useQuasar()
-const modeCreate = ref(true)
 const props = defineProps<Props>()
-const confirm = ref(false)
-const postTitleRef = ref(null)
+const modeCreate = ref(true) // Create/Edit mode of the component
+
+const imageLoad = ref(false) // Image processing indicator while deleting image
+const deleteBtn = ref(false) // Button disable indicator while processing the action
+const imageGalleryLoad = reactive({})
+const confirm = ref(false) // Confirmation of resetting form
+
+const postTitleRef = ref(null) // Ref for title input
 const currentHeroimagePaths = ref<string>('')
 const currentGalleryImagePaths = ref<string[]>([])
 const catOptions = props.data.categories.map(item => ({ label: item.title, value: item.id }))
@@ -44,8 +51,8 @@ let form = useForm<PostData>({
 
 if (props.data.post) {
     modeCreate.value = false
-    let cat_ids = []
-    let tag_ids = []
+    let cat_ids:number[] = []
+    let tag_ids:number[] = []
     if (props.data.post.categories.length != 0) {
         cat_ids = props.data.post.categories.map(item => item.id)
     }
@@ -54,16 +61,21 @@ if (props.data.post) {
     }
 
     if (typeof props.data.post.hero_image === 'string') {
-        currentHeroimagePaths.value = props.data.post.hero_image.split(',')[1]
+        currentHeroimagePaths.value = props.data.post.hero_image.split(',')[0]
     }
 
     if (props.data.post.galleries.length != 0) {
-        currentGalleryImagePaths.value = props.data.post.galleries.map(item => item.thumbs.split(',')[1])
+        props.data.post.galleries.forEach((item, idx) => {
+            imageGalleryLoad[`name-${idx}`] = false
+        })
+        currentGalleryImagePaths.value = props.data.post.galleries.map(item => item.thumbs.split(',')[0])
     }
 
     form = useForm<PostData>({
+    _method: "put",
     id: props.data.post.id,
     title: props.data.post.title,
+    slug: props.data.post.slug,
     meta_title: props.data.post.meta_title,
     summary: props.data.post.summary ?? '',
     content: props.data.post.content ?? '',
@@ -78,10 +90,22 @@ if (props.data.post) {
     author_id: 1
 })}
 
-const storePost = () => form.post('/admin/posts', {
-    onSuccess: () => onStoreSuccess(),
-    onError: (errors) => onStoreFail(errors)
-})
+const actionPost = () => {
+    if (modeCreate.value) {
+        form.post('/admin/posts', {
+        onSuccess: () => onStoreSuccess(),
+        onError: (errors) => onStoreFail(errors)
+        })
+        return
+    }
+
+    form.post(`/admin/posts/${form.slug}`, {
+        onSuccess: () => onUpdateSuccess(),
+        onError: (errors) => onUpdateFail(errors),
+        onStart: () => deleteBtn.value = true,
+        onFinish: () => deleteBtn.value = false
+    })
+}
 const resetForm = () => {
     form.reset()
     postTitleRef.value.resetValidation()
@@ -90,20 +114,37 @@ const resetForm = () => {
 const onStoreFail = (errors) => {
     $q.notify({
         type: 'negative',
-        message: `There were errors while storing: ${errors.cat_ids}`
+        message: trans('There were errors while storing: ') + errors.cat_ids
+    })
+}
+
+const onUpdateFail = (errors) => {
+    $q.notify({
+        type: 'negative',
+        message: trans('There were errors while updating: ') + trans('validation.custom.cat_ids.required')
     })
 }
 
 const onStoreSuccess = () => {
     $q.notify({
         type: 'positive',
-        message: "The post have been stored successfully"
+        message: trans('The post have been stored successfully')
     })
 }
+
+const onUpdateSuccess = () => {
+    $q.notify({
+        type: 'positive',
+        message: trans('The post have been updated successfully')
+    })
+    form.hero_image = null
+    form.images = null
+}
+
 const onRejected = (rejectedEntries) => {
     $q.notify({
         type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+        message: rejectedEntries.length + trans(' file(s) did not pass validation constraints')
     })
 }
 
@@ -115,14 +156,56 @@ const currentDate = () => {
 const calendarOptions = (date: string) => date >= currentDate()
 
 const deleteHeroImage = () => {
-
+    Inertia.post('/admin/hero_image', { 'post_id': props.data.post.id, 'slug': props.data.post.slug }, {
+        onStart: () => {
+            imageLoad.value = true,
+            deleteBtn.value = true
+        },
+        onSuccess: () => onUpdateSuccess(),
+        onError: (errors) => onUpdateFail(errors),
+        onFinish: () => {
+            imageLoad.value = false,
+            deleteBtn.value = false
+        },
+        preserveScroll: true
+    })
 }
+
+const deleteGalleryImage = (idx) => {
+    Inertia.post('/admin/gallery_image', { 'post_id': props.data.post.id, 'slug': props.data.post.slug, 'image_idx': idx }, {
+        onStart: () => {
+            imageGalleryLoad[`name-${idx}`] = true,
+            deleteBtn.value = true
+        },
+        onSuccess: () => onUpdateSuccess(),
+        onError: (errors) => onUpdateFail(errors),
+        onFinish: () => {
+            imageGalleryLoad[`name-${idx}`] = false,
+            deleteBtn.value = false
+        },
+        preserveScroll: true
+    })
+}
+
+watch(() => props.data.post, () => {
+    if (typeof props.data.post.hero_image === 'string') {
+        currentHeroimagePaths.value = props.data.post.hero_image.split(',')[0]
+    }
+    if (!props.data.post.hero_image) {
+        currentHeroimagePaths.value = ''
+    }
+    // Object.keys(imageGalleryLoad).forEach(key => delete imageGalleryLoad[key]);
+    props.data.post.galleries.forEach((item, idx) => {
+        imageGalleryLoad[`name-${idx}`] = false
+    })
+    currentGalleryImagePaths.value = props.data.post.galleries.map(item => item.thumbs.split(',')[0])
+})
 
 </script>
 
 <template>
     <div class="q-mt-md">
-        <q-form @submit="storePost">
+        <q-form @submit="actionPost">
             <q-card flat bordered>
                 <q-card-section class="text-primary text-h6">
                     {{ modeCreate ? $t('Create Post') : $t('Edit Post') }}
@@ -241,7 +324,7 @@ const deleteHeroImage = () => {
                             </div>
                         </div>
 
-                        <div class="column q-gutter-md">
+                        <div v-if="modeCreate" class="column q-gutter-md">
                             <q-card flat bordered>
                                 <q-card-section>
                                     <div class="column">
@@ -253,7 +336,7 @@ const deleteHeroImage = () => {
                                                 <q-icon color="orange" name="image" />
                                             </template>
                                             <template v-slot:hint>
-                                                Only image format file, max. size &lt 1 MB
+                                                {{ $t('Only image format file, max. size < 1 MB') }}
                                             </template>
                                         </q-file>
                                     </div>
@@ -266,7 +349,7 @@ const deleteHeroImage = () => {
                                                 <q-icon color="orange" name="collections" />
                                             </template>
                                             <template v-slot:hint>
-                                                Only image format file(s), max. overall size &lt 3 MB
+                                                {{ $t('Only image format file(s), max. overall size < 3 MB') }}
                                             </template>
                                         </q-file>
                                     </div>
@@ -285,7 +368,7 @@ const deleteHeroImage = () => {
                                                 <q-icon color="orange" name="image" />
                                             </template>
                                             <template v-slot:hint>
-                                                Only image format file, max. size &lt 1 MB
+                                                {{ $t('Only image format file, max. size < 1 MB') }}
                                             </template>
                                         </q-file>
                                         <template v-if="currentHeroimagePaths">
@@ -293,8 +376,19 @@ const deleteHeroImage = () => {
                                                 {{ $t('Post current hero-image') }}</div>
                                             <div class="row">
                                                 <div class="col-3 relative-position">
-                                                    <q-img fit="cover" height="200px" class="rounded-borders" :src="currentHeroimagePaths"/>
-                                                    <q-btn round icon="delete" color="accent" class="absolute-top-right" style="top: 5px; right: 5px" @click="deleteHeroImage" />
+                                                    <q-img fit="cover" height="200px" class="rounded-borders" :src="currentHeroimagePaths">
+                                                        <template v-slot:loading>
+                                                            <q-spinner-gears color="accent" />
+                                                        </template>
+                                                        <template v-slot:error>
+                                                            <div class="absolute-full flex flex-center bg-grey-3 text-accent">
+                                                                {{ $t('Cannot load image') }}
+                                                            </div>
+                                                        </template>
+                                                    </q-img>
+                                                    <q-btn :disable="deleteBtn" round icon="delete" color="accent" class="absolute-top-right" style="top: 5px; right: 5px" @click="deleteHeroImage" />
+                                                    <q-spinner-gears size="4em" v-if="imageLoad" class="absolute-center z-max" color="accent"/>
+                                                    <div v-if="imageLoad" class="light-dimmed transparent absolute-full bg-grey-3"></div>
                                                 </div>
                                             </div>
                                         </template>
@@ -314,16 +408,30 @@ const deleteHeroImage = () => {
                                                 <q-icon color="orange" name="collections" />
                                             </template>
                                             <template v-slot:hint>
-                                                Only image format file(s), max. overall size &lt 3 MB
+                                                {{ $t('Only image format file(s), max. overall size < 3 MB') }}
                                             </template>
                                         </q-file>
+                                        <template v-if="currentGalleryImagePaths.length != 0">
                                         <div class="text-subtitle2 text-primary text-weight-thin q-mt-md">
                                             {{ $t('Post images in your gallery') }}</div>
                                         <div class="row q-col-gutter-md">
-                                            <div v-for="(path, idx) in currentGalleryImagePaths" :key="idx" class="col-3">
-                                                <q-img fit="cover" height="200px" class="rounded-borders" :src="path"/>
+                                            <div v-for="(path, idx) in currentGalleryImagePaths" :key="idx" class="col-3 relative-position">
+                                                <q-img fit="cover" height="200px" class="rounded-borders" :src="path">
+                                                    <template v-slot:loading>
+                                                        <q-spinner-gears color="accent" />
+                                                    </template>
+                                                    <template v-slot:error>
+                                                        <div class="absolute-full flex flex-center bg-grey-3 text-accent">
+                                                            {{ $t('Cannot load image') }}
+                                                        </div>
+                                                    </template>
+                                                </q-img>
+                                                <q-btn :disable="deleteBtn" round icon="delete" color="accent" class="absolute-top-right" style="top: 21px; right: 7px" @click="deleteGalleryImage(idx)" />
+                                                <q-spinner-gears size="4em" v-if="imageGalleryLoad[`name-${idx}`]" class="absolute-center z-max" color="accent"/>
+                                                <div v-if="imageGalleryLoad[`name-${idx}`]" class="light-dimmed transparent absolute-full bg-grey-3"></div>
                                             </div>
                                         </div>
+                                        </template>
                                     </div>
                                 </q-card-section>
                             </q-card>

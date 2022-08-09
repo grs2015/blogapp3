@@ -19,7 +19,7 @@ export interface PostData {
     'author_id'?: number | null;
     'content'?: string | null;
     'favorite': Favorite;
-    'hero_image'?: File | string | string[] | null,
+    'hero_image'?: File | any | any[] | null,
     'id': number;
     'meta_title'?: string | null;
     'parent_id'?: number | null;
@@ -38,6 +38,7 @@ export interface PostData {
     'categories'?: Array<categoryData> | null,
     'tags'?: Array<tagData> | null,
     'images'?: Array<File> | null,
+    '_method'?: "put" | null
 }
 
 export interface SortingData {
