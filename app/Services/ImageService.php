@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Post;
 use Illuminate\Http\File;
+use Illuminate\Support\Arr;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Intervention\Image\Facades\Image;
@@ -39,7 +40,11 @@ class ImageService
     public function deleteHeroImages(string $pathToImages):bool
     {
         $namesArr = explode(',', $pathToImages);
-        return Storage::disk('public')->delete($namesArr);
+        $clippedPaths = Arr::map($namesArr, function($item) {
+            return substr($item, strpos($item, 'uploads'));
+        });
+
+        return Storage::disk('public')->delete($clippedPaths);
     }
 
     public function deleteGallery(Post $post):void
@@ -49,25 +54,42 @@ class ImageService
             return;
         }
         $postGallery->each(function($gallery) {
-            $namesArr = [ $gallery->original, $gallery->lowres, explode(',', $gallery->thumbs)[0], explode(',', $gallery->thumbs)[1]];
-            Storage::disk('public')->delete($namesArr);
+            $namesArr = [ $gallery->original, $gallery->lowres, explode(',', $gallery->thumbs)[0]];
+            $clippedPaths = Arr::map($namesArr, function($item) {
+                return substr($item, strpos($item, 'uploads'));
+            });
+            Storage::disk('public')->delete($clippedPaths);
         });
     }
 
-    public function storeHeroImages(?int $width = null, ?int $height = 600, ?int $quality = 100):self
+    public function deleteGalleryImage(Post $post, int $index): void
+    {
+        // $postGalleryImage = ($post->galleries()->get()->toArray())[$index];
+        $postGalleryImage = $post->galleries()->get()[$index];
+
+        $namesArr = [ $postGalleryImage->original, $postGalleryImage->lowres, explode(',', $postGalleryImage->thumbs)[0]];
+        $clippedPaths = Arr::map($namesArr, function($item) {
+            return substr($item, strpos($item, 'uploads'));
+        });
+        Storage::disk('public')->delete($clippedPaths);
+    }
+
+    public function storeHeroImages(?int $quality = 100, ?int $width = 600, ?int $height = 600):self
     {
         $fileHiRes = Image::make($this->file);
-        $fileLoRes = $fileHiRes->fit($width, $height, function($constraint) { $constraint->upsize(); });
         Storage::put("uploads/HiRes-{$this->filename}.{$this->file->getClientOriginalExtension()}", $fileHiRes->stream('jpg', 100));
-        Storage::put("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}", $fileLoRes->stream('jpg', $quality));
+        // $fileLoRes = $fileHiRes;
+        Storage::put("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}", $fileHiRes->stream('jpg', $quality));
 
         return $this;
     }
 
     public function generateHeroURL(): self
     {
-        $this->urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
-        $this->urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+        // $this->urlLoRes = str_replace('/storage/', '', Storage::url("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+        // $this->urlHiRes = str_replace('/storage/', '', Storage::url("uploads/HiRes-{$this->filename}.{$this->file->getClientOriginalExtension()}"));
+        $this->urlLoRes = Storage::url("uploads/LoRes-{$this->filename}.{$this->file->getClientOriginalExtension()}");
+        $this->urlHiRes = Storage::url("uploads/HiRes-{$this->filename}.{$this->file->getClientOriginalExtension()}");
         $this->filenames->push($this->urlHiRes, $this->urlLoRes);
         $this->filenamesDB = $this->filenames->implode(',');
         $this->thumbFilenamesDB = $this->thumbFilenames->implode(',');
