@@ -20,7 +20,8 @@ class CategoryFactory extends Factory
             'parent_id' => 1,
             'title' => $this->faker->sentence(),
             'meta_title' => $this->faker->sentence(),
-            'content' => $this->faker->text()
+            'content' => $this->faker->text(),
+            'icon' => 'description'
         ];
     }
 }
