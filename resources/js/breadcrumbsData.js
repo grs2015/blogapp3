@@ -57,3 +57,37 @@ export const catsBreadcrumbs = [
         icon: "category",
     },
 ];
+
+export const categoryCreateBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Categories",
+        icon: "category",
+        route: "/admin/categories"
+    },
+    {
+        label: "Create",
+        icon: "edit",
+    }
+];
+
+export const categoryEditBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Categories",
+        icon: "category",
+        route: "/admin/categories"
+    },
+    {
+        label: "Edit",
+        icon: "edit",
+    }
+];
