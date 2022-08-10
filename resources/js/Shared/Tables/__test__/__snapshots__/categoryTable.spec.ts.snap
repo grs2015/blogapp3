@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`PostTable component > checks the data from parent component is defined on current component 1`] = `
+exports[`CategoryTable component > checks the data from parent component is defined on current component 1`] = `
 <div
   class="q-mt-md"
 >
@@ -14,14 +14,14 @@ exports[`PostTable component > checks the data from parent component is defined 
       <div
         class="q-table__title text-primary"
       >
-        Posts
+        Categories
       </div>
       <div
         class="q-space"
       />
       <label
         class="q-field row no-wrap items-start q-field--standard q-input q-field--labeled q-field--dense"
-        for="f_6b8253ab-b2bf-482d-a1c1-2c96fc56e5d4"
+        for="f_879eaee4-cf5f-4e5c-9587-ed3b2fbbea3b"
       >
         <!---->
         <div
@@ -37,7 +37,7 @@ exports[`PostTable component > checks the data from parent component is defined 
               <input
                 class="q-field__native q-placeholder"
                 data-test="search-input"
-                id="f_6b8253ab-b2bf-482d-a1c1-2c96fc56e5d4"
+                id="f_879eaee4-cf5f-4e5c-9587-ed3b2fbbea3b"
                 tabindex="0"
                 type="text"
               />
@@ -115,7 +115,7 @@ exports[`PostTable component > checks the data from parent component is defined 
             post_add
           </i>
           <div>
-            ADD POST
+            ADD CATEGORY
           </div>
         </span>
       </button>
@@ -133,6 +133,18 @@ exports[`PostTable component > checks the data from parent component is defined 
           >
             
             <th
+              class="text-center sortable text-primary"
+            >
+              Category Icon
+              <i
+                aria-hidden="true"
+                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--center"
+                role="presentation"
+              >
+                arrow_upward
+              </i>
+            </th>
+            <th
               class="text-left sortable text-primary"
             >
               Title
@@ -145,45 +157,16 @@ exports[`PostTable component > checks the data from parent component is defined 
               </i>
             </th>
             <th
-              class="text-left text-primary"
+              class="text-left sortable text-primary"
             >
-              Author
-            </th>
-            <th
-              class="text-right sortable text-primary"
-            >
+              Content
               <i
                 aria-hidden="true"
-                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--right"
+                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--left"
                 role="presentation"
               >
                 arrow_upward
               </i>
-              Status
-            </th>
-            <th
-              class="text-right sortable text-primary"
-            >
-              <i
-                aria-hidden="true"
-                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--right"
-                role="presentation"
-              >
-                arrow_upward
-              </i>
-              Favorite
-            </th>
-            <th
-              class="text-right sortable text-primary"
-            >
-              <i
-                aria-hidden="true"
-                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--right"
-                role="presentation"
-              >
-                arrow_upward
-              </i>
-              Views
             </th>
             <th
               class="text-center text-primary"
@@ -197,6 +180,20 @@ exports[`PostTable component > checks the data from parent component is defined 
           <tr
             class=""
           >
+            
+            <td
+              class="q-td q-table--col-auto-width text-center"
+            >
+              <i
+                aria-hidden="true"
+                class="q-icon text-purple notranslate material-icons"
+                role="presentation"
+                style="font-size: 32px;"
+              >
+                description
+              </i>
+            </td>
+            
             <td
               class="text-left"
               style="width: 30%;"
@@ -206,29 +203,8 @@ exports[`PostTable component > checks the data from parent component is defined 
             <td
               class="text-left"
             >
-              name
+              content
             </td>
-            
-            <td
-              class="q-td q-table--col-auto-width text-right"
-            >
-              draft
-            </td>
-            
-            
-            <td
-              class="q-td q-table--col-auto-width text-right"
-            >
-              usual
-            </td>
-            
-            
-            <td
-              class="q-td q-table--col-auto-width text-right"
-            >
-              1
-            </td>
-            
             
             <td
               class="q-td q-table--col-auto-width text-center"
@@ -287,6 +263,20 @@ exports[`PostTable component > checks the data from parent component is defined 
           <tr
             class=""
           >
+            
+            <td
+              class="q-td q-table--col-auto-width text-center"
+            >
+              <i
+                aria-hidden="true"
+                class="q-icon text-purple notranslate material-icons"
+                role="presentation"
+                style="font-size: 32px;"
+              >
+                description
+              </i>
+            </td>
+            
             <td
               class="text-left"
               style="width: 30%;"
@@ -296,29 +286,8 @@ exports[`PostTable component > checks the data from parent component is defined 
             <td
               class="text-left"
             >
-              name
+              content
             </td>
-            
-            <td
-              class="q-td q-table--col-auto-width text-right"
-            >
-              draft
-            </td>
-            
-            
-            <td
-              class="q-td q-table--col-auto-width text-right"
-            >
-              usual
-            </td>
-            
-            
-            <td
-              class="q-td q-table--col-auto-width text-right"
-            >
-              1
-            </td>
-            
             
             <td
               class="q-td q-table--col-auto-width text-center"
@@ -393,7 +362,7 @@ exports[`PostTable component > checks the data from parent component is defined 
         </span>
         <label
           class="q-field row no-wrap items-start q-field--borderless q-select q-field--auto-height q-select--without-input q-select--without-chips q-select--single q-field--float q-field--dense q-table__select inline q-table__bottom-item"
-          for="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400"
+          for="f_124d6782-23b9-4eff-8c92-ba26569fac65"
         >
           <!---->
           <div
@@ -414,11 +383,11 @@ exports[`PostTable component > checks the data from parent component is defined 
                   </span>
                   <input
                     aria-autocomplete="none"
-                    aria-controls="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400_lb"
+                    aria-controls="f_124d6782-23b9-4eff-8c92-ba26569fac65_lb"
                     aria-expanded="false"
-                    aria-owns="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400_lb"
+                    aria-owns="f_124d6782-23b9-4eff-8c92-ba26569fac65_lb"
                     class="q-select__focus-target"
-                    id="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400"
+                    id="f_124d6782-23b9-4eff-8c92-ba26569fac65"
                     readonly=""
                     role="combobox"
                     tabindex="0"
@@ -447,14 +416,9 @@ exports[`PostTable component > checks the data from parent component is defined 
       <div
         class="q-table__control"
       >
-        <span
-          class="q-table__bottom-item"
-        >
-          1-5 of 20
-        </span>
         <button
           aria-disabled="true"
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-primary disabled q-btn--dense"
+          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 disabled q-btn--dense"
           disabled=""
           tabindex="-1"
           type="button"
@@ -476,7 +440,7 @@ exports[`PostTable component > checks the data from parent component is defined 
         </button>
         <button
           aria-disabled="true"
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-primary disabled q-btn--dense"
+          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 disabled q-btn--dense"
           disabled=""
           tabindex="-1"
           type="button"
@@ -497,7 +461,7 @@ exports[`PostTable component > checks the data from parent component is defined 
           </span>
         </button>
         <button
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-primary q-btn--actionable q-focusable q-hoverable q-btn--dense"
+          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 q-btn--actionable q-focusable q-hoverable q-btn--dense"
           tabindex="0"
           type="button"
         >
@@ -517,7 +481,7 @@ exports[`PostTable component > checks the data from parent component is defined 
           </span>
         </button>
         <button
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-primary q-btn--actionable q-focusable q-hoverable q-btn--dense"
+          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 q-btn--actionable q-focusable q-hoverable q-btn--dense"
           tabindex="0"
           type="button"
         >
