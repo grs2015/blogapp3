@@ -5,11 +5,13 @@ import Breadcrumbs from '@/Shared/Breadcrumbs.vue'
 import CategoryTable from '@/Shared/Tables/CategoryTable.vue'
 import { catsBreadcrumbs } from '@/breadcrumbsData.js'
 import { ref } from 'vue'
-import { categoryData, breadcrumbsData } from '@/Interfaces/PaginatedData'
+import { breadcrumbsData, SortingData } from '@/Interfaces/PaginatedData'
+import { PaginatedCategory } from '@/Interfaces/PaginatedCatData'
 
 interface Props {
     model: {
-        categories: Array<categoryData>
+        categories: PaginatedCategory,
+        sorting: SortingData
     }
 }
 
@@ -22,7 +24,7 @@ const breadcrumbs = ref<breadcrumbsData[]>(catsBreadcrumbs)
 <template>
     <Head title="Post categories" />
     <Breadcrumbs :data="breadcrumbs" />
-    <CategoryTable :paginatedData="props.model.categories"/>
+    <CategoryTable :paginatedData="props.model.categories" :sortingData="props.model.sorting"/>
 </template>
 
 
