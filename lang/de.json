@@ -49,5 +49,13 @@
     "The post have been updated successfully": "Der Beitrag wurde erfolgreich aktualisiert",
     "There were errors while updating: ": "Beim Update sind Fehler aufgetreten: ",
     "There were errors while storing: ": "Beim Speichern sind Fehler aufgetreten: ",
-    " file(s) did not pass validation constraints": " Datei(en) haben Validierungseinschränkungen nicht bestanden"
+    " file(s) did not pass validation constraints": " Datei(en) haben Validierungseinschränkungen nicht bestanden",
+
+    "Add category": "Kategorie hinzufügen",
+    "Category Icon": "Kategorie-Symbol",
+    "Content": "Beschreibung",
+    "Something went wrong with category deletion": "Beim Löschen der Kategorie ist etwas schief gelaufen",
+    "The category have been deleted successfully": "Die Kategorie wurde erfolgreich gelöscht",
+    "Edit category": "Kategorie bearbeiten",
+    "Delete category": "Kategorie löschen"
 }

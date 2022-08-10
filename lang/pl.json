@@ -49,6 +49,14 @@
     "The post have been updated successfully": "Post został zaktualizowany pomyślnie",
     "There were errors while updating: ": "Wystąpiły błędy podczas aktualizacji: ",
     "There were errors while storing: ": "Wystąpiły błędy podczas przechowywania: ",
-    " file(s) did not pass validation constraints": " plik(i) nie odpowiadają regułom walidacji"
+    " file(s) did not pass validation constraints": " plik(i) nie odpowiadają regułom walidacji",
+
+    "Add category": "Dodaj kategorię",
+    "Category Icon": "Obrazek kategorii",
+    "Content": "Opis kategorii",
+    "Something went wrong with category deletion": "Coś poszło źle w trakcie usunięcia kategorii",
+    "The category have been deleted successfully": "Kategoria została usunięta pomyślnie",
+    "Edit category": "Edytuj kategorię",
+    "Delete category": "Usuń kategorię"
 }
 

@@ -49,5 +49,13 @@
     "The post have been updated successfully": "The post have been updated successfully",
     "There were errors while updating: ": "There were errors while updating: ",
     "There were errors while storing: ": "There were errors while storing: ",
-    " file(s) did not pass validation constraints": " file(s) did not pass validation constraints"
+    " file(s) did not pass validation constraints": " file(s) did not pass validation constraints",
+
+    "Add category": "Add category",
+    "Category Icon": "Category Icon",
+    "Content": "Content",
+    "Something went wrong with category deletion": "Something went wrong with category deletion",
+    "The category have been deleted successfully": "The category have been deleted successfully",
+    "Edit category": "Edit category",
+    "Delete category": "Delete category"
 }
