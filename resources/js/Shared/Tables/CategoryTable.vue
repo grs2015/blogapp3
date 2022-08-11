@@ -23,6 +23,8 @@ const rows = computed(() => {
 const filter = ref('')
 const loading = ref(false)
 const loadingResetButton = ref(false)
+const selectedCats = ref<categoryData[]>([])
+const confirm = ref(false)
 
 const pagination = ref<tablePagination>({
     sortBy: props.sortingData.column,
@@ -111,19 +113,31 @@ const deleteCategory = (row: Object) => {
 const onDeleteFail = () => {
     $q.notify({
         type: 'negative',
-        message: trans("Something went wrong with category deletion")
+        message: trans("Something went wrong with category(s) deletion")
     })
 }
 
 const onDeleteSuccess = () => {
     $q.notify({
         type: 'positive',
-        message: trans("The category have been deleted successfully")
+        message: trans("The category(s) have been deleted successfully")
     })
 }
 
 const addPost = () => {
     Inertia.get('/admin/categories/create')
+}
+
+const getSelectedString = (number) => selectedCats.value.length === 0 ? '' : `${selectedCats.value.length} record${selectedCats.value.length > 1 ? 's' : ''} selected of ${number}`
+
+const massDelete = () => {
+    // ids.value = selectedCats.value.map(cat => cat.id)
+    Inertia.post('/admin/catmassdelete', { data: selectedCats.value.map(cat => cat.id) }, {
+        onStart: () => loading.value = true,
+        onFinish: () => selectedCats.value.length = 0,
+        onSuccess: () => onDeleteSuccess(),
+        onError: () => onDeleteFail()
+    })
 }
 
 </script>
@@ -132,14 +146,16 @@ const addPost = () => {
     <div class="q-mt-md">
         <q-table :title="$t('Categories')" :row-key="row => row.id" :columns="columns" :rows="rows"
             v-model:pagination="pagination" :filter="filter" @request="onRequest" :loading="loading" color="primary"
+            v-model:selected="selectedCats" selection="multiple" :selected-rows-label="getSelectedString"
             flat binary-state-sort :rows-per-page-label="$t('Records per page')"
             :rows-per-page-options="[5, 10, 15, props.paginatedData.total, 0]" bordered>
-            <template v-slot:header="props">
-                <q-tr :props="props">
-                    <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-primary">
-                        {{ col.label }}
-                    </q-th>
-                </q-tr>
+            <template v-slot:header-selection="scope">
+                <q-checkbox color="primary" keep-color v-model="scope.selected" data-test="select-checkbox"/>
+            </template>
+            <template v-slot:header-cell="props">
+                <q-th :props="props" class="text-primary">
+                    {{ props.col.label }}
+                </q-th>
             </template>
             <template v-slot:no-data>
                 <div class="full-width row flex-center text-primary q-gutter-sm">
@@ -210,6 +226,30 @@ const addPost = () => {
                 <q-btn v-if="scope.pagesNumber > 2" icon="last_page" color="grey-8" round dense flat
                     :disable="scope.isLastPage" @click="scope.lastPage" />
             </template>
+            <template v-slot:bottom-row>
+                <q-tr>
+                    <q-td colspan="100%">
+                        <div class="row justify-end">
+                            <q-btn outline color="red" :disable="loading || selectedCats.length == 0" @click="confirm = true" data-test="massdelete-button">
+                                <div>{{ $t('Delete selected') }}</div>
+                            </q-btn>
+                        </div>
+                    </q-td>
+                </q-tr>
+            </template>
         </q-table>
     </div>
+    <q-dialog v-model="confirm" persistent>
+        <q-card>
+            <q-card-section class="row items-center bg-red-1">
+                <q-avatar icon="front_hand" color="negative" text-color="white" />
+                <span class="q-ml-sm">{{ $t("You are going to delete selected categories, aren't you?") }}</span>
+            </q-card-section>
+
+            <q-card-actions align="right">
+                <q-btn flat :label="$t('Cancel')" color="primary" v-close-popup />
+                <q-btn flat :label="$t('Delete')" color="negative" v-close-popup @click="massDelete" data-test="massdelete-confirm" />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>

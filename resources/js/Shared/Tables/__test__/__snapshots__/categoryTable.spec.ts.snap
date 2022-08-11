@@ -2,506 +2,664 @@
 
 exports[`CategoryTable component > checks the data from parent component is defined on current component 1`] = `
 <div
-  class="q-mt-md"
+  data-v-app=""
 >
+  
   <div
-    class="q-table__container q-table--horizontal-separator column no-wrap q-table__card q-table--flat q-table--bordered q-table--no-wrap"
+    class="q-mt-md"
   >
     <div
-      class="q-table__top relative-position row items-center"
+      class="q-table__container q-table--horizontal-separator column no-wrap q-table__card q-table--flat q-table--bordered q-table--no-wrap"
     >
-      
       <div
-        class="q-table__title text-primary"
+        class="q-table__top relative-position row items-center"
       >
-        Categories
-      </div>
-      <div
-        class="q-space"
-      />
-      <label
-        class="q-field row no-wrap items-start q-field--standard q-input q-field--labeled q-field--dense"
-        for="f_879eaee4-cf5f-4e5c-9587-ed3b2fbbea3b"
-      >
-        <!---->
+        
         <div
-          class="q-field__inner relative-position col self-stretch"
+          class="q-table__title text-primary"
         >
-          <div
-            class="q-field__control relative-position row no-wrap"
-            tabindex="-1"
-          >
-            <div
-              class="q-field__control-container col relative-position row no-wrap q-anchor--skip"
-            >
-              <input
-                class="q-field__native q-placeholder"
-                data-test="search-input"
-                id="f_879eaee4-cf5f-4e5c-9587-ed3b2fbbea3b"
-                tabindex="0"
-                type="text"
-              />
-              <div
-                class="q-field__label no-pointer-events absolute ellipsis text-primary"
-              >
-                <div>
-                  Search
-                </div>
-              </div>
-              <!---->
-            </div>
-            <div
-              class="q-field__append q-field__marginal row no-wrap items-center"
-            >
-              <i
-                aria-hidden="true"
-                class="q-icon text-primary notranslate material-icons"
-                role="presentation"
-              >
-                search
-              </i>
-            </div>
-          </div>
-          <!---->
+          Categories
         </div>
-        <!---->
-      </label>
-      <button
-        class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-primary q-btn--actionable q-focusable q-hoverable q-ml-md"
-        data-test="refresh-button"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="q-focus-helper"
+        <div
+          class="q-space"
         />
-        <span
-          class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
-        >
-          <i
-            aria-hidden="true"
-            class="q-icon notranslate material-icons"
-            role="img"
-          >
-            restart_alt
-          </i>
-        </span>
-        <transition-stub>
-          <!---->
-        </transition-stub>
-      </button>
-      <hr
-        aria-orientation="vertical"
-        class="q-separator q-separator--vertical q-separator--vertical-inset"
-        style="margin-right: 8px; margin-left: 8px;"
-      />
-      <button
-        class="q-btn q-btn-item non-selectable no-outline q-btn--unelevated q-btn--rectangle bg-green text-white q-btn--actionable q-focusable q-hoverable"
-        data-test="add-button"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="q-focus-helper"
-        />
-        <span
-          class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
-        >
-          <i
-            aria-hidden="true"
-            class="q-icon on-left notranslate material-icons"
-            role="presentation"
-          >
-            post_add
-          </i>
-          <div>
-            ADD CATEGORY
-          </div>
-        </span>
-      </button>
-      
-    </div>
-    <div
-      class="q-table__middle scroll"
-    >
-      <table
-        class="q-table"
-      >
-        <thead>
-          <tr
-            class="q-tr"
-          >
-            
-            <th
-              class="text-center sortable text-primary"
-            >
-              Category Icon
-              <i
-                aria-hidden="true"
-                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--center"
-                role="presentation"
-              >
-                arrow_upward
-              </i>
-            </th>
-            <th
-              class="text-left sortable text-primary"
-            >
-              Title
-              <i
-                aria-hidden="true"
-                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--left"
-                role="presentation"
-              >
-                arrow_upward
-              </i>
-            </th>
-            <th
-              class="text-left sortable text-primary"
-            >
-              Content
-              <i
-                aria-hidden="true"
-                class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--left"
-                role="presentation"
-              >
-                arrow_upward
-              </i>
-            </th>
-            <th
-              class="text-center text-primary"
-            >
-              Actions
-            </th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class=""
-          >
-            
-            <td
-              class="q-td q-table--col-auto-width text-center"
-            >
-              <i
-                aria-hidden="true"
-                class="q-icon text-purple notranslate material-icons"
-                role="presentation"
-                style="font-size: 32px;"
-              >
-                description
-              </i>
-            </td>
-            
-            <td
-              class="text-left"
-              style="width: 30%;"
-            >
-              first_title
-            </td>
-            <td
-              class="text-left"
-            >
-              content
-            </td>
-            
-            <td
-              class="q-td q-table--col-auto-width text-center"
-            >
-              <div
-                class="row flex-center q-gutter-x-sm no-wrap"
-              >
-                <button
-                  class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-accent q-btn--actionable q-focusable q-hoverable"
-                  data-test="edit-button"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="q-focus-helper"
-                  />
-                  <span
-                    class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
-                  >
-                    <i
-                      aria-hidden="true"
-                      class="q-icon notranslate material-icons"
-                      role="img"
-                    >
-                      edit
-                    </i>
-                    <!---->
-                  </span>
-                </button>
-                <button
-                  class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-red q-btn--actionable q-focusable q-hoverable"
-                  data-test="delete-button"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="q-focus-helper"
-                  />
-                  <span
-                    class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
-                  >
-                    <i
-                      aria-hidden="true"
-                      class="q-icon notranslate material-icons"
-                      role="img"
-                    >
-                      delete
-                    </i>
-                    <!---->
-                  </span>
-                </button>
-              </div>
-            </td>
-            
-          </tr>
-          <tr
-            class=""
-          >
-            
-            <td
-              class="q-td q-table--col-auto-width text-center"
-            >
-              <i
-                aria-hidden="true"
-                class="q-icon text-purple notranslate material-icons"
-                role="presentation"
-                style="font-size: 32px;"
-              >
-                description
-              </i>
-            </td>
-            
-            <td
-              class="text-left"
-              style="width: 30%;"
-            >
-              first_title
-            </td>
-            <td
-              class="text-left"
-            >
-              content
-            </td>
-            
-            <td
-              class="q-td q-table--col-auto-width text-center"
-            >
-              <div
-                class="row flex-center q-gutter-x-sm no-wrap"
-              >
-                <button
-                  class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-accent q-btn--actionable q-focusable q-hoverable"
-                  data-test="edit-button"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="q-focus-helper"
-                  />
-                  <span
-                    class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
-                  >
-                    <i
-                      aria-hidden="true"
-                      class="q-icon notranslate material-icons"
-                      role="img"
-                    >
-                      edit
-                    </i>
-                    <!---->
-                  </span>
-                </button>
-                <button
-                  class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-red q-btn--actionable q-focusable q-hoverable"
-                  data-test="delete-button"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="q-focus-helper"
-                  />
-                  <span
-                    class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
-                  >
-                    <i
-                      aria-hidden="true"
-                      class="q-icon notranslate material-icons"
-                      role="img"
-                    >
-                      delete
-                    </i>
-                    <!---->
-                  </span>
-                </button>
-              </div>
-            </td>
-            
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div
-      class="q-table__bottom row items-center justify-end"
-    >
-      <div
-        class="q-table__separator col"
-      />
-      <div
-        class="q-table__control"
-      >
-        <span
-          class="q-table__bottom-item"
-        >
-          Records per page
-        </span>
         <label
-          class="q-field row no-wrap items-start q-field--borderless q-select q-field--auto-height q-select--without-input q-select--without-chips q-select--single q-field--float q-field--dense q-table__select inline q-table__bottom-item"
-          for="f_124d6782-23b9-4eff-8c92-ba26569fac65"
+          class="q-field row no-wrap items-start q-field--standard q-input q-field--labeled q-field--dense"
+          for="f_ac3b1040-1be0-4a02-a46a-d80ed754a865"
         >
           <!---->
           <div
             class="q-field__inner relative-position col self-stretch"
           >
             <div
-              class="q-field__control relative-position row no-wrap text-primary"
+              class="q-field__control relative-position row no-wrap"
               tabindex="-1"
             >
               <div
                 class="q-field__control-container col relative-position row no-wrap q-anchor--skip"
               >
+                <input
+                  class="q-field__native q-placeholder"
+                  data-test="search-input"
+                  id="f_ac3b1040-1be0-4a02-a46a-d80ed754a865"
+                  tabindex="0"
+                  type="text"
+                />
                 <div
-                  class="q-field__native row items-center"
+                  class="q-field__label no-pointer-events absolute ellipsis text-primary"
                 >
-                  <span>
-                    5
-                  </span>
-                  <input
-                    aria-autocomplete="none"
-                    aria-controls="f_124d6782-23b9-4eff-8c92-ba26569fac65_lb"
-                    aria-expanded="false"
-                    aria-owns="f_124d6782-23b9-4eff-8c92-ba26569fac65_lb"
-                    class="q-select__focus-target"
-                    id="f_124d6782-23b9-4eff-8c92-ba26569fac65"
-                    readonly=""
-                    role="combobox"
-                    tabindex="0"
-                  />
+                  <div>
+                    Search
+                  </div>
                 </div>
                 <!---->
               </div>
               <div
-                class="q-field__append q-field__marginal row no-wrap items-center q-anchor--skip"
+                class="q-field__append q-field__marginal row no-wrap items-center"
               >
                 <i
                   aria-hidden="true"
-                  class="q-icon notranslate material-icons q-select__dropdown-icon"
+                  class="q-icon text-primary notranslate material-icons"
                   role="presentation"
                 >
-                  arrow_drop_down
+                  search
                 </i>
               </div>
-              <!---->
             </div>
             <!---->
           </div>
           <!---->
         </label>
+        <button
+          class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-primary q-btn--actionable q-focusable q-hoverable q-ml-md"
+          data-test="refresh-button"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="q-focus-helper"
+          />
+          <span
+            class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+          >
+            <i
+              aria-hidden="true"
+              class="q-icon notranslate material-icons"
+              role="img"
+            >
+              restart_alt
+            </i>
+          </span>
+          <transition-stub>
+            <!---->
+          </transition-stub>
+        </button>
+        <hr
+          aria-orientation="vertical"
+          class="q-separator q-separator--vertical q-separator--vertical-inset"
+          style="margin-right: 8px; margin-left: 8px;"
+        />
+        <button
+          class="q-btn q-btn-item non-selectable no-outline q-btn--unelevated q-btn--rectangle bg-green text-white q-btn--actionable q-focusable q-hoverable"
+          data-test="add-button"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="q-focus-helper"
+          />
+          <span
+            class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+          >
+            <i
+              aria-hidden="true"
+              class="q-icon on-left notranslate material-icons"
+              role="presentation"
+            >
+              post_add
+            </i>
+            <div>
+              Add category
+            </div>
+          </span>
+        </button>
+        
       </div>
       <div
-        class="q-table__control"
+        class="q-table__middle scroll"
       >
-        <button
-          aria-disabled="true"
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 disabled q-btn--dense"
-          disabled=""
-          tabindex="-1"
-          type="button"
+        <table
+          class="q-table"
+        >
+          <thead>
+            <tr>
+              <th
+                class="q-table--col-auto-width"
+              >
+                <div
+                  aria-checked="false"
+                  class="q-checkbox cursor-pointer no-outline row inline no-wrap items-center"
+                  data-test="select-checkbox"
+                  role="checkbox"
+                  tabindex="0"
+                >
+                  <div
+                    class="q-checkbox__inner relative-position non-selectable q-checkbox__inner--falsy text-primary"
+                  >
+                    <input
+                      class="hidden q-checkbox__native absolute q-ma-none q-pa-none"
+                      type="checkbox"
+                    />
+                    <div
+                      class="q-checkbox__bg absolute"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="q-checkbox__svg fit absolute-full"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          class="q-checkbox__truthy"
+                          d="M1.73,12.91 8.1,19.28 22.79,4.59"
+                          fill="none"
+                        />
+                        <path
+                          class="q-checkbox__indet"
+                          d="M4,14H20V10H4"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </th>
+              
+              <th
+                class="text-center sortable text-primary"
+              >
+                Category Icon
+                <i
+                  aria-hidden="true"
+                  class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--center"
+                  role="presentation"
+                >
+                  arrow_upward
+                </i>
+              </th>
+              
+              
+              <th
+                class="text-left sortable text-primary"
+              >
+                Title
+                <i
+                  aria-hidden="true"
+                  class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--left"
+                  role="presentation"
+                >
+                  arrow_upward
+                </i>
+              </th>
+              
+              
+              <th
+                class="text-left sortable text-primary"
+              >
+                Content
+                <i
+                  aria-hidden="true"
+                  class="q-icon notranslate material-icons q-table__sort-icon q-table__sort-icon--left"
+                  role="presentation"
+                >
+                  arrow_upward
+                </i>
+              </th>
+              
+              
+              <th
+                class="text-center text-primary"
+              >
+                Actions
+              </th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class=""
+            >
+              <td
+                class="q-table--col-auto-width"
+              >
+                <div
+                  aria-checked="false"
+                  class="q-checkbox cursor-pointer no-outline row inline no-wrap items-center"
+                  role="checkbox"
+                  tabindex="0"
+                >
+                  <div
+                    class="q-checkbox__inner relative-position non-selectable q-checkbox__inner--falsy"
+                  >
+                    <input
+                      class="hidden q-checkbox__native absolute q-ma-none q-pa-none"
+                      type="checkbox"
+                    />
+                    <div
+                      class="q-checkbox__bg absolute"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="q-checkbox__svg fit absolute-full"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          class="q-checkbox__truthy"
+                          d="M1.73,12.91 8.1,19.28 22.79,4.59"
+                          fill="none"
+                        />
+                        <path
+                          class="q-checkbox__indet"
+                          d="M4,14H20V10H4"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              
+              <td
+                class="q-td q-table--col-auto-width text-center"
+              >
+                <i
+                  aria-hidden="true"
+                  class="q-icon text-purple notranslate material-icons"
+                  role="presentation"
+                  style="font-size: 32px;"
+                >
+                  description
+                </i>
+              </td>
+              
+              <td
+                class="text-left"
+                style="width: 30%;"
+              >
+                first_title
+              </td>
+              <td
+                class="text-left"
+              >
+                content
+              </td>
+              
+              <td
+                class="q-td q-table--col-auto-width text-center"
+              >
+                <div
+                  class="row flex-center q-gutter-x-sm no-wrap"
+                >
+                  <button
+                    class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-accent q-btn--actionable q-focusable q-hoverable"
+                    data-test="edit-button"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="q-focus-helper"
+                    />
+                    <span
+                      class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="q-icon notranslate material-icons"
+                        role="img"
+                      >
+                        edit
+                      </i>
+                      <!---->
+                    </span>
+                  </button>
+                  <button
+                    class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-red q-btn--actionable q-focusable q-hoverable"
+                    data-test="delete-button"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="q-focus-helper"
+                    />
+                    <span
+                      class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="q-icon notranslate material-icons"
+                        role="img"
+                      >
+                        delete
+                      </i>
+                      <!---->
+                    </span>
+                  </button>
+                </div>
+              </td>
+              
+            </tr>
+            <tr
+              class=""
+            >
+              <td
+                class="q-table--col-auto-width"
+              >
+                <div
+                  aria-checked="false"
+                  class="q-checkbox cursor-pointer no-outline row inline no-wrap items-center"
+                  role="checkbox"
+                  tabindex="0"
+                >
+                  <div
+                    class="q-checkbox__inner relative-position non-selectable q-checkbox__inner--falsy"
+                  >
+                    <input
+                      class="hidden q-checkbox__native absolute q-ma-none q-pa-none"
+                      type="checkbox"
+                    />
+                    <div
+                      class="q-checkbox__bg absolute"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="q-checkbox__svg fit absolute-full"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          class="q-checkbox__truthy"
+                          d="M1.73,12.91 8.1,19.28 22.79,4.59"
+                          fill="none"
+                        />
+                        <path
+                          class="q-checkbox__indet"
+                          d="M4,14H20V10H4"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              
+              <td
+                class="q-td q-table--col-auto-width text-center"
+              >
+                <i
+                  aria-hidden="true"
+                  class="q-icon text-purple notranslate material-icons"
+                  role="presentation"
+                  style="font-size: 32px;"
+                >
+                  description
+                </i>
+              </td>
+              
+              <td
+                class="text-left"
+                style="width: 30%;"
+              >
+                first_title
+              </td>
+              <td
+                class="text-left"
+              >
+                content
+              </td>
+              
+              <td
+                class="q-td q-table--col-auto-width text-center"
+              >
+                <div
+                  class="row flex-center q-gutter-x-sm no-wrap"
+                >
+                  <button
+                    class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-accent q-btn--actionable q-focusable q-hoverable"
+                    data-test="edit-button"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="q-focus-helper"
+                    />
+                    <span
+                      class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="q-icon notranslate material-icons"
+                        role="img"
+                      >
+                        edit
+                      </i>
+                      <!---->
+                    </span>
+                  </button>
+                  <button
+                    class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-red q-btn--actionable q-focusable q-hoverable"
+                    data-test="delete-button"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="q-focus-helper"
+                    />
+                    <span
+                      class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="q-icon notranslate material-icons"
+                        role="img"
+                      >
+                        delete
+                      </i>
+                      <!---->
+                    </span>
+                  </button>
+                </div>
+              </td>
+              
+            </tr>
+            <tr
+              class="q-tr"
+            >
+              <td
+                class="q-td"
+                colspan="100%"
+              >
+                <div
+                  class="row justify-end"
+                >
+                  <button
+                    aria-disabled="true"
+                    class="q-btn q-btn-item non-selectable no-outline q-btn--outline q-btn--rectangle text-red disabled"
+                    data-test="massdelete-button"
+                    disabled=""
+                    tabindex="-1"
+                    type="button"
+                  >
+                    <span
+                      class="q-focus-helper"
+                    />
+                    <span
+                      class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+                    >
+                      <div>
+                        Delete selected
+                      </div>
+                    </span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="q-table__bottom row items-center justify-end"
+      >
+        <div
+          class="q-table__separator col"
+        />
+        <div
+          class="q-table__control"
         >
           <span
-            class="q-focus-helper"
-          />
-          <span
-            class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+            class="q-table__bottom-item"
           >
-            <i
-              aria-hidden="true"
-              class="q-icon notranslate material-icons"
-              role="img"
-            >
-              first_page
-            </i>
+            Records per page
           </span>
-        </button>
-        <button
-          aria-disabled="true"
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 disabled q-btn--dense"
-          disabled=""
-          tabindex="-1"
-          type="button"
+          <label
+            class="q-field row no-wrap items-start q-field--borderless q-select q-field--auto-height q-select--without-input q-select--without-chips q-select--single q-field--float q-field--dense q-table__select inline q-table__bottom-item"
+            for="f_5cae7e4b-aee8-4789-b632-2834a7a08e62"
+          >
+            <!---->
+            <div
+              class="q-field__inner relative-position col self-stretch"
+            >
+              <div
+                class="q-field__control relative-position row no-wrap text-primary"
+                tabindex="-1"
+              >
+                <div
+                  class="q-field__control-container col relative-position row no-wrap q-anchor--skip"
+                >
+                  <div
+                    class="q-field__native row items-center"
+                  >
+                    <span>
+                      5
+                    </span>
+                    <input
+                      aria-autocomplete="none"
+                      aria-controls="f_5cae7e4b-aee8-4789-b632-2834a7a08e62_lb"
+                      aria-expanded="false"
+                      aria-owns="f_5cae7e4b-aee8-4789-b632-2834a7a08e62_lb"
+                      class="q-select__focus-target"
+                      id="f_5cae7e4b-aee8-4789-b632-2834a7a08e62"
+                      readonly=""
+                      role="combobox"
+                      tabindex="0"
+                    />
+                  </div>
+                  <!---->
+                </div>
+                <div
+                  class="q-field__append q-field__marginal row no-wrap items-center q-anchor--skip"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="q-icon notranslate material-icons q-select__dropdown-icon"
+                    role="presentation"
+                  >
+                    arrow_drop_down
+                  </i>
+                </div>
+                <!---->
+              </div>
+              <!---->
+            </div>
+            <!---->
+          </label>
+        </div>
+        <div
+          class="q-table__control"
         >
-          <span
-            class="q-focus-helper"
-          />
-          <span
-            class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+          <button
+            aria-disabled="true"
+            class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 disabled q-btn--dense"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
-            <i
-              aria-hidden="true"
-              class="q-icon notranslate material-icons"
-              role="img"
+            <span
+              class="q-focus-helper"
+            />
+            <span
+              class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
             >
-              chevron_left
-            </i>
-          </span>
-        </button>
-        <button
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 q-btn--actionable q-focusable q-hoverable q-btn--dense"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="q-focus-helper"
-          />
-          <span
-            class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+              <i
+                aria-hidden="true"
+                class="q-icon notranslate material-icons"
+                role="img"
+              >
+                first_page
+              </i>
+            </span>
+          </button>
+          <button
+            aria-disabled="true"
+            class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 disabled q-btn--dense"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
-            <i
-              aria-hidden="true"
-              class="q-icon notranslate material-icons"
-              role="img"
+            <span
+              class="q-focus-helper"
+            />
+            <span
+              class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
             >
-              chevron_right
-            </i>
-          </span>
-        </button>
-        <button
-          class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 q-btn--actionable q-focusable q-hoverable q-btn--dense"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="q-focus-helper"
-          />
-          <span
-            class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+              <i
+                aria-hidden="true"
+                class="q-icon notranslate material-icons"
+                role="img"
+              >
+                chevron_left
+              </i>
+            </span>
+          </button>
+          <button
+            class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 q-btn--actionable q-focusable q-hoverable q-btn--dense"
+            tabindex="0"
+            type="button"
           >
-            <i
-              aria-hidden="true"
-              class="q-icon notranslate material-icons"
-              role="img"
+            <span
+              class="q-focus-helper"
+            />
+            <span
+              class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
             >
-              last_page
-            </i>
-          </span>
-        </button>
+              <i
+                aria-hidden="true"
+                class="q-icon notranslate material-icons"
+                role="img"
+              >
+                chevron_right
+              </i>
+            </span>
+          </button>
+          <button
+            class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-grey-8 q-btn--actionable q-focusable q-hoverable q-btn--dense"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="q-focus-helper"
+            />
+            <span
+              class="q-btn__content text-center col items-center q-anchor--skip justify-center row"
+            >
+              <i
+                aria-hidden="true"
+                class="q-icon notranslate material-icons"
+                role="img"
+              >
+                last_page
+              </i>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
+  <!---->
+  
 </div>
 `;
