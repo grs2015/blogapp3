@@ -1,0 +1,19 @@
+// Vitest Snapshot v1
+
+exports[`Tag/Form component > makes a snapshot 1`] = `
+<div
+  data-v-app=""
+>
+  
+  <head-stub
+    title="Blog Tag - Edit"
+  />
+  <breadcrumbs-stub
+    data="[object Object],[object Object],[object Object]"
+  />
+  <tag-form-stub
+    data="[object Object]"
+  />
+  
+</div>
+`;

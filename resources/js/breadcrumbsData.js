@@ -103,3 +103,37 @@ export const tagsBreadcrumbs = [
         icon: "local_offer",
     },
 ];
+
+export const tagCreateBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Tags",
+        icon: "local_offer",
+        route: "/admin/tags"
+    },
+    {
+        label: "Create",
+        icon: "edit",
+    }
+];
+
+export const tagEditBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Tags",
+        icon: "local_offer",
+        route: "/admin/tags"
+    },
+    {
+        label: "Edit",
+        icon: "edit",
+    }
+];
