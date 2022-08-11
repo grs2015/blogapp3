@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('parent_id')->nullable();
             $table->string('title');
             $table->string('meta_title')->nullable();
+            $table->char('icon', 100)->nullable();
+            $table->char('color', 100)->nullable();
             $table->string('slug')->nullable();
             $table->text('content')->nullable();
 

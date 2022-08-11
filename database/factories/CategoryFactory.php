@@ -18,9 +18,11 @@ class CategoryFactory extends Factory
     {
         return [
             'parent_id' => 1,
-            'title' => $this->faker->sentence(),
+            'title' => $this->faker->words(3, true),
             'meta_title' => $this->faker->sentence(),
-            'content' => $this->faker->text()
+            'content' => $this->faker->sentence(),
+            'icon' => 'description',
+            'color' => 'purple'
         ];
     }
 }

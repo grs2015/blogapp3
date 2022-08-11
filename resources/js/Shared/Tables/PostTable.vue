@@ -65,6 +65,7 @@ type tableColumns = {
     required?: boolean;
     align?: "left" | "right" | "center";
     sortable?: boolean;
+    style?: string;
 }
 
 const columns:tableColumns[] = [

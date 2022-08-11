@@ -12,6 +12,6 @@ class DeleteCategoryAction
         $category->detachPosts();
         $category->delete();
 
-        CategoryDeleted::dispatch($category->title, $category->content ?? 'No content provided');
+        // CategoryDeleted::dispatch($category->title, $category->content ?? 'No content provided');
     }
 }

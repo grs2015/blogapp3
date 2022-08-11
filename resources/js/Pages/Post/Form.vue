@@ -27,5 +27,4 @@ const title = props.model.post ? 'Edit' : 'Create'
     <Head :title="`Blog Post - ${ title }`" />
     <Breadcrumbs :data="breadcrumbs" />
     <PostCreateTable :data="props.model" />
-    <!-- {{ props.model.tags }} -->
 </template>

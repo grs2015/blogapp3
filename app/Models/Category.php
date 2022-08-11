@@ -4,10 +4,12 @@ namespace App\Models;
 
 
 use Illuminate\Support\Str;
+use App\Filters\QueryFilter;
 use Spatie\LaravelData\WithData;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Builders\CategoryBuilder;
 use App\DataTransferObjects\CategoryData;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -94,5 +96,10 @@ class Category extends Model
     public function newEloquentBuilder($query): CategoryBuilder
     {
         return new CategoryBuilder($query);
+    }
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }

@@ -1,0 +1,19 @@
+// Vitest Snapshot v1
+
+exports[`Category/Form component > makes a snapshot 1`] = `
+<div
+  data-v-app=""
+>
+  
+  <head-stub
+    title="Blog Category - Edit"
+  />
+  <breadcrumbs-stub
+    data="[object Object],[object Object],[object Object]"
+  />
+  <category-form-stub
+    data="[object Object]"
+  />
+  
+</div>
+`;

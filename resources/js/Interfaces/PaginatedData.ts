@@ -14,7 +14,6 @@ export interface Paginated {
     'total': number;
 }
 
-
 export interface PostData {
     'author_id'?: number | null;
     'content'?: string | null;
@@ -93,12 +92,14 @@ export enum Status {
 }
 
 export interface categoryData {
-    content?: string,
     id: number,
+    title: string,
     meta_title?: string,
+    content?: string,
     parent_id?: number,
-    slug: string,
-    title: string
+    slug?: string,
+    icon?: string,
+    color?: string
 }
 
 export interface tagData {

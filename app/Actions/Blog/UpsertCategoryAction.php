@@ -13,9 +13,9 @@ class UpsertCategoryAction
     {
         $category = Category::updateOrCreate(['id' => $data->id], $data->all());
 
-        $data->id ?
-        CategoryUpdated::dispatch($data->title, $data->content ?? 'No content provided') :
-        CategoryCreated::dispatch($data->title, $data->content ?? 'No content provided');
+        // $data->id ?
+        // CategoryUpdated::dispatch($data->title, $data->content ?? 'No content provided') :
+        // CategoryCreated::dispatch($data->title, $data->content ?? 'No content provided');
 
         return $category;
     }

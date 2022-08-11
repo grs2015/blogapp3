@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use App\Models\Category;
+use App\Filters\CatFilter;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Services\CacheService;
 use App\Events\CategoryCreated;
 use App\Events\CategoryDeleted;
@@ -22,10 +24,10 @@ use App\Interfaces\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
-    public function index(CacheService $cacheService)
+    public function index(Request $request, CacheService $cacheService, CatFilter $filters)
     {
         return Inertia::render('Category/Index', [
-            'model' => new GetCategoriesViewModel($cacheService)
+            'model' => new GetCategoriesViewModel($cacheService, $request, $filters)
         ]);
     }
 
