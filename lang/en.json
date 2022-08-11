@@ -77,6 +77,14 @@
 
     "The category have been stored successfully": "The category have been stored successfully",
     "There were errors while storing category: ": "There were errors while storing category: ",
-    "The category have been updated successfully": "The category have been updated successfully"
+    "The category have been updated successfully": "The category have been updated successfully",
+
+    "Something went wrong with tag(s) deletion": "Something went wrong with tag(s) deletion",
+    "The tag(s) have been deleted successfully": "The tag(s) have been deleted successfully",
+    "Edit tag": "Edit tag",
+    "Delete tag": "Delete tag",
+    "Add tag": "Add tag",
+    "You are going to delete selected tags, aren't you?": "You are going to delete selected tags, aren't you?"
+
 
 }

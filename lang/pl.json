@@ -77,6 +77,13 @@
 
     "The category have been stored successfully": "Kategoria została zapisana pomyślnie",
     "There were errors while storing category: ": "Wystąpiły błędy podczas przychowywania kategorii: ",
-    "The category have been updated successfully": "Kategoria została zaktualizowana pomyślnie"
+    "The category have been updated successfully": "Kategoria została zaktualizowana pomyślnie",
+
+    "Something went wrong with tag(s) deletion": "Coś poszło źle w trakcie usunięcia tegu(-ów)",
+    "The tag(s) have been deleted successfully": "Teg(-i) zostały usunięte pomyślnie",
+    "Edit tag": "Edytuj teg",
+    "Delete tag": "Usuń teg",
+    "Add tag": "Dodaj teg",
+    "You are going to delete selected tags, aren't you?": "Czy naprawdę chcesz usunąć odznaczone tegi?"
 }
 

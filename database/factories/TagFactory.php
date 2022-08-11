@@ -18,8 +18,8 @@ class TagFactory extends Factory
     {
         return [
             'title' => $this->faker->word(),
-            'meta_title' => $this->faker->word(),
-            'content' => $this->faker->text()
+            'meta_title' => $this->faker->sentence(),
+            'content' => $this->faker->sentence()
         ];
     }
 }
