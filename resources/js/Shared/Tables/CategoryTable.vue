@@ -188,7 +188,9 @@ const massDelete = () => {
             </template>
             <template v-slot:body-cell-catIcon="props">
                 <q-td :props="props" auto-width>
-                    <q-icon size="md" :color="props.row.color" :name="props.row.icon" />
+                    <div class="row rounded-borders flex-center color-box" :style="{background: props.row.color}">
+                        <q-icon :name="props.row.icon" color="white" size="md"/>
+                    </div>
                 </q-td>
             </template>
             <template v-slot:top>
@@ -253,3 +255,9 @@ const massDelete = () => {
         </q-card>
     </q-dialog>
 </template>
+
+<style lang="sass" scoped>
+.color-box
+    width: 35px
+    height: 35px
+</style>

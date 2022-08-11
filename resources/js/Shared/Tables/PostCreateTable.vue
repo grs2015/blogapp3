@@ -46,7 +46,7 @@ let form = useForm<PostData>({
     cat_ids: [],
     hero_image: null,
     images: null,
-    author_id: 1
+    author_id: 1 // NOTE - Here goes ID of authorized user
 })
 
 if (props.data.post) {
@@ -87,7 +87,7 @@ if (props.data.post) {
     cat_ids: cat_ids,
     hero_image: null,
     images: null,
-    author_id: 1
+    author_id: 1 // NOTE - Here goes ID of authorized user
 })}
 
 const actionPost = () => {
