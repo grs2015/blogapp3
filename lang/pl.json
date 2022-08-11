@@ -2,7 +2,7 @@
     "Welcome to your Jetstream application!": "Witamy na przetłumaczonej stronie Jetstream application!",
     "Dashboard": "Pulpit",
     "Posts": "Posty",
-    "Categories": "Kategorii",
+    "Categories": "Kategorie",
     "Tags": "Tegi",
     "Users": "Użytkownicy",
     "Welcome": "Witam",
@@ -18,7 +18,7 @@
     "Edit post": "Edytuj post",
     "Delete post": "Usuń post",
     "Create Post": "Utwórz Post",
-    "Post Title": "Tytuł Posta",
+    "Post Title": "Tytuł posta",
     "Short description": "Któtki opis",
     "Post contents": "Zawartość posta",
     "Pick post category (at least one)": "Wybierz kategorię posta (przynajmniej jedną)",
@@ -57,6 +57,26 @@
     "Something went wrong with category deletion": "Coś poszło źle w trakcie usunięcia kategorii",
     "The category have been deleted successfully": "Kategoria została usunięta pomyślnie",
     "Edit category": "Edytuj kategorię",
-    "Delete category": "Usuń kategorię"
+    "Delete category": "Usuń kategorię",
+
+    "Delete selected": "Usuń odznaczone",
+    "You are going to delete selected categories, aren't you?": "Czy naprawdę chcecz usunąć odznaczone kategorie?",
+    "Delete": "Usuń",
+
+    "Create Category": "Utwórz Kategorię",
+    "Edit Category": "Edytuj Kategorię",
+    "Category Title": "Tytuł kategorii",
+    "Field is required": "Pole jest wymagane",
+    "Category Description": "Opis kategorii",
+    "Category Meta Description (SEO)": "Opis meta danych kategorii (SEO)",
+    "Pick the category icon": "Wybierz obrazek kategorii",
+    "Available icons": "Dostępne obrazki",
+    "Picked icon": "Wybrany obrazek",
+    "Pick category color": "Wybierz kolor kategorii",
+    "Example of picked color:": "Przykład wybranego koloru:",
+
+    "The category have been stored successfully": "Kategoria została zapisana pomyślnie",
+    "There were errors while storing category: ": "Wystąpiły błędy podczas przychowywania kategorii: ",
+    "The category have been updated successfully": "Kategoria została zaktualizowana pomyślnie"
 }
 

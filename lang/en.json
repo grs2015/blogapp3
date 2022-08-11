@@ -18,7 +18,7 @@
     "Edit post": "Edit post",
     "Delete post": "Delete post",
     "Create Post": "Create Post",
-    "Post Title": "Post Title",
+    "Post Title": "Post title",
     "Short description": "Short description",
     "Post contents": "Post contents",
     "Pick post category (at least one)": "Pick post category (at least one)",
@@ -57,5 +57,26 @@
     "Something went wrong with category deletion": "Something went wrong with category deletion",
     "The category have been deleted successfully": "The category have been deleted successfully",
     "Edit category": "Edit category",
-    "Delete category": "Delete category"
+    "Delete category": "Delete category",
+
+    "Delete selected": "Delete selected",
+    "You are going to delete selected categories, aren't you?": "You are going to delete selected categories, aren't you?",
+    "Delete": "Delete",
+
+    "Create Category": "Create Category",
+    "Edit Category": "Edit Category",
+    "Category Title": "Category Title",
+    "Field is required": "Field is required",
+    "Category Description": "Category Description",
+    "Category Meta Description (SEO)": "Category Meta Description (SEO)",
+    "Pick the category icon": "Pick the category icon",
+    "Available icons": "Available icons",
+    "Picked icon": "Picked icon",
+    "Pick category color": "Pick category color",
+    "Example of picked color:": "Example of picked color:",
+
+    "The category have been stored successfully": "The category have been stored successfully",
+    "There were errors while storing category: ": "There were errors while storing category: ",
+    "The category have been updated successfully": "The category have been updated successfully"
+
 }

@@ -57,5 +57,25 @@
     "Something went wrong with category deletion": "Beim Löschen der Kategorie ist etwas schief gelaufen",
     "The category have been deleted successfully": "Die Kategorie wurde erfolgreich gelöscht",
     "Edit category": "Kategorie bearbeiten",
-    "Delete category": "Kategorie löschen"
+    "Delete category": "Kategorie löschen",
+
+    "Delete selected": "Ausgewählte löschen",
+    "You are going to delete selected categories, aren't you?": "Sie werden ausgewählte Kategorien löschen, nicht wahr?",
+    "Delete": "Löschen",
+
+    "Create Category": "Kategorie erstellen",
+    "Edit Category": "Kategorie bearbeiten",
+    "Category Title": "Kategorietitel",
+    "Field is required": "Feld ist erforderlich",
+    "Category Description": "Kategorie beschreibung",
+    "Category Meta Description (SEO)": "Kategorie Meta-Beschreibung (SEO)",
+    "Pick the category icon": "Wählen Sie das Kategoriesymbol aus",
+    "Available icons": "Verfügbare Symbole",
+    "Picked icon": "Symbol ausgewählt",
+    "Pick category color": "Kategoriefarbe auswählen",
+    "Example of picked color:": "Beispiel für ausgewählte Farbe:",
+
+    "The category have been stored successfully": "Die Kategorie wurde erfolgreich gespeichert",
+    "There were errors while storing category: ": "Beim Speichern der Kategorie sind Fehler aufgetreten: ",
+    "The category have been updated successfully": "Die Kategorie wurde erfolgreich aktualisiert"
 }
