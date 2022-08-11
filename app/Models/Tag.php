@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use App\Filters\QueryFilter;
 use Spatie\LaravelData\WithData;
 use App\Models\Builders\TagBuilder;
 use App\DataTransferObjects\TagData;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -82,5 +84,10 @@ class Tag extends Model
     public function newEloquentBuilder($query): TagBuilder
     {
         return new TagBuilder($query);
+    }
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }
