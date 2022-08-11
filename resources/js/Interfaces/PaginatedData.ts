@@ -92,12 +92,12 @@ export enum Status {
 }
 
 export interface categoryData {
-    content?: string,
     id: number,
-    meta_title?: string,
-    parent_id?: number,
-    slug: string,
     title: string,
+    meta_title?: string,
+    content?: string,
+    parent_id?: number,
+    slug?: string,
     icon?: string,
     color?: string
 }
