@@ -55,13 +55,13 @@
                 <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Dashboard/Index'" name="code">
                     {{ $t('Dashboard') }}
                 </nav-link>
-                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value === 'Post/Index'" name="code">
+                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value.startsWith('Post')" name="code">
                     {{ $t('Posts') }}
                 </nav-link>
-                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value === 'Category/Index'" name="code">
+                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value.startsWith('Category')" name="code">
                     {{ $t('Categories') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Tag/Index'" name="code">
+                <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="code">
                     {{ $t('Tags') }}
                 </nav-link>
                 <nav-link :href="route('admin.index')" :active="usePage().component.value === 'User/Index'" name="code">

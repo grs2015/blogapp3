@@ -91,3 +91,15 @@ export const categoryEditBreadcrumbs = [
         icon: "edit",
     }
 ];
+
+export const tagsBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Tags",
+        icon: "local_offer",
+    },
+];
