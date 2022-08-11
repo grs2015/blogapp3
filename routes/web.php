@@ -10,6 +10,7 @@ use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\BaseinfoController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CategoryMassDeleteController;
 use App\Http\Controllers\Trash\UserTrashController;
 
 use App\Http\Controllers\Admin\PostCommentController;
@@ -67,7 +68,10 @@ Route::name('public.')->group(function() {
                 Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
 
                 Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
+
                 Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+                Route::post('/catmassdelete', [App\Http\Controllers\Admin\CategoryDeleteController::class, 'mass_delete'])->name('catdelete');
+
                 Route::resource('baseinfo', App\Http\Controllers\Admin\BaseinfoController::class);
                 Route::resource('posts.postmetas', App\Http\Controllers\Admin\PostPostmetaController::class);
                 Route::resource('posts.comments', App\Http\Controllers\Admin\PostCommentController::class);
