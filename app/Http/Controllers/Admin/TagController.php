@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use App\Events\TagCreated;
 use App\Events\TagDeleted;
 use App\Events\TagUpdated;
+use App\Filters\TagFilter;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\DataTransferObjects\TagData;
 use App\Http\Controllers\Controller;
 use App\ViewModels\GetTagsViewModel;
@@ -18,17 +20,13 @@ use App\ViewModels\UpsertTagViewModel;
 use App\Http\Requests\UpdateTagRequest;
 use App\Interfaces\TagRepositoryInterface;
 
+
 class TagController extends Controller
 {
-    public function __construct(
-        private TagRepositoryInterface $tagRepository
-    ) {}
-
-
-    public function index()
+    public function index(Request $request, TagFilter $filters)
     {
         return Inertia::render('Tag/Index', [
-            'model' => new GetTagsViewModel()
+            'model' => new GetTagsViewModel($request, $filters)
         ]);
     }
 
@@ -70,15 +68,6 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         DeleteTagAction::execute($tag);
-
-        // $title = $tag->title;
-        // $content = $tag->content ?? 'No content provided';
-
-        // $tag->posts()->detach();
-
-        // $this->tagRepository->deleteEntry($tag->id);
-
-        // TagDeleted::dispatch($title, $content);
 
         return redirect()->action([TagController::class, 'index']);
     }

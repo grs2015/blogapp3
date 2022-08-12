@@ -47,7 +47,7 @@
     "Post images in your gallery": "Bieżące obrazki w twej galerii",
     "The post have been stored successfully": "Post został zapisany pomyślnie",
     "The post have been updated successfully": "Post został zaktualizowany pomyślnie",
-    "There were errors while updating: ": "Wystąpiły błędy podczas aktualizacji: ",
+    "There were errors while updating": "Wystąpiły błędy podczas aktualizacji",
     "There were errors while storing: ": "Wystąpiły błędy podczas przechowywania: ",
     " file(s) did not pass validation constraints": " plik(i) nie odpowiadają regułom walidacji",
 
@@ -76,7 +76,25 @@
     "Example of picked color:": "Przykład wybranego koloru:",
 
     "The category have been stored successfully": "Kategoria została zapisana pomyślnie",
-    "There were errors while storing category: ": "Wystąpiły błędy podczas przychowywania kategorii: ",
-    "The category have been updated successfully": "Kategoria została zaktualizowana pomyślnie"
+    "There were errors while storing category: ": "Wystąpiły błędy podczas przechowywania kategorii: ",
+    "The category have been updated successfully": "Kategoria została zaktualizowana pomyślnie",
+
+    "Something went wrong with tag(s) deletion": "Coś poszło źle w trakcie usunięcia tegu(-ów)",
+    "The tag(s) have been deleted successfully": "Teg(-i) zostały usunięte pomyślnie",
+    "Edit tag": "Edytuj teg",
+    "Delete tag": "Usuń teg",
+    "Add tag": "Dodaj teg",
+    "You are going to delete selected tags, aren't you?": "Czy naprawdę chcesz usunąć odznaczone tegi?",
+
+    "The tag have been stored successfully": "Teg został zapisany pomyślnie",
+    "There were errors while storing tag": "Wystąpiły błędy podczas przechowywania tegu",
+    "The tag have been updated successfully": "Teg został zaktualizowany pomyślnie",
+    "Create Tag": "Utwórz teg",
+    "Edit Tag": "Edytuj teg",
+    "Please use maximum 30 characters": "Proszę użyć mniej niż 30 liter",
+    "Please use maximum 50 characters": "Proszę użyć mniej niż 50 liter",
+    "Tag Meta Description (SEO)": "Opis meta danych tegu (SEO)",
+    "Tag Title": "Tytuł tegu",
+    "Tag Description": "Opis tegu"
 }
 

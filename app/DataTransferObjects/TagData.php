@@ -5,6 +5,7 @@ namespace App\DataTransferObjects;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
+use Illuminate\Validation\Rule;
 
 class TagData extends Data
 {
@@ -24,10 +25,10 @@ class TagData extends Data
         ]);
     }
 
-    public static function rules(): array
+    public static function rules(Request $request): array
     {
         return [
-            'title' => ['required', 'string', 'unique:tags'],
+            'title' => ['required', 'string', Rule::unique('tags')->ignore($request->id)],
             'meta_title' => ['nullable', 'sometimes', 'string'],
             'content' => ['nullable', 'sometimes', 'string']
         ];

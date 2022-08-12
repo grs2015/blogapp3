@@ -12,6 +12,6 @@ class DeleteTagAction
         $tag->detachPosts();
         $tag->delete();
 
-        TagDeleted::dispatch($tag->title, $tag->content ?? 'No content provided');
+        // TagDeleted::dispatch($tag->title, $tag->content ?? 'No content provided');
     }
 }
