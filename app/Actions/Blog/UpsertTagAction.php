@@ -12,9 +12,9 @@ class UpsertTagAction
     {
         $tag = Tag::updateOrCreate(['id' => $data->id], $data->all());
 
-        $data->id ?
-        TagUpdated::dispatch($data->title, $data->content ?? 'No content provided') :
-        TagCreated::dispatch($data->title, $data->content ?? 'No content provided');
+        // $data->id ?
+        // TagUpdated::dispatch($data->title, $data->content ?? 'No content provided') :
+        // TagCreated::dispatch($data->title, $data->content ?? 'No content provided');
 
         return $tag;
     }

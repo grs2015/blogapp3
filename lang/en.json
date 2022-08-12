@@ -84,7 +84,19 @@
     "Edit tag": "Edit tag",
     "Delete tag": "Delete tag",
     "Add tag": "Add tag",
-    "You are going to delete selected tags, aren't you?": "You are going to delete selected tags, aren't you?"
+    "You are going to delete selected tags, aren't you?": "You are going to delete selected tags, aren't you?",
+
+    "The tag have been stored successfully": "The tag have been stored successfully",
+    "There were errors while storing tag": "There were errors while storing tag",
+    "The tag have been updated successfully": "The tag have been updated successfully",
+    "There were errors while updating": "There were errors while updating",
+    "Create Tag": "Create Tag",
+    "Edit Tag": "Edit Tag",
+    "Please use maximum 30 characters": "Please use maximum 30 characters",
+    "Please use maximum 50 characters": "Please use maximum 50 characters",
+    "Tag Meta Description (SEO)": "Tag Meta Description (SEO)",
+    "Tag Title": "Tag Title",
+    "Tag Description": "Tag Description"
 
 
 }

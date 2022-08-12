@@ -84,5 +84,17 @@
     "Edit tag": "Tag bearbeiten",
     "Delete tag": "Tag löschen",
     "Add tag": "Tag hinzufügen",
-    "You are going to delete selected tags, aren't you?": "Sie werden ausgewählte Tags löschen, nicht wahr?"
+    "You are going to delete selected tags, aren't you?": "Sie werden ausgewählte Tags löschen, nicht wahr?",
+
+    "The tag have been stored successfully": "Das Tag wurde erfolgreich gespeichert",
+    "There were errors while storing tag": "Beim Speichern des Tags sind Fehler aufgetreten",
+    "The tag have been updated successfully": "Das Tag wurde erfolgreich aktualisiert",
+    "There were errors while updating": "Beim Update sind Fehler aufgetreten",
+    "Create Tag": "Tag erstellen",
+    "Edit Tag": "Tag bearbeiten",
+    "Please use maximum 30 characters": "Bitte verwenden Sie maximal 30 Zeichen",
+    "Please use maximum 50 characters": "Bitte verwenden Sie maximal 50 Zeichen",
+    "Tag Meta Description (SEO)": "Tag-Meta-Beschreibung (SEO)",
+    "Tag Title": "Tag-Titel",
+    "Tag Description": "Tag-Beschreibung"
 }
