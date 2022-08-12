@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use Inertia\Inertia;
+use App\Filters\UserFilter;
 use Illuminate\Http\Request;
 use App\Services\CacheService;
 use App\Events\UserRoleUpdated;
@@ -10,6 +12,7 @@ use App\Events\UserStatusUpdated;
 use App\Http\Requests\TrashRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\ViewModels\GetUsersViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\UpdateUserRequest;
@@ -20,21 +23,29 @@ class UserController extends Controller
     public function __construct(
         private UserRepositoryInterface $userRepository
     ) {
-        $this->authorizeResource(User::class, 'user');
+        // $this->authorizeResource(User::class, 'user');
     }
 
-    public function index(CacheService $cacheService)
+    public function index(Request $request, UserFilter $filters)
     {
-        $users = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
-            return $this->userRepository->getAllEntries();
-        });
-
-        if (!Auth::user()->hasRole('super-admin')) {
-            $users = $users->reject(fn($user) => $user->hasRole('super-admin'));
-        }
-
-        return view('user.index', compact(['users']));
+        return Inertia::render('User/Index', [
+            'model' => new GetUsersViewModel($request, $filters)
+        ]);
     }
+
+    // public function index(CacheService $cacheService)
+    // {
+
+    //     $users = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
+    //         return $this->userRepository->getAllEntries();
+    //     });
+
+    //     if (!Auth::user()->hasRole('super-admin')) {
+    //         $users = $users->reject(fn($user) => $user->hasRole('super-admin'));
+    //     }
+
+    //     return view('user.index', compact(['users']));
+    // }
 
     public function show(User $user)
     {

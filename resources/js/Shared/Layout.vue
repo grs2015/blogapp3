@@ -64,7 +64,7 @@
                 <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="code">
                     {{ $t('Tags') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'User/Index'" name="code">
+                <nav-link :href="route('admin.users.index')" :active="usePage().component.value.startsWith('User')" name="code">
                     {{ $t('Users') }}
                 </nav-link>
             </q-list>

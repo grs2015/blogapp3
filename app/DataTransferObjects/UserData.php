@@ -31,8 +31,9 @@ class UserData extends Data
         #[WithCast(EnumCast::class)]
         public readonly ?UserStatus $status = UserStatus::Pending,
         public readonly ?Collection $roles,
-        // #[DataCollectionOf(PostData::class)]
-        // public readonly null|Lazy|DataCollection $posts,
+        public readonly ?int $posts_count,
+        #[DataCollectionOf(PostData::class)]
+        public readonly null|Lazy|DataCollection $posts,
     ) {}
 
     public static function fromModel(User $user): self
@@ -40,7 +41,7 @@ class UserData extends Data
         return self::from([
             ...$user->toArray(),
             'posts' => Lazy::whenLoaded('posts', $user, fn() => PostData::collection($user->posts)),
-            // 'roles' => $user->roles
+            'roles' => $user->roles
         ]);
     }
 }

@@ -4,8 +4,11 @@ namespace App\Models;
 
 use App\Enums\UserStatus;
 use Illuminate\Support\Str;
+use App\Filters\QueryFilter;
+use Spatie\LaravelData\WithData;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Builders\UserBuilder;
+use App\DataTransferObjects\UserData;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -91,7 +94,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles, WithData;
 
     const ADMIN_USER = 'admin';
     const AUTHOR_USER = 'author';
@@ -100,6 +103,8 @@ class User extends Authenticatable
     const ENABLED = 'enabled';
     const DISABLED = 'disabled';
     const PENDING = 'pending';
+
+    protected $dataClass = UserData::class;
 
     /**
      * The attributes that are mass assignable.
@@ -205,5 +210,10 @@ class User extends Authenticatable
     public function newEloquentBuilder($query): UserBuilder
     {
         return new UserBuilder($query);
+    }
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
     }
 }

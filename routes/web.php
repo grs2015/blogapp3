@@ -88,7 +88,7 @@ Route::name('public.')->group(function() {
                 Route::post('/hero_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_heroimage'])->name('hero_image.delete');
                 Route::post('/gallery_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_galleryimage'])->name('gallery_image.delete');
 
-                Route::name('users.')->group(function() {
+                Route::name('posts.')->group(function() {
                     Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
                     Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
                 });
