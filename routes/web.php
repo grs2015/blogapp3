@@ -68,6 +68,7 @@ Route::name('public.')->group(function() {
                 Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
 
                 Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
+                Route::post('/tagmassdelete', App\Http\Controllers\Admin\TagDeleteController::class)->name('tagdelete');
 
                 Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
                 Route::post('/catmassdelete', [App\Http\Controllers\Admin\CategoryDeleteController::class, 'mass_delete'])->name('catdelete');
