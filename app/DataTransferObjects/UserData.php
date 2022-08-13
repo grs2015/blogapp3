@@ -17,7 +17,7 @@ use Spatie\LaravelData\Attributes\DataCollectionOf;
 class UserData extends Data
 {
     public function __construct(
-        public readonly ?int $int,
+        public readonly ?int $id,
         public readonly string $email,
         public readonly string $first_name,
         public readonly ?string $middle_name,

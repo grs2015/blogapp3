@@ -91,6 +91,12 @@ export enum Status {
     Unpublished = 'unpublished',
 }
 
+export enum UserStatus {
+    Enabled = 'enabled',
+    Disabled = 'disabled',
+    Pending = 'pending'
+}
+
 export interface categoryData {
     id: number,
     title: string,
@@ -114,4 +120,21 @@ export interface breadcrumbsData {
     label: string,
     icon: string,
     route?: string
+}
+
+export interface userData {
+    avatar?: string,
+    email: string,
+    first_name: string
+    id: number,
+    intro?: string,
+    last_login?: string,
+    last_name?: string,
+    middle_name?: string,
+    mobile?: string,
+    posts_count?: number,
+    profile?: string,
+    registered_at?: string,
+    roles?: Array<string>
+    status?: UserStatus
 }

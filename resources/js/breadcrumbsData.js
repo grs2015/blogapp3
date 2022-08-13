@@ -137,3 +137,16 @@ export const tagEditBreadcrumbs = [
         icon: "edit",
     }
 ];
+
+export const usersBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+
+    },
+    {
+        label: "Users",
+        icon: "people_alt",
+    },
+];
