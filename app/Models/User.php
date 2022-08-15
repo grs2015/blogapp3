@@ -9,11 +9,13 @@ use Spatie\LaravelData\WithData;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Builders\UserBuilder;
 use App\DataTransferObjects\UserData;
+
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -134,7 +136,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'status' => UserStatus::class,
+        'status' => UserStatus::class
     ];
 
     /**
@@ -215,5 +217,10 @@ class User extends Authenticatable
     public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
     {
         return $filters->apply($builder);
+    }
+
+    public function fullName(): Attribute
+    {
+        return Attribute::make(get: fn() => "{$this->first_name} {$this->last_name}");
     }
 }
