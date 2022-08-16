@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { loadLanguageAsync } from 'laravel-vue-i18n';
+import { usePage } from '@inertiajs/inertia-vue3';
+import NavLink from '@/Shared/NavLink.vue'
+import { Inertia } from '@inertiajs/inertia';
+
+const leftDrawerOpen = ref(false)
+const text = ref('')
+
+const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
+
+const userLogout = () => { Inertia.post('/logout') }
+
+</script>
+
+<style lang="sass">
+.my-custom-image
+  filter: sepia()
+</style>
+
+
 <template>
     <q-layout view="lHh Lpr lFf" class="bg-white">
         <q-header elevated>
@@ -40,7 +62,7 @@
                                     <q-item-section>Account Settings</q-item-section>
                                 </q-item>
                                 <q-item clickable>
-                                    <q-item-section>Logout</q-item-section>
+                                    <q-item-section @click="userLogout">Logout</q-item-section>
                                 </q-item>
                             </q-menu>
                         </q-btn>
@@ -76,21 +98,3 @@
         </q-page-container>
     </q-layout>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { loadLanguageAsync } from 'laravel-vue-i18n';
-import { usePage } from '@inertiajs/inertia-vue3';
-import NavLink from '@/Shared/NavLink.vue'
-
-const leftDrawerOpen = ref(false)
-const text = ref('')
-
-const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
-
-</script>
-
-<style lang="sass">
-.my-custom-image
-  filter: sepia()
-</style>

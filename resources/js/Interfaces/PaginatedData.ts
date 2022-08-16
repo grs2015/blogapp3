@@ -97,6 +97,13 @@ export enum UserStatus {
     Pending = 'pending'
 }
 
+export enum UserRole {
+    Admin = 'admin',
+    Author = 'author',
+    Member = 'member',
+    SuperAdmin = 'super-admin'
+}
+
 export interface categoryData {
     id: number,
     title: string,
@@ -125,7 +132,8 @@ export interface breadcrumbsData {
 export interface userData {
     avatar?: string,
     email: string,
-    first_name: string
+    first_name: string,
+    full_name: string,
     id: number,
     intro?: string,
     last_login?: string,
@@ -135,6 +143,16 @@ export interface userData {
     posts_count?: number,
     profile?: string,
     registered_at?: string,
-    roles?: Array<string>
+    roles?: string,
     status?: UserStatus
+}
+
+export interface Role {
+    created_at: string,
+    updated_at: string,
+    guard_name: string,
+    id: number,
+    name: string,
+    pivot: Object
+
 }
