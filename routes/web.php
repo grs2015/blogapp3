@@ -60,7 +60,7 @@ Route::name('public.')->group(function() {
 // Here goes the root with Auth middleware
 
 // Admin part
-// Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function() {
     Route::prefix('admin')->group(function() {
         // Route::middleware('role:super-admin|admin')->group(function() {
             Route::name('admin.')->group(function() {
@@ -120,4 +120,4 @@ Route::name('public.')->group(function() {
         });
     });
 
-// });
+});

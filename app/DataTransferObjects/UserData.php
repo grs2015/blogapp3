@@ -35,7 +35,7 @@ class UserData extends Data
         public ?string $avatar,
         #[WithCast(EnumCast::class)]
         public readonly ?UserStatus $status = UserStatus::Pending,
-        public readonly ?Collection $roles,
+        public readonly string|Array|null $roles,
         public readonly ?int $posts_count,
         // #[DataCollectionOf(PostData::class)]
         // public readonly null|Lazy|DataCollection $posts,
@@ -47,7 +47,7 @@ class UserData extends Data
             ...$user->toArray(),
             'full_name' => $user->full_name,
             'posts' => Lazy::whenLoaded('posts', $user, fn() => PostData::collection($user->posts)),
-            'roles' => $user->roles
+            'roles' => $user->roles->value('name')
         ]);
     }
 }

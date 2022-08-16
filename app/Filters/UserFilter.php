@@ -33,12 +33,12 @@ class UserFilter extends QueryFilter
         return $this->builder->orderBy('full_name', $order);
     }
 
-    public function userRole($order = 'asc')
-    {
-        return $this->builder->whereHas('roles', function(Builder $builder) use ($order) {
-            $builder->orderBy('name', $order);
-        });
-    }
+    // public function userRole($order = 'asc')
+    // {
+    //     return $this->builder->whereHas('roles', function(Builder $builder) use ($order) {
+    //         $builder->orderBy('name', $order);
+    //     });
+    // }
 
     public function userStatus($order = 'asc')
     {

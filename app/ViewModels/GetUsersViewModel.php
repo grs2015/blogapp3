@@ -5,6 +5,7 @@ namespace App\ViewModels;
 use App\Models\User;
 use App\Filters\UserFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class GetUsersViewModel extends ViewModel
@@ -16,11 +17,11 @@ class GetUsersViewModel extends ViewModel
 
     public function users(): LengthAwarePaginator
     {
-        // if (!Auth::user()->hasRole('super-admin')) {
-        // $users = $users->reject(fn($user) => $user->hasRole('super-admin'));
-        // }
-
         $items = User::withCount('posts')->filter($this->filters)->get()->map->getData();
+
+        if (!Auth::user()->hasRole('super-admin')) {
+            $items = $items->reject(fn($user) => $user->roles === 'super-admin');
+        }
 
         $page = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 15;
