@@ -90,7 +90,12 @@ class PostSeeder extends Seeder
         $admins->first()->email = 'admin@admin.com';
         $admins->first()->save();
 
-        User::factory()->create(['email' => 'superadmin@admin.com', 'status' => 'enabled']);
+        User::factory()->create([
+            'email' => 'superadmin@admin.com',
+            'status' => 'enabled',
+            'registered_at' => now()->toDateString(),
+            'last_login' => now()->toDateString()
+        ]);
         User::get()->last()->assignRole('super-admin');
 
         // User::find(1)->assignRole('admin');
