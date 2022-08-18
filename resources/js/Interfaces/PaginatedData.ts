@@ -133,7 +133,7 @@ export interface userData {
     avatar?: string,
     email: string,
     first_name: string,
-    full_name: string,
+    full_name?: string,
     id: number,
     intro?: string,
     last_login?: string,
@@ -144,7 +144,8 @@ export interface userData {
     profile?: string,
     registered_at?: string,
     roles?: string,
-    status?: UserStatus
+    status?: UserStatus,
+    email_verified_at?: string,
 }
 
 export interface Role {
