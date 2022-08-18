@@ -67,6 +67,11 @@ Route::middleware('auth')->group(function() {
                 // Admin routes
                 Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
 
+                Route::name('avatar.')->group(function() {
+                    Route::put('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'update'])->name('update');
+                    Route::post('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'delete'])->name('delete');
+                });
+
                 Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
                 Route::post('/tagmassdelete', App\Http\Controllers\Admin\TagDeleteController::class)->name('tagdelete');
 
