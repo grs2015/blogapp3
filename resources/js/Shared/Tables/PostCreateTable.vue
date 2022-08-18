@@ -3,7 +3,7 @@
 import { categoryData, Favorite, PostData, Status, tagData } from '@/Interfaces/PaginatedData'
 import { reactive, ref, watch } from 'vue'
 import { statusOptions, favOptions } from '@/postData'
-import { useForm, Link } from '@inertiajs/inertia-vue3'
+import { useForm, Link, usePage } from '@inertiajs/inertia-vue3'
 import { useQuasar } from 'quasar'
 import { Inertia } from '@inertiajs/inertia'
 import { trans } from 'laravel-vue-i18n';
@@ -46,7 +46,7 @@ let form = useForm<PostData>({
     cat_ids: [],
     hero_image: null,
     images: null,
-    author_id: 1 // NOTE - Here goes ID of authorized user
+    author_id: usePage().props.value.auth.user.id
 })
 
 if (props.data.post) {
@@ -87,7 +87,7 @@ if (props.data.post) {
     cat_ids: cat_ids,
     hero_image: null,
     images: null,
-    author_id: 1 // NOTE - Here goes ID of authorized user
+    author_id: props.data.post.author_id
 })}
 
 const actionPost = () => {

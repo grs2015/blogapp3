@@ -4,6 +4,26 @@ import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { usePage } from '@inertiajs/inertia-vue3';
 import NavLink from '@/Shared/NavLink.vue'
 import { Inertia } from '@inertiajs/inertia';
+import { UserStatus } from '@/Interfaces/PaginatedData';
+
+interface AuthProps {
+    auth : {
+        user: authUser
+    }
+}
+
+interface authUser {
+    email: string,
+    first_name: string,
+    last_name?: string,
+    full_name?: string,
+    id: number,
+    status: UserStatus,
+    role: Array<string>
+}
+
+const props = defineProps<AuthProps>()
+
 
 const leftDrawerOpen = ref(false)
 const text = ref('')
@@ -11,6 +31,7 @@ const text = ref('')
 const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 
 const userLogout = () => { Inertia.post('/logout') }
+const userProfile = () => { Inertia.get(`/admin/users/${props.auth.user.id}/edit`) }
 
 </script>
 
@@ -57,12 +78,12 @@ const userLogout = () => { Inertia.post('/logout') }
                             </q-btn>
                         </q-btn-group>
                         <q-btn color="green" icon="account_circle">
-                            <q-menu anchor="bottom right" self="top right" :offset="[0, 10]">
+                            <q-menu anchor="bottom right" self="top right" :offset="[0, 10]" auto-close>
                                 <q-item clickable>
-                                    <q-item-section>Account Settings</q-item-section>
+                                    <q-item-section @click="userProfile">{{ $t('Account Settings') }}</q-item-section>
                                 </q-item>
                                 <q-item clickable>
-                                    <q-item-section @click="userLogout">Logout</q-item-section>
+                                    <q-item-section @click="userLogout">{{ $t('Logout') }}</q-item-section>
                                 </q-item>
                             </q-menu>
                         </q-btn>
