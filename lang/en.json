@@ -96,7 +96,46 @@
     "Please use maximum 50 characters": "Please use maximum 50 characters",
     "Tag Meta Description (SEO)": "Tag Meta Description (SEO)",
     "Tag Title": "Tag Title",
-    "Tag Description": "Tag Description"
+    "Tag Description": "Tag Description",
+
+    "Account Settings": "Account Settings",
+    "Logout": "Logout",
+    "User Account": "User Account",
+
+    "The password has been updated successfully": "The password has been updated successfully",
+    "There were errors while updating password": "There were errors while updating password",
+    "The avatar has been updated successfully": "The avatar has been updated successfully",
+    "There were errors while updating avatar": "There were errors while updating avatar",
+    "The avatar has been removed successfully": "The avatar has been removed successfully",
+    "There were errors while removing avatar": "There were errors while removing avatar",
+    "The profile has been updated successfully": "The profile has been updated successfully",
+    "There were errors while updating profile": "There were errors while updating profile",
+
+    "Account information": "Account information",
+    "First name": "First name",
+    "Last name": "Last name",
+    "Please use maximum characters: ": "Please use maximum characters: ",
+    "Mobile": "Mobile",
+    "Short introduction info": "Short introduction info",
+    "Profile description": "Profile description",
+    "Drop some lines...": "Drop some lines...",
+    "Current avatar": "Current avatar",
+    "Remove avatar": "Remove avatar",
+    "User registered at:": "User registered at:",
+    "User last logged-in:": "User last logged-in:",
+    "Email status:": "Email status:",
+    "Verified": "Verified",
+    "Not Verified": "Not Verified",
+    "User role:": "User role:",
+    "User status:": "User status:",
+    "User posts": "User posts",
+    "Password update": "Password update",
+    "Current password": "Current password",
+    "New password": "New password",
+    "Confirm new password": "Confirm new password",
+    "Avatar update": "Avatar update",
+    "Back": "Back"
+
 
 
 }
