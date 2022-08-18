@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use App\ViewModels\GetUsersViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
+use App\ViewModels\UpsertUserViewModel;
 use App\Http\Requests\UpdateUserRequest;
+use App\ViewModels\GetSingleUserViewModel;
 use App\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
@@ -33,25 +35,42 @@ class UserController extends Controller
         ]);
     }
 
-    // public function index(CacheService $cacheService)
-    // {
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return Inertia::render('User/Form', [
+            'model' => new UpsertUserViewModel()
+        ]);
+    }
 
-    //     $users = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
-    //         return $this->userRepository->getAllEntries();
-    //     });
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(User $user)
+    {
+        return Inertia::render('User/Form', [
+            'model' => new UpsertUserViewModel($user)
+        ]);
+    }
 
-    //     if (!Auth::user()->hasRole('super-admin')) {
-    //         $users = $users->reject(fn($user) => $user->hasRole('super-admin'));
-    //     }
-
-    //     return view('user.index', compact(['users']));
-    // }
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show(User $user)
     {
-        $user = $this->userRepository->getEntryById($user->id);
-
-        return view('user.show', compact(['user']));
+        return Inertia::render('User/Show', [
+            'model' => new GetSingleUserViewModel($user)
+        ]);
     }
 
     /**
