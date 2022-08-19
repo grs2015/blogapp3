@@ -197,3 +197,21 @@ export const accountBreadcrumbs = [
         icon: "account_circle",
     },
 ];
+
+export const profileBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+
+    },
+    {
+        label: "Users",
+        icon: "people_alt",
+        route: "/admin/users"
+    },
+    {
+        label: "User Profile",
+        icon: "person",
+    },
+]

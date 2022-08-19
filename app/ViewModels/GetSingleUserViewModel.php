@@ -16,6 +16,6 @@ class GetSingleUserViewModel extends ViewModel
 
     public function user(): UserData
     {
-        return UserData::from($this->user->withCount('posts'));
+        return UserData::from($this->user->loadCount('posts'));
     }
 }

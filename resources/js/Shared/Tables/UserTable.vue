@@ -147,6 +147,10 @@ const editPost = (row: Object) => {
     Inertia.get(`/admin/posts/${postSlug}/edit`)
 }
 
+const viewUser = (row: userData) => {
+    Inertia.get(`/admin/users/${row.id}`)
+}
+
 const deletePost = (row: Object) => {
     let postSlug = row['slug']
     loading.value = true
@@ -217,7 +221,7 @@ const statusChanged = async (id) => {
                             </q-btn>
                         </template>
                         <template v-else>
-                            <q-btn outline color="secondary" icon="visibility" :disable="loading" @click="editPost(props.row)" data-test="edit-button">
+                            <q-btn outline color="secondary" icon="visibility" :disable="loading" @click="viewUser(props.row)" data-test="view-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                     {{ $t('View user') }}
                                 </q-tooltip>
@@ -233,7 +237,7 @@ const statusChanged = async (id) => {
                         <template v-else>
                             <q-btn outline color="grey" icon="delete" disable data-test="edit-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
-                                    {{ $t('View user') }}
+                                    {{ $t('Delete user') }}
                                 </q-tooltip>
                             </q-btn>
                         </template>
@@ -309,22 +313,6 @@ const statusChanged = async (id) => {
                 </q-td>
             </template>
 
-
-            <template v-slot:body-cell-postViews="props">
-                <q-td :props="props" auto-width>
-                    {{ props.row.views }}
-                </q-td>
-            </template>
-            <template v-slot:body-cell-postFavorite="props">
-                <q-td :props="props" auto-width>
-                    {{ props.row.favorite }}
-                </q-td>
-            </template>
-            <template v-slot:body-cell-postStatus="props">
-                <q-td :props="props" auto-width>
-                    {{ props.row.status }}
-                </q-td>
-            </template>
             <template v-slot:top>
                 <div class="q-table__title text-primary">{{ $t('Users') }}</div>
                 <q-space />
