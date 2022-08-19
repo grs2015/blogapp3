@@ -27,6 +27,9 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->instance(LoginResponse::class, new class implements LoginResponse {
             public function toResponse($request)
             {
+                $request->user()->last_login = now()->toDateString();
+                $request->user()->save();
+
                 if ($request->user()->status === UserStatus::Pending || $request->user()->hasRole('member')) {
                     return redirect('/');
                 };
@@ -34,6 +37,7 @@ class FortifyServiceProvider extends ServiceProvider
                 return redirect('/admin');
             }
         });
+
     }
 
     /**

@@ -3,7 +3,7 @@
 import { SortingData, tablePagination, userData } from '@/Interfaces/PaginatedData'
 import { PaginatedUser } from '@/Interfaces/PaginatedUserData';
 import { useQuasar } from 'quasar'
-import { ref, computed } from 'vue'
+import { ref, computed, reactive, nextTick } from 'vue'
 import { trans } from 'laravel-vue-i18n';
 import { Inertia, PageProps } from '@inertiajs/inertia'
 
@@ -22,6 +22,12 @@ const rows = computed(() => {
 const filter = ref('')
 const loading = ref(false)
 const loadingResetButton = ref(false)
+
+const rowStatuses = reactive({})
+
+props.paginatedData.data.forEach((item, idx) => {
+    rowStatuses[`${item.id}`] = ref(`${item.status}`)
+})
 
 const pagination = ref<tablePagination>({
     sortBy: props.sortingData.column,
@@ -43,6 +49,14 @@ type tableColumns = {
 
 const columns:tableColumns[] = [
     {
+        name: 'userAvatar',
+        required: true,
+        label: trans('Avatar'),
+        align: 'center',
+        sortable: false,
+        field: 'avatar',
+    },
+    {
         name: 'userFirstname',
         required: true,
         label: trans('First name'),
@@ -61,28 +75,22 @@ const columns:tableColumns[] = [
         // style: "width: 30%"
     },
     {
-        name: 'userFullname',
-        required: true,
-        label: trans('Full name'),
-        align: 'left',
-        sortable: false,
-        field: (row : userData) => row.full_name
-    },
-    {
         name: 'userRole',
         required: true,
         label: trans('Role'),
-        align: 'left',
-        sortable: true,
+        align: 'center',
+        sortable: false,
         field: (row : userData) => row.roles,
+        style: "width: 10%"
     },
     {
         name: 'userStatus',
         required: true,
         label: trans('Status'),
-        align: 'left',
+        align: 'center',
         sortable: true,
-        field: (row : userData) => row.status
+        field: (row : userData) => row.status,
+        style: "width: 15%"
     },
     {
         name: 'userRegistered',
@@ -109,7 +117,7 @@ const columns:tableColumns[] = [
         field: (row : userData) => row.posts_count
     },
     {
-        name: 'postActions',
+        name: 'userActions',
         required: true,
         label: trans('Actions'),
         align: 'center',
@@ -131,7 +139,7 @@ const onRequest = (props: { pagination : tablePagination, filter: string }) => {
 const reset = () => {
     loading.value = true
     loadingResetButton.value = true
-    Inertia.get('/admin/posts')
+    Inertia.get('/admin/users')
 }
 
 const editPost = (row: Object) => {
@@ -166,11 +174,20 @@ const addPost = () => {
     Inertia.get('/admin/posts/create')
 }
 
+const statusChanged = async (id) => {
+    await nextTick()
+    Inertia.post('/admin/users/status', { id: id, status: rowStatuses[id] }, {
+        onStart: () => loading.value = true,
+        onFinish: () => loading.value = false,
+        preserveScroll: true
+    })
+}
+
 </script>
 
 <template>
     <div class="q-mt-md">
-        <q-table :title="$t('Posts')" :row-key="row => row.id" :columns="columns" :rows="rows"
+        <q-table :title="$t('Users')" :row-key="row => row.id" :columns="columns" :rows="rows"
             v-model:pagination="pagination" :filter="filter" @request="onRequest" :loading="loading" color="primary"
             flat binary-state-sort :rows-per-page-label="$t('Records per page')"
             :rows-per-page-options="[5, 10, 15, props.paginatedData.total, 0]" bordered>
@@ -189,22 +206,110 @@ const addPost = () => {
                     </span>
                 </div>
             </template>
-            <template v-slot:body-cell-postActions="props">
+            <template v-slot:body-cell-userActions="props">
                 <q-td :props="props" auto-width>
                     <div class="row flex-center q-gutter-x-sm no-wrap">
-                        <q-btn outline color="accent" icon="edit" :disable="loading" @click="editPost(props.row)" data-test="edit-button">
+                        <template v-if="props.row.status === 'pending' || props.row.roles === 'admin' || props.row.roles === 'super-admin'">
+                            <q-btn outline color="accent" icon="edit" :disable="loading" @click="editPost(props.row)" data-test="edit-button">
+                                <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
+                                    {{ $t('Edit user') }}
+                                </q-tooltip>
+                            </q-btn>
+                        </template>
+                        <template v-else>
+                            <q-btn outline color="secondary" icon="visibility" :disable="loading" @click="editPost(props.row)" data-test="edit-button">
+                                <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
+                                    {{ $t('View user') }}
+                                </q-tooltip>
+                            </q-btn>
+                        </template>
+                        <template v-if="props.row.status === 'pending' || props.row.roles === 'admin'">
+                            <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
+                                <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
+                                    {{ $t('Delete user') }}
+                                </q-tooltip>
+                            </q-btn>
+                        </template>
+                        <template v-else>
+                            <q-btn outline color="grey" icon="delete" disable data-test="edit-button">
+                                <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
+                                    {{ $t('View user') }}
+                                </q-tooltip>
+                            </q-btn>
+                        </template>
+
+                        <!-- <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
                             <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
-                                {{ $t('Edit post') }}
+                                {{ $t('Delete user') }}
                             </q-tooltip>
-                        </q-btn>
-                        <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
-                            <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
-                                {{ $t('Delete post') }}
-                            </q-tooltip>
-                        </q-btn>
+                        </q-btn> -->
                     </div>
                 </q-td>
             </template>
+            <template v-slot:body-cell-userAvatar="props">
+                <template v-if="!props.row.avatar">
+                    <q-td :props="props" auto-width>
+                        <q-avatar size="40px" color="orange" class="text-white">{{ props.row.first_name[0] + props.row.last_name[0] }}</q-avatar>
+                    </q-td>
+                </template>
+                <template v-else>
+                    <q-td :props="props" auto-width>
+                        <q-avatar size="40px">
+                            <q-img height="40px" :src="props.row.avatar" />
+                        </q-avatar>
+                    </q-td>
+                </template>
+            </template>
+
+            <template v-slot:body-cell-userPostcount="props">
+                <q-td :props="props" auto-width>
+                    <span class="text-primary text-subtitle1">
+                        {{ props.row.posts_count }}
+                    </span>
+                </q-td>
+            </template>
+
+            <template v-slot:body-cell-userRole="props">
+                <q-td :props="props" auto-width>
+                    <q-badge outline :class="[
+                        (props.row.roles === 'author') ? 'text-green' :
+                        (props.row.roles === 'member') ? 'text-primary' :
+                        (props.row.roles === 'admin') ? 'text-accent' :
+                        'text-red']" :label="props.row.roles" />
+                </q-td>
+            </template>
+
+            <template v-slot:body-cell-userStatus="props">
+                <q-td :props="props" auto-width>
+                    <template v-if="props.row.status === 'pending'">
+                        <q-toggle
+                            :label="rowStatuses[`${props.row.id}`]"
+                            color="red"
+                            class="text-red"
+                            false-value="pending"
+                            true-value="enabled"
+                            @update:model-value="statusChanged(props.row.id)"
+                            keep-color
+                            v-model="rowStatuses[`${props.row.id}`]"
+                        />
+                    </template>
+                    <template v-else>
+                        <q-toggle
+                            :label="rowStatuses[`${props.row.id}`]"
+                            color="primary"
+                            class="text-primary"
+                            false-value="disabled"
+                            true-value="enabled"
+                            @update:model-value="statusChanged(props.row.id)"
+                            keep-color
+                            :disable="!!(props.row.roles === 'super-admin')"
+                            v-model="rowStatuses[`${props.row.id}`]"
+                        />
+                    </template>
+                </q-td>
+            </template>
+
+
             <template v-slot:body-cell-postViews="props">
                 <q-td :props="props" auto-width>
                     {{ props.row.views }}
@@ -221,7 +326,7 @@ const addPost = () => {
                 </q-td>
             </template>
             <template v-slot:top>
-                <div class="q-table__title text-primary">{{ $t('Posts') }}</div>
+                <div class="q-table__title text-primary">{{ $t('Users') }}</div>
                 <q-space />
                 <q-input clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot data-test="search-input">
                     <template v-slot:append>
@@ -236,10 +341,13 @@ const addPost = () => {
                 <q-btn class="q-ml-md" color="primary" outline :disable="loading" @click="reset" data-test="refresh-button"
                     :loading="loadingResetButton" icon="restart_alt" />
                 <q-separator vertical spaced inset />
-                <q-btn color="green" unelevated @click="addPost" data-test="add-button">
+                <q-btn color="green" unelevated @click="addAdminUser" data-test="add-button">
                     <q-icon left name="post_add" />
-                    <div>{{ $t('ADD POST') }}</div>
+                    <div>{{ $t('ADD ADMIN USER') }}</div>
                 </q-btn>
+            </template>
+            <template v-slot:loading>
+                <q-inner-loading showing color="primary" />
             </template>
         </q-table>
     </div>

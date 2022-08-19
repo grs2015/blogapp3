@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function() {
                 Route::name('users.')->group(function() {
                     Route::post('/users/delete', [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('forcedelete');
                     Route::post('/users/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('restore');
+                    Route::post('/users/status', App\Http\Controllers\Admin\StatusController::class)->name('status');
                 });
 
                 Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
