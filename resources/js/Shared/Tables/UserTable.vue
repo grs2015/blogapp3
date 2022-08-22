@@ -142,21 +142,20 @@ const reset = () => {
     Inertia.get('/admin/users')
 }
 
-const editPost = (row: Object) => {
-    let postSlug = row['slug']
-    Inertia.get(`/admin/posts/${postSlug}/edit`)
+const editUser = (row: userData) => {
+    Inertia.get(`/admin/users/${row.id}/edit`)
 }
 
 const viewUser = (row: userData) => {
     Inertia.get(`/admin/users/${row.id}`)
 }
 
-const deletePost = (row: Object) => {
-    let postSlug = row['slug']
-    loading.value = true
-    Inertia.delete(`/admin/posts/${postSlug}`, {
+const deleteUser = (row: userData) => {
+    Inertia.delete(`/admin/users/${row.id}`, {
         onSuccess: () => onDeleteSuccess(),
-        onError: () => onDeleteFail()
+        onError: () => onDeleteFail(),
+        onStart: () => loading.value = true,
+        onFinish: () => loading.value = false,
     })
 }
 
@@ -174,8 +173,8 @@ const onDeleteSuccess = () => {
     })
 }
 
-const addPost = () => {
-    Inertia.get('/admin/posts/create')
+const addAdminUser = () => {
+    Inertia.get('/admin/users/create')
 }
 
 const statusChanged = async (id) => {
@@ -214,7 +213,7 @@ const statusChanged = async (id) => {
                 <q-td :props="props" auto-width>
                     <div class="row flex-center q-gutter-x-sm no-wrap">
                         <template v-if="props.row.status === 'pending' || props.row.roles === 'admin' || props.row.roles === 'super-admin'">
-                            <q-btn outline color="accent" icon="edit" :disable="loading" @click="editPost(props.row)" data-test="edit-button">
+                            <q-btn outline color="accent" icon="edit" :disable="loading" @click="editUser(props.row)" data-test="edit-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                     {{ $t('Edit user') }}
                                 </q-tooltip>
@@ -228,14 +227,14 @@ const statusChanged = async (id) => {
                             </q-btn>
                         </template>
                         <template v-if="props.row.status === 'pending' || props.row.roles === 'admin'">
-                            <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
+                            <q-btn outline color="red" icon="delete" :disable="loading" @click="deleteUser(props.row)" data-test="delete-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                     {{ $t('Delete user') }}
                                 </q-tooltip>
                             </q-btn>
                         </template>
                         <template v-else>
-                            <q-btn outline color="grey" icon="delete" disable data-test="edit-button">
+                            <q-btn outline color="grey" icon="delete" disable data-test="delete-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                     {{ $t('Delete user') }}
                                 </q-tooltip>
@@ -331,7 +330,7 @@ const statusChanged = async (id) => {
                 <q-separator vertical spaced inset />
                 <q-btn color="green" unelevated @click="addAdminUser" data-test="add-button">
                     <q-icon left name="post_add" />
-                    <div>{{ $t('ADD ADMIN USER') }}</div>
+                    <div>{{ $t('Add admin user') }}</div>
                 </q-btn>
             </template>
             <template v-slot:loading>
