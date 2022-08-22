@@ -8,14 +8,20 @@ class UserFilter extends QueryFilter
 {
     public function search(?string $keyword = null)
     {
-        return $this->builder;
+        // return $this->builder;
         return $this->builder->where(function(Builder $builder) use ($keyword) {
             return $builder->where('first_name', 'like', '%'.$keyword.'%')
                 ->orWhere('last_name', 'like', '%'.$keyword.'%')
-                ->orWhere('full_name', 'like', '%'.$keyword.'%')
                 ->orWhere('registered_at', 'like', '%'.$keyword.'%')
-                ->orWhere('last_login', 'like', '%'.$keyword.'%');
+                ->orWhere('last_login', 'like', '%'.$keyword.'%')
+                ->orWhere('status', 'like', '%'.$keyword.'%')
+                ->orWhere(function(Builder $builder) use ($keyword) {
+                    $builder->whereHas('roles', function(Builder $builder) use ($keyword) {
+                        $builder->where('name', 'like', '%'.$keyword.'%' );
+                    });
+                });
         });
+
     }
 
     public function userFirstname($order = 'asc')

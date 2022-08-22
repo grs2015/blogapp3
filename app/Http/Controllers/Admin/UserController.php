@@ -2,26 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Blog\DeleteUserAction;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Enums\UserStatus;
 use App\Filters\UserFilter;
 use Illuminate\Http\Request;
 use App\Services\CacheService;
 use App\Events\UserRoleUpdated;
 use App\Events\UserStatusUpdated;
 use App\Http\Requests\TrashRequest;
+use App\Exceptions\CannotDeleteUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\DataTransferObjects\UserData;
 use App\ViewModels\GetUsersViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
+use App\Actions\Blog\UpsertUserAction;
 use App\ViewModels\UpsertUserViewModel;
 use App\Http\Requests\UpdateUserRequest;
 use App\ViewModels\GetSingleUserViewModel;
 use App\Interfaces\UserRepositoryInterface;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class UserController extends Controller
 {
+    use PasswordValidationRules;
+
     public function __construct(
         private UserRepositoryInterface $userRepository
     ) {
@@ -42,7 +50,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User/Form', [
+        return Inertia::render('User/SimpleForm', [
             'model' => new UpsertUserViewModel()
         ]);
     }
@@ -55,7 +63,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Inertia::render('User/Form', [
+        $view = $user->status === UserStatus::Pending || $user->hasRole('admin') ? 'User/SimpleForm' : 'User/Form';
+
+        return Inertia::render($view, [
             'model' => new UpsertUserViewModel($user)
         ]);
     }
@@ -73,6 +83,24 @@ class UserController extends Controller
         ]);
     }
 
+    public function store(UserData $data, Request $request)
+    {
+        $request->validate([
+            'password' => $this->passwordRules()
+        ]);
+
+        UpsertUserAction::execute($data, $request);
+
+        return redirect()->action([UserController::class, 'index']);
+    }
+
+    public function update(UserData $data, Request $request)
+    {
+        UpsertUserAction::execute($data, $request);
+
+        return redirect()->action([UserController::class, 'edit'], ['user' => $data->id]);
+    }
+
     /**
      * Delete model
      *
@@ -81,44 +109,44 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
-        $this->userRepository->deleteEntry($user->id);
+        DeleteUserAction::execute($user);
 
         return redirect()->action([UserController::class, 'index']);
     }
 
-    /**
-     * Force to delete trashed models
-     *
-     * @param TrashRequest $request
-     * @return RedirectResponse
-     */
-    public function delete(TrashRequest $request): RedirectResponse
-    {
-        $this->authorize('forceDelete', User::class);
+    // /**
+    //  * Force to delete trashed models
+    //  *
+    //  * @param TrashRequest $request
+    //  * @return RedirectResponse
+    //  */
+    // public function delete(TrashRequest $request): RedirectResponse
+    // {
+    //     $this->authorize('forceDelete', User::class);
 
-        $userToDelete = $this->userRepository->forceDeleteEntry($request->ids);
+    //     $userToDelete = $this->userRepository->forceDeleteEntry($request->ids);
 
-        $userToDelete->each(function($item) {
-            $item->forceDelete();
-        });
+    //     $userToDelete->each(function($item) {
+    //         $item->forceDelete();
+    //     });
 
-        return redirect()->action([UserController::class, 'index']);
-    }
+    //     return redirect()->action([UserController::class, 'index']);
+    // }
 
-    /**
-     * Restore trashed models
-     *
-     * @param TrashRequest $request
-     * @return RedirectResponse
-     */
-    public function restore(TrashRequest $request): RedirectResponse
-    {
-        $this->authorize('restore', User::class);
+    // /**
+    //  * Restore trashed models
+    //  *
+    //  * @param TrashRequest $request
+    //  * @return RedirectResponse
+    //  */
+    // public function restore(TrashRequest $request): RedirectResponse
+    // {
+    //     $this->authorize('restore', User::class);
 
-        $this->userRepository->restoreEntry($request->ids);
+    //     $this->userRepository->restoreEntry($request->ids);
 
-        return redirect()->action([UserController::class, 'index']);
-    }
+    //     return redirect()->action([UserController::class, 'index']);
+    // }
 
     // public function update(UpdateUserRequest $request, User $user): RedirectResponse
     // {

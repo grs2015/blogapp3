@@ -5,9 +5,12 @@ namespace App\DataTransferObjects;
 use DateTime;
 use App\Models\User;
 use App\Enums\UserStatus;
+use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Lazy;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use App\DataTransferObjects\PostData;
 use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\DataCollection;
@@ -50,5 +53,23 @@ class UserData extends Data
             'posts' => Lazy::whenLoaded('posts', $user, fn() => PostData::collection($user->posts)),
             'roles' => $user->roles->value('name')
         ]);
+    }
+
+    public static function fromRequest(Request $request): self
+    {
+        return self::from([
+            ...$request->all(),
+            'roles' => $request->id ? User::getEntityById($request['id'])->roles->value('name') : null
+        ]);
+    }
+
+    public static function rules(Request $request): array
+    {
+        return [
+            'first_name' => ['required', 'string', 'max:40'],
+            'last_name' => ['nullable', 'sometimes', 'string', 'max:40'],
+            'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users')->ignore($request->id)],
+            'mobile' => ['required', 'string', 'max:100'],
+        ];
     }
 }
