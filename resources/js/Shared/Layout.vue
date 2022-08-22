@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { usePage } from '@inertiajs/inertia-vue3';
 import NavLink from '@/Shared/NavLink.vue'
@@ -17,9 +17,10 @@ interface authUser {
     first_name: string,
     last_name?: string,
     full_name?: string,
+    avatar?: string,
     id: number,
     status: UserStatus,
-    role: Array<string>
+    role?: string | Array<string> | null
 }
 
 const props = defineProps<AuthProps>()
@@ -33,13 +34,12 @@ const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
 const userLogout = () => { Inertia.post('/logout') }
 const userProfile = () => { Inertia.get(`/admin/users/${props.auth.user.id}/edit`) }
 
+const currentAvatarPath = computed(() => props.auth.user.avatar)
+const hasAvatarImage = computed(() => !!(props.auth.user.avatar))
+
+const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.last_name[0])
+
 </script>
-
-<style lang="sass">
-.my-custom-image
-  filter: sepia()
-</style>
-
 
 <template>
     <q-layout view="lHh Lpr lFf" class="bg-white">
@@ -93,7 +93,31 @@ const userProfile = () => { Inertia.get(`/admin/users/${props.auth.user.id}/edit
         </q-header>
 
         <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-2">
-            <q-img img-class="my-custom-image" src="/images/parallax2.jpg" />
+            <q-img img-class="my-custom-image relative-position" src="/images/parallax2.jpg">
+                <q-item class="full-width">
+                    <template v-if="!hasAvatarImage">
+                        <q-item-section avatar>
+                            <q-avatar size="50px" color="green" text-color="white">{{ symbols }}</q-avatar>
+                        </q-item-section>
+                    </template>
+                    <template v-else>
+                        <q-item-section avatar>
+                            <q-avatar size="50px">
+                                <q-img height="50px" :src="currentAvatarPath" />
+                            </q-avatar>
+                        </q-item-section>
+                    </template>
+                    <!-- <q-item-section avatar>
+                        <q-avatar color="green" text-color="white" icon="bluetooth" />
+                    </q-item-section> -->
+                    <q-item-section>
+                        <q-item-label class="text-white text-subtitle1">Hi, {{ props.auth.user.full_name }}</q-item-label>
+                        <q-item-label caption class="text-white">Your status: {{ props.auth.user.role }}</q-item-label>
+                        <q-item-label caption class="text-white">Email: {{ props.auth.user.email }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-img>
+            <q-separator color="green" />
             <q-list>
                 <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Dashboard/Index'" name="code">
                     {{ $t('Dashboard') }}
@@ -119,3 +143,10 @@ const userProfile = () => { Inertia.get(`/admin/users/${props.auth.user.id}/edit
         </q-page-container>
     </q-layout>
 </template>
+
+<style lang="sass">
+
+.my-custom-image
+    filter: sepia()
+
+</style>

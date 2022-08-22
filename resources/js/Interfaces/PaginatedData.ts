@@ -146,6 +146,8 @@ export interface userData {
     roles?: string,
     status?: UserStatus,
     email_verified_at?: string,
+    password?: string,
+    password_confirmation?: string
 }
 
 export interface Role {
