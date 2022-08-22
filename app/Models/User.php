@@ -96,7 +96,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles, WithData;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, WithData;
 
     const ADMIN_USER = 'admin';
     const AUTHOR_USER = 'author';
