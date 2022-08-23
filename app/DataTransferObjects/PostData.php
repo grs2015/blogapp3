@@ -98,8 +98,9 @@ class PostData extends Data
             'images' => ['nullable', 'sometimes', 'array'],
             'tag_ids' => ['nullable', 'sometimes', 'array'],
             'cat_ids' => ['required', 'array'],
-            'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
-            'favorite' => ['nullable', 'sometimes', new Enum(FavoriteStatus::class)],
+            'status' => ['nullable', 'sometimes', Rule::in(['draft', 'pending'])],
+            // 'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
+            'favorite' => ['nullable', 'sometimes', Rule::in(['usual'])],
             'author_id' => ['required', 'exists:users,id'],
         ];
     }

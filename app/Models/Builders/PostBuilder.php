@@ -12,12 +12,14 @@ class PostBuilder extends BaseBuilder
     public function markAsPending(): void
     {
         $this->model->status = PostStatus::Pending;
+        $this->model->published_at = now()->addDays(10)->toDateString();
         $this->model->save();
     }
 
     public function markAsPublished(): void
     {
         $this->model->status = PostStatus::Published;
+        $this->model->published_at = now()->toDateString();
         $this->model->save();
     }
 
@@ -35,13 +37,13 @@ class PostBuilder extends BaseBuilder
 
     public function markAsFavorite(): void
     {
-        $this->model->status = FavoriteStatus::Favorite;
+        $this->model->favorite = FavoriteStatus::Favorite;
         $this->model->save();
     }
 
     public function markAsNonFavorite(): void
     {
-        $this->model->status = FavoriteStatus::Nonfavorite;
+        $this->model->favorite = FavoriteStatus::Nonfavorite;
         $this->model->save();
     }
 
