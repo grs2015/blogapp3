@@ -135,8 +135,37 @@
     "Confirm new password": "Confirm new password",
     "Avatar update": "Avatar update",
     "Back": "Back",
-    "Add admin user": "Add admin user"
+    "Add admin user": "Add admin user",
 
+    "To be published at": "To be published at",
+    "Comments": "Comments",
+    "Actions": "Actions",
+    "Something went wrong with post deletion": "Something went wrong with post deletion",
+    "The post have been deleted successfully": "The post have been deleted successfully",
+    "Usual > Favorite": "Usual > Favorite",
+    "Draft > Pending": "Draft > Pending",
+    "Pending > Published": "Pending > Published",
+    "Unpublished > Published": "Unpublished > Published",
+    "no date set": "no date set",
 
+    "Post status:": "Post status:",
+    "Favorite post:": "Favorite post:",
 
+    "Edit user": "Edit user",
+    "View user": "View user",
+    "Delete user": "Delete user",
+    "Registered at": "Registered at",
+    "Last Logged-in": "Last Logged-in",
+    "Posts count": "Posts count",
+    "Create User": "Create User",
+    "Edit User": "Edit User",
+    "User profile information": "User profile information",
+    "User Profile": "User Profile",
+    "Password": "Password",
+    "Password confirmation": "Password confirmation",
+
+    "Hi": "Hi",
+    "Your status: ": "Your status: ",
+
+    "Edit Post": "Edit Post"
 }

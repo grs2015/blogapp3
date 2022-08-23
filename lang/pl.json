@@ -134,6 +134,38 @@
     "Confirm new password": "Potwierdź nowe hasło",
     "Avatar update": "Aktualizacja avataru",
     "Back": "Wstecz",
-    "Add admin user": "Dodaj administratora"
+    "Add admin user": "Dodaj administratora",
+
+    "To be published at": "Opublikować",
+    "Comments": "Komentarze",
+    "Actions": "Działania",
+    "Something went wrong with post deletion": "Coś poszło źle w trakcie usunięcia posta",
+    "The post have been deleted successfully": "Post został usunięty pomyślnie",
+    "Usual > Favorite": "Zwykły > Odznaczony",
+    "Draft > Pending": "Szkic > Oczekujący",
+    "Pending > Published": "Oczekujący > Opublikowany",
+    "Unpublished > Published": "Wycofany > Opublikowany",
+    "no date set": "nie ustalony termin",
+
+    "Post status:": "Stan posta:",
+    "Favorite post:": "Odznaczony post:",
+
+    "Edit user": "Edytuj użytkownika",
+    "View user": "Przegląd użytkownika",
+    "Delete user": "Usuń użytkownika",
+    "Registered at": "Zarejestrowany",
+    "Last Logged-in": "Ostatnio zalogowany",
+    "Posts count": "Ilość postów",
+    "Create User": "Utwórz użytkownika",
+    "Edit User": "Edytuj użytkownika",
+    "User profile information": "Profil użytkownika",
+    "User Profile": "Profil użytkownika",
+    "Password": "Hasło",
+    "Password confirmation": "Potwierdzenie hasła",
+
+    "Hi": "Cześć",
+    "Your status: ": "Jesteś: ",
+
+    "Edit Post": "Edytuj post"
 }
 
