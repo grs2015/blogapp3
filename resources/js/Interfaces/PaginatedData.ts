@@ -37,7 +37,8 @@ export interface PostData {
     'categories'?: Array<categoryData> | null,
     'tags'?: Array<tagData> | null,
     'images'?: Array<File> | null,
-    '_method'?: "put" | null
+    '_method'?: "put" | null,
+    comments_count?: number,
 }
 
 export interface SortingData {
@@ -52,8 +53,9 @@ export interface LinkData {
 }
 
 type UserData = {
-    'email': string;
-    'first_name': string;
+    email: string;
+    first_name: string;
+    full_name?: string;
 }
 
 type PostmetaData = {

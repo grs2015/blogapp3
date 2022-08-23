@@ -111,8 +111,8 @@ const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.l
                         <q-avatar color="green" text-color="white" icon="bluetooth" />
                     </q-item-section> -->
                     <q-item-section>
-                        <q-item-label class="text-white text-subtitle1">Hi, {{ props.auth.user.full_name }}</q-item-label>
-                        <q-item-label caption class="text-white">Your status: {{ props.auth.user.role }}</q-item-label>
+                        <q-item-label class="text-white text-subtitle1">{{ $t('Hi')}}, {{ props.auth.user.full_name }}</q-item-label>
+                        <q-item-label caption class="text-white">{{ $t('Your status: ')}} {{ props.auth.user.role }}</q-item-label>
                         <q-item-label caption class="text-white">Email: {{ props.auth.user.email }}</q-item-label>
                     </q-item-section>
                 </q-item>
