@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import { ref, computed, watch } from 'vue'
+import { ref, computed, reactive, nextTick } from 'vue'
 import { trans } from 'laravel-vue-i18n';
 import { Inertia, PageProps } from '@inertiajs/inertia'
 import { PostData, LinkData, tablePagination } from '@/Interfaces/PaginatedData';
 import { useQuasar } from 'quasar'
+import { format, formatDistanceToNow, compareDesc } from 'date-fns'
 // import { usePage } from '@inertiajs/inertia-vue3';
 
 interface Paginated {
@@ -48,6 +49,14 @@ const filter = ref('')
 const loading = ref(false)
 const loadingResetButton = ref(false)
 
+const rowStatuses = reactive({})
+const rowFavorites = reactive({})
+
+props.paginatedData.data.forEach((item, idx) => {
+    rowStatuses[`${item.id}`] = ref(`${item.status}`)
+    rowFavorites[`${item.id}`] = ref(`${item.favorite}`)
+})
+
 const pagination = ref<tablePagination>({
     // sortBy: usePage<pageActions>().props.value.sorting.column,
     // descending: usePage<pageActions>().props.value.sorting.descending === 'true',
@@ -61,7 +70,7 @@ const pagination = ref<tablePagination>({
 type tableColumns = {
     name: string;
     label: string;
-    field: string | ((row: PostData) => string);
+    field: string | ((row: PostData) => string | number);
     required?: boolean;
     align?: "left" | "right" | "center";
     sortable?: boolean;
@@ -76,38 +85,59 @@ const columns:tableColumns[] = [
         align: 'left',
         sortable: true,
         field: (row : PostData) => row.title,
-        style: "width: 30%"
+        style: "width: 35%"
+
     },
     {
         name: 'postAuthor',
         required: true,
         label: trans('Author'),
         align: 'left',
-        field: (row : PostData) => row.user.first_name
+        field: (row : PostData) => row.user.full_name,
+        style: "width: 15%"
+    },
+    {
+        name: 'postPublishedAt',
+        required: true,
+        label: trans('To be published at'),
+        align: 'left',
+        sortable: true,
+        field: (row : PostData) => row.published_at,
+        style: "width: 20%"
     },
     {
         name: 'postStatus',
         required: true,
         label: trans('Status'),
-        align: 'right',
+        align: 'left',
         sortable: true,
         field: (row : PostData) => row.status,
+        // style: "width: 20%"
     },
     {
         name: 'postFavorite',
         required: true,
         label: trans('Favorite'),
-        align: 'right',
+        align: 'left',
         sortable: true,
-        field: (row : PostData) => row.favorite
+        field: (row : PostData) => row.favorite,
+        // style: "width: 15%"
     },
     {
         name: 'postViews',
         required: true,
         label: trans('Views'),
-        align: 'right',
+        align: 'center',
         sortable: true,
         field: (row : PostData) => row.views
+    },
+    {
+        name: 'postComments',
+        required: true,
+        label: trans('Comments'),
+        align: 'center',
+        sortable: true,
+        field: (row : PostData) => row.comments_count
     },
     {
         name: 'postActions',
@@ -135,7 +165,7 @@ const reset = () => {
     Inertia.get('/admin/posts')
 }
 
-const editPost = (row: Object) => {
+const editPost = (row: PostData) => {
     let postSlug = row['slug']
     Inertia.get(`/admin/posts/${postSlug}/edit`)
 }
@@ -152,19 +182,36 @@ const deletePost = (row: Object) => {
 const onDeleteFail = () => {
     $q.notify({
         type: 'negative',
-        message: "Something went wrong with post deletion"
+        message: trans("Something went wrong with post deletion")
     })
 }
 
 const onDeleteSuccess = () => {
     $q.notify({
         type: 'positive',
-        message: "The post have been deleted successfully"
+        message: trans("The post have been deleted successfully")
     })
 }
 
 const addPost = () => {
     Inertia.get('/admin/posts/create')
+}
+
+const statusChanged = async (id) => {
+    await nextTick()
+    Inertia.post('/admin/posts/status', { id: id, status: rowStatuses[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page }, {
+        onStart: () => loading.value = true,
+        onFinish: () => loading.value = false,
+        preserveScroll: true
+    })
+}
+const favoritesChanged = async (id) => {
+    await nextTick()
+    Inertia.post('/admin/posts/favorite', { id: id, favorite: rowFavorites[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page }, {
+        onStart: () => loading.value = true,
+        onFinish: () => loading.value = false,
+        preserveScroll: true
+    })
 }
 
 </script>
@@ -198,27 +245,123 @@ const addPost = () => {
                                 {{ $t('Edit post') }}
                             </q-tooltip>
                         </q-btn>
-                        <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
-                            <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
-                                {{ $t('Delete post') }}
-                            </q-tooltip>
-                        </q-btn>
+                        <template v-if="props.row.status === 'draft' || props.row.status === 'pending'">
+                            <q-btn outline color="red" icon="delete" :disable="loading" @click="deletePost(props.row)" data-test="delete-button">
+                                <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
+                                    {{ $t('Delete post') }}
+                                </q-tooltip>
+                            </q-btn>
+                        </template>
+                        <template v-else>
+                            <q-btn outline color="grey" icon="delete" disable data-test="delete-button">
+                                <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
+                                    {{ $t('Delete post') }}
+                                </q-tooltip>
+                            </q-btn>
+                        </template>
+
                     </div>
                 </q-td>
             </template>
             <template v-slot:body-cell-postViews="props">
                 <q-td :props="props" auto-width>
-                    {{ props.row.views }}
+                    <span class="text-primary text-subtitle1">
+                        {{ props.row.views }}
+                    </span>
+                </q-td>
+            </template>
+            <template v-slot:body-cell-postComments="props">
+                <q-td :props="props" auto-width>
+                    <span class="text-primary text-subtitle1">
+                        {{ props.row.comments_count }}
+                    </span>
                 </q-td>
             </template>
             <template v-slot:body-cell-postFavorite="props">
                 <q-td :props="props" auto-width>
-                    {{ props.row.favorite }}
+                    <q-toggle
+                        color="primary"
+                        icon="star_rate"
+                        false-value="usual"
+                        true-value="favorite"
+                        @update:model-value="favoritesChanged(props.row.id)"
+                        v-model="rowFavorites[`${props.row.id}`]"
+                    >
+                        <q-tooltip anchor="bottom middle" self="center middle" :delay="500">
+                            {{ $t('Usual > Favorite') }}
+                        </q-tooltip>
+                    </q-toggle>
                 </q-td>
             </template>
             <template v-slot:body-cell-postStatus="props">
                 <q-td :props="props" auto-width>
-                    {{ props.row.status }}
+                    <template v-if="props.row.status === 'draft'">
+                        <q-toggle
+                            color="green"
+                            checked-icon="hourglass_empty"
+                            unchecked-icon="mode_edit"
+                            false-value="draft"
+                            true-value="pending"
+                            @update:model-value="statusChanged(props.row.id)"
+                            v-model="rowStatuses[`${props.row.id}`]"
+                        >
+                            <q-tooltip anchor="bottom middle" self="center middle" :delay="500">
+                                {{ $t('Draft > Pending') }}
+                            </q-tooltip>
+                        </q-toggle>
+                    </template>
+                    <template v-else-if="props.row.status === 'pending'">
+                        <q-toggle
+                            color="green"
+                            checked-icon="upload"
+                            unchecked-icon="hourglass_empty"
+                            false-value="pending"
+                            true-value="published"
+                            @update:model-value="statusChanged(props.row.id)"
+                            v-model="rowStatuses[`${props.row.id}`]"
+                        >
+                            <q-tooltip anchor="bottom middle" self="center middle" :delay="500">
+                                {{ $t('Pending > Published') }}
+                            </q-tooltip>
+                        </q-toggle>
+                    </template>
+                    <template v-else>
+                        <q-toggle
+                            color="green"
+                            checked-icon="upload"
+                            unchecked-icon="block"
+                            true-value="published"
+                            false-value="unpublished"
+                            @update:model-value="statusChanged(props.row.id)"
+                            v-model="rowStatuses[`${props.row.id}`]"
+                        >
+                            <q-tooltip anchor="bottom middle" self="center middle" :delay="500">
+                                {{ $t('Unpublished > Published') }}
+                            </q-tooltip>
+                        </q-toggle>
+                    </template>
+                </q-td>
+            </template>
+            <template v-slot:body-cell-postPublishedAt="props">
+                <q-td :props="props" auto-width>
+                    <span v-if="props.row.published_at">
+                        {{ props.row.published_at }}
+                        <template v-if="props.row.status === 'pending'">
+                            <q-badge align="top" :class="[compareDesc(new Date(props.row.published_at), new Date()) === -1 ? 'text-green' : 'text-red']" outline>
+                                <template v-if="compareDesc(new Date(props.row.published_at), new Date()) === -1">
+                                    + {{ formatDistanceToNow(new Date(props.row.published_at)) }}
+                                </template>
+                                <template v-else>
+                                    - {{ formatDistanceToNow(new Date(props.row.published_at)) }}
+                                </template>
+                            </q-badge>
+                        </template>
+                    </span>
+                    <span v-else class="text-grey">
+                        <q-badge outline class="text-grey">
+                            {{ $t('no date set') }}
+                        </q-badge>
+                    </span>
                 </q-td>
             </template>
             <template v-slot:top>
@@ -241,6 +384,9 @@ const addPost = () => {
                     <q-icon left name="post_add" />
                     <div>{{ $t('ADD POST') }}</div>
                 </q-btn>
+            </template>
+            <template v-slot:loading>
+                <q-inner-loading showing color="primary" />
             </template>
         </q-table>
     </div>

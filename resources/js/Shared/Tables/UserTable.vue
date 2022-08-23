@@ -179,7 +179,7 @@ const addAdminUser = () => {
 
 const statusChanged = async (id) => {
     await nextTick()
-    Inertia.post('/admin/users/status', { id: id, status: rowStatuses[id] }, {
+    Inertia.post('/admin/users/status', { id: id, status: rowStatuses[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page }, {
         onStart: () => loading.value = true,
         onFinish: () => loading.value = false,
         preserveScroll: true
