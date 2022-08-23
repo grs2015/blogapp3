@@ -20,6 +20,6 @@ class StatusController extends Controller
         $user = User::getEntityById($request->id);
         $request->status === 'enabled' ? $user->markAsEnabled() : $user->markAsDisabled();
 
-        return redirect()->action([UserController::class, 'index']);
+        return redirect()->action([UserController::class, 'index'], ['page' => $request->page, 'per_page' => $request->per_page]);
     }
 }

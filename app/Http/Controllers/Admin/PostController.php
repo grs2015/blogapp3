@@ -94,8 +94,6 @@ class PostController extends Controller
     {
         UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
 
-
-
         return redirect()->action([PostController::class, 'index']);
     }
 
@@ -109,8 +107,6 @@ class PostController extends Controller
     public function update(PostData $data, Request $request, ImageService $imageService)
     {
         UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
-
-
 
         return redirect()->action([PostController::class, 'edit'], ['post' => $data->slug]);
     }

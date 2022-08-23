@@ -97,6 +97,8 @@ Route::middleware('auth')->group(function() {
                 Route::name('posts.')->group(function() {
                     Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
                     Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
+                    Route::post('/posts/status', App\Http\Controllers\Admin\PostStatusController::class)->name('status');
+                    Route::post('/posts/favorite', App\Http\Controllers\Admin\PostFavoriteController::class)->name('favorite');
                 });
 
             });
