@@ -58,6 +58,7 @@ class PostData extends Data
         #[DataCollectionOf(CategoryData::class)]
         public readonly null|Lazy|DataCollection $categories,
         public readonly null|Lazy|UserData $user,
+        public readonly ?int $comments_count,
     ) {}
 
     public static function fromModel(Post $post): self

@@ -29,6 +29,7 @@ class PostFactory extends Factory
             'hero_image' => $this->faker->imageUrl(640, 480, 'blog-image', true),
             'images' => $this->faker->imageUrl().','.$this->faker->imageUrl(),
             'time_to_read' => $this->faker->numberBetween(1, 20),
+            'published_at' => $this->faker->dateTimeBetween('now', '+2 weeks')
         ];
     }
 

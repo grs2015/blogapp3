@@ -28,7 +28,7 @@ class GetPostsViewModel extends ViewModel
     public function posts(): LengthAwarePaginator
     {
         $items =  Cache::remember($this->cacheService->cacheResponse(), $this->cacheService->cacheTime(), function()  {
-            return Post::with(['user:id,email,first_name'])->filter($this->filters)->get();})
+            return Post::withCount('comments')->with(['user:id,email,first_name,last_name,full_name'])->filter($this->filters)->get();})
             ->map
             ->getData();
 
