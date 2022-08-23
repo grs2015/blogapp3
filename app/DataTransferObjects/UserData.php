@@ -66,10 +66,10 @@ class UserData extends Data
     public static function rules(Request $request): array
     {
         return [
-            'first_name' => ['required', 'string', 'max:40'],
-            'last_name' => ['nullable', 'sometimes', 'string', 'max:40'],
-            'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users')->ignore($request->id)],
-            'mobile' => ['required', 'string', 'max:100'],
+            'first_name' => ['sometimes', 'required', 'string', 'max:40'],
+            'last_name' => ['sometimes', 'required', 'string', 'max:40'],
+            'email' => ['sometimes', 'required', 'string', 'email', 'max:100', Rule::unique('users')->ignore($request->id)],
+            'mobile' => ['sometimes', 'required', 'string', 'max:100'],
         ];
     }
 }
