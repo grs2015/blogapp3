@@ -1,3 +1,46 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { loadLanguageAsync } from 'laravel-vue-i18n';
+import { usePage } from '@inertiajs/inertia-vue3';
+import NavLink from '@/Shared/NavLink.vue'
+import { Inertia } from '@inertiajs/inertia';
+import { UserStatus } from '@/Interfaces/PaginatedData';
+
+interface AuthProps {
+    auth : {
+        user: authUser
+    }
+}
+
+interface authUser {
+    email: string,
+    first_name: string,
+    last_name?: string,
+    full_name?: string,
+    avatar?: string,
+    id: number,
+    status: UserStatus,
+    role?: string | Array<string> | null
+}
+
+const props = defineProps<AuthProps>()
+
+
+const leftDrawerOpen = ref(false)
+const text = ref('')
+
+const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
+
+const userLogout = () => { Inertia.post('/logout') }
+const userProfile = () => { Inertia.get(`/admin/users/${props.auth.user.id}/edit`) }
+
+const currentAvatarPath = computed(() => props.auth.user.avatar)
+const hasAvatarImage = computed(() => !!(props.auth.user.avatar))
+
+const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.last_name[0])
+
+</script>
+
 <template>
     <q-layout view="lHh Lpr lFf" class="bg-white">
         <q-header elevated>
@@ -35,12 +78,12 @@
                             </q-btn>
                         </q-btn-group>
                         <q-btn color="green" icon="account_circle">
-                            <q-menu anchor="bottom right" self="top right" :offset="[0, 10]">
+                            <q-menu anchor="bottom right" self="top right" :offset="[0, 10]" auto-close>
                                 <q-item clickable>
-                                    <q-item-section>Account Settings</q-item-section>
+                                    <q-item-section @click="userProfile">{{ $t('Account Settings') }}</q-item-section>
                                 </q-item>
                                 <q-item clickable>
-                                    <q-item-section>Logout</q-item-section>
+                                    <q-item-section @click="userLogout">{{ $t('Logout') }}</q-item-section>
                                 </q-item>
                             </q-menu>
                         </q-btn>
@@ -50,7 +93,31 @@
         </q-header>
 
         <q-drawer v-model="leftDrawerOpen" show-if-above class="bg-grey-2">
-            <q-img img-class="my-custom-image" src="/images/parallax2.jpg" />
+            <q-img img-class="my-custom-image relative-position" src="/images/parallax2.jpg">
+                <q-item class="full-width">
+                    <template v-if="!hasAvatarImage">
+                        <q-item-section avatar>
+                            <q-avatar size="50px" color="green" text-color="white">{{ symbols }}</q-avatar>
+                        </q-item-section>
+                    </template>
+                    <template v-else>
+                        <q-item-section avatar>
+                            <q-avatar size="50px">
+                                <q-img height="50px" :src="currentAvatarPath" />
+                            </q-avatar>
+                        </q-item-section>
+                    </template>
+                    <!-- <q-item-section avatar>
+                        <q-avatar color="green" text-color="white" icon="bluetooth" />
+                    </q-item-section> -->
+                    <q-item-section>
+                        <q-item-label class="text-white text-subtitle1">{{ $t('Hi')}}, {{ props.auth.user.full_name }}</q-item-label>
+                        <q-item-label caption class="text-white">{{ $t('Your status: ')}} {{ props.auth.user.role }}</q-item-label>
+                        <q-item-label caption class="text-white">Email: {{ props.auth.user.email }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-img>
+            <q-separator color="green" />
             <q-list>
                 <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Dashboard/Index'" name="code">
                     {{ $t('Dashboard') }}
@@ -64,7 +131,7 @@
                 <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="code">
                     {{ $t('Tags') }}
                 </nav-link>
-                <nav-link :href="route('admin.index')" :active="usePage().component.value === 'User/Index'" name="code">
+                <nav-link :href="route('admin.users.index')" :active="usePage().component.value.startsWith('User')" name="code">
                     {{ $t('Users') }}
                 </nav-link>
             </q-list>
@@ -77,20 +144,9 @@
     </q-layout>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { loadLanguageAsync } from 'laravel-vue-i18n';
-import { usePage } from '@inertiajs/inertia-vue3';
-import NavLink from '@/Shared/NavLink.vue'
-
-const leftDrawerOpen = ref(false)
-const text = ref('')
-
-const toggleLeftDrawer = () => leftDrawerOpen.value = !leftDrawerOpen.value
-
-</script>
-
 <style lang="sass">
+
 .my-custom-image
-  filter: sepia()
+    filter: sepia()
+
 </style>

@@ -2,6 +2,7 @@
 
 namespace App\DataTransferObjects;
 
+use DateTime;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
@@ -13,13 +14,13 @@ use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Lazy;
 use App\Enums\FavoriteStatus;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use App\DataTransferObjects\TagData;
 use App\DataTransferObjects\UserData;
 use Illuminate\Validation\Rules\Enum;
 use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\DataCollection;
 use App\DataTransferObjects\CategoryData;
-use DateTime;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
@@ -57,6 +58,7 @@ class PostData extends Data
         #[DataCollectionOf(CategoryData::class)]
         public readonly null|Lazy|DataCollection $categories,
         public readonly null|Lazy|UserData $user,
+        public readonly ?int $comments_count,
     ) {}
 
     public static function fromModel(Post $post): self
@@ -84,10 +86,10 @@ class PostData extends Data
         ])->except('comments', 'postmetas', 'galleries');
     }
 
-    public static function rules(): array
+    public static function rules(Request $request): array
     {
         return [
-            'title' => ['required', 'string'],
+            'title' => ['required', 'string', Rule::unique('posts')->ignore($request->id)],
             'meta_title' => ['nullable', 'sometimes', 'string'],
             'summary' => ['nullable', 'sometimes', 'string'],
             'content' => ['nullable', 'sometimes', 'string'],
@@ -96,8 +98,9 @@ class PostData extends Data
             'images' => ['nullable', 'sometimes', 'array'],
             'tag_ids' => ['nullable', 'sometimes', 'array'],
             'cat_ids' => ['required', 'array'],
-            'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
-            'favorite' => ['nullable', 'sometimes', new Enum(FavoriteStatus::class)],
+            'status' => ['nullable', 'sometimes', Rule::in(['draft', 'pending'])],
+            // 'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
+            'favorite' => ['nullable', 'sometimes', Rule::in(['usual'])],
             'author_id' => ['required', 'exists:users,id'],
         ];
     }

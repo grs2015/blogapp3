@@ -33,12 +33,16 @@ it('renders the tag page with tags data', function() {
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Tag/Index')
         ->has('model', fn(Assert $page) => $page
-            ->has('tags', 5)
-            ->has('tags.0', fn(Assert $page) => $page
+            ->has('tags', 13)
+            ->has('tags', fn(Assert $page) => $page
+              ->has('data', 5)
+              ->has('data.0', fn(Assert $page) => $page
+                ->has('title')
                 ->where('title', $tagTitle)
-                ->etc()
+                ->etc())
+              ->etc())
+            ->etc()
             )
-        )
     );
 });
 

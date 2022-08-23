@@ -37,7 +37,8 @@ export interface PostData {
     'categories'?: Array<categoryData> | null,
     'tags'?: Array<tagData> | null,
     'images'?: Array<File> | null,
-    '_method'?: "put" | null
+    '_method'?: "put" | null,
+    comments_count?: number,
 }
 
 export interface SortingData {
@@ -52,8 +53,9 @@ export interface LinkData {
 }
 
 type UserData = {
-    'email': string;
-    'first_name': string;
+    email: string;
+    first_name: string;
+    full_name?: string;
 }
 
 type PostmetaData = {
@@ -91,6 +93,19 @@ export enum Status {
     Unpublished = 'unpublished',
 }
 
+export enum UserStatus {
+    Enabled = 'enabled',
+    Disabled = 'disabled',
+    Pending = 'pending'
+}
+
+export enum UserRole {
+    Admin = 'admin',
+    Author = 'author',
+    Member = 'member',
+    SuperAdmin = 'super-admin'
+}
+
 export interface categoryData {
     id: number,
     title: string,
@@ -114,4 +129,35 @@ export interface breadcrumbsData {
     label: string,
     icon: string,
     route?: string
+}
+
+export interface userData {
+    avatar?: string,
+    email: string,
+    first_name: string,
+    full_name?: string,
+    id: number,
+    intro?: string,
+    last_login?: string,
+    last_name?: string,
+    middle_name?: string,
+    mobile?: string,
+    posts_count?: number,
+    profile?: string,
+    registered_at?: string,
+    roles?: string,
+    status?: UserStatus,
+    email_verified_at?: string,
+    password?: string,
+    password_confirmation?: string
+}
+
+export interface Role {
+    created_at: string,
+    updated_at: string,
+    guard_name: string,
+    id: number,
+    name: string,
+    pivot: Object
+
 }

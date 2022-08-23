@@ -137,3 +137,81 @@ export const tagEditBreadcrumbs = [
         icon: "edit",
     }
 ];
+
+export const usersBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+
+    },
+    {
+        label: "Users",
+        icon: "people_alt",
+    },
+];
+
+export const userCreateBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Users",
+        icon: "people_alt",
+        route: "/admin/users"
+    },
+    {
+        label: "Create",
+        icon: "edit",
+    }
+];
+
+export const userEditBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Users",
+        icon: "people_alt",
+        route: "/admin/users"
+    },
+    {
+        label: "Edit",
+        icon: "edit",
+    }
+];
+
+export const accountBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+
+    },
+    {
+        label: "User Account",
+        icon: "account_circle",
+    },
+];
+
+export const profileBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+
+    },
+    {
+        label: "Users",
+        icon: "people_alt",
+        route: "/admin/users"
+    },
+    {
+        label: "User Profile",
+        icon: "person",
+    },
+]

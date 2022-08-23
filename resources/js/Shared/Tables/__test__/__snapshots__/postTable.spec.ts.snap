@@ -21,7 +21,7 @@ exports[`PostTable component > checks the data from parent component is defined 
       />
       <label
         class="q-field row no-wrap items-start q-field--standard q-input q-field--labeled q-field--dense"
-        for="f_6b8253ab-b2bf-482d-a1c1-2c96fc56e5d4"
+        for="f_7a37c89c-a10f-46fc-980f-d4c905d3afd7"
       >
         <!---->
         <div
@@ -37,7 +37,7 @@ exports[`PostTable component > checks the data from parent component is defined 
               <input
                 class="q-field__native q-placeholder"
                 data-test="search-input"
-                id="f_6b8253ab-b2bf-482d-a1c1-2c96fc56e5d4"
+                id="f_7a37c89c-a10f-46fc-980f-d4c905d3afd7"
                 tabindex="0"
                 type="text"
               />
@@ -393,7 +393,7 @@ exports[`PostTable component > checks the data from parent component is defined 
         </span>
         <label
           class="q-field row no-wrap items-start q-field--borderless q-select q-field--auto-height q-select--without-input q-select--without-chips q-select--single q-field--float q-field--dense q-table__select inline q-table__bottom-item"
-          for="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400"
+          for="f_79e90a9e-001f-496c-b3c2-519192bbab03"
         >
           <!---->
           <div
@@ -414,11 +414,11 @@ exports[`PostTable component > checks the data from parent component is defined 
                   </span>
                   <input
                     aria-autocomplete="none"
-                    aria-controls="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400_lb"
+                    aria-controls="f_79e90a9e-001f-496c-b3c2-519192bbab03_lb"
                     aria-expanded="false"
-                    aria-owns="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400_lb"
+                    aria-owns="f_79e90a9e-001f-496c-b3c2-519192bbab03_lb"
                     class="q-select__focus-target"
-                    id="f_7290fa0d-97a8-4a3b-98ba-58c0a03c5400"
+                    id="f_79e90a9e-001f-496c-b3c2-519192bbab03"
                     readonly=""
                     role="combobox"
                     tabindex="0"

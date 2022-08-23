@@ -28,7 +28,7 @@ class TagData extends Data
     public static function rules(Request $request): array
     {
         return [
-            'title' => ['required', 'string', Rule::unique('tags')->ignore($request->id)],
+            'title' => ['sometimes', 'required', 'string', Rule::unique('tags')->ignore($request->id)],
             'meta_title' => ['nullable', 'sometimes', 'string'],
             'content' => ['nullable', 'sometimes', 'string']
         ];

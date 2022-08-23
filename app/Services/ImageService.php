@@ -19,13 +19,17 @@ class ImageService
     private string $filename;
     private Collection $filenames;
     private Collection $thumbFilenames;
+    private Collection $avatarFilenames;
     public string $urlLoRes;
     public string $urlHiRes;
     public string $filenamesDB;
     public string $thumbFilenamesDB;
+    public string $avatarFilenamesDB;
 
     public function __construct(
     ) {  }
+
+    // public static function
 
     public function generateNames(UploadedFile|File $file)
     {
@@ -35,6 +39,14 @@ class ImageService
         $this->filename = pathinfo($this->filenameWithExtension)['filename'];
         $this->filenames = collect([]);
         $this->thumbFilenames = collect([]);
+        $this->avatarFilenames = collect([]);
+    }
+
+    public function deleteAvatarImage(string $pathToImage):bool
+    {
+        $clippedPath = substr($pathToImage, strpos($pathToImage, 'uploads'));
+
+        return Storage::disk('public')->delete($clippedPath);
     }
 
     public function deleteHeroImages(string $pathToImages):bool
@@ -93,6 +105,25 @@ class ImageService
         $this->filenames->push($this->urlHiRes, $this->urlLoRes);
         $this->filenamesDB = $this->filenames->implode(',');
         $this->thumbFilenamesDB = $this->thumbFilenames->implode(',');
+
+        return $this;
+    }
+
+    public function storeAvatarImage(array $dimensions): self
+    {
+        $dims = collect($dimensions);
+        $dims->each(function($item) {
+            $image = Image::make($this->file)->resize($item[0], $item[1], function ($constraint) {
+                $constraint->aspectRatio();
+            });
+
+            Storage::put("uploads/avatar/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}", $image->stream());
+
+            $url = Storage::url("uploads/avatar/{$item[0]}-{$item[1]}-{$this->filename}.{$this->file->getClientOriginalExtension()}");
+            $this->avatarFilenames->push($url);
+        });
+
+        $this->avatarFilenamesDB = $this->avatarFilenames->implode(',');
 
         return $this;
     }

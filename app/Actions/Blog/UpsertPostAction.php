@@ -31,7 +31,7 @@ class UpsertPostAction
             $data->hero_image = Post::getEntityById($data->id)->hero_image;
         }
 
-        $post = Post::updateOrCreate(['id' => $data->id], $data->except('tags', 'categories', 'user')->all());
+        $post = Post::updateOrCreate(['id' => $data->id], $data->except('comments_count', 'tags', 'categories', 'user')->all());
 
         if ($files->has('images'))  {
             $imageService->deleteGallery($post);

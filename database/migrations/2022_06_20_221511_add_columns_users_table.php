@@ -24,9 +24,9 @@ return new class extends Migration
             $table->text('intro')->nullable();
             $table->text('profile')->nullable();
             $table->string('avatar')->nullable();
-            $table->char('status', 100)->default(User::PENDING);
+            $table->char('status', 100)->nullable();
 
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 
@@ -38,7 +38,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+            // $table->dropSoftDeletes();
         });
     }
 };

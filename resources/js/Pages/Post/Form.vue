@@ -5,7 +5,7 @@ import Breadcrumbs from '@/Shared/Breadcrumbs.vue'
 import { postCreateBreadcrumbs, postEditBreadcrumbs } from '@/breadcrumbsData.js'
 import { ref } from 'vue'
 import { tagData, categoryData, breadcrumbsData, PostData } from '@/Interfaces/PaginatedData'
-import PostCreateTable from '@/Shared/Tables/PostCreateTable.vue'
+import PostForm from '@/Shared/Forms/PostForm.vue'
 
 interface Props {
     model: {
@@ -26,5 +26,5 @@ const title = props.model.post ? 'Edit' : 'Create'
 <template>
     <Head :title="`Blog Post - ${ title }`" />
     <Breadcrumbs :data="breadcrumbs" />
-    <PostCreateTable :data="props.model" />
+    <PostForm :data="props.model" />
 </template>
