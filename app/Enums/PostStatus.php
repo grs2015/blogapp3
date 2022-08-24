@@ -12,30 +12,40 @@ enum PostStatus: string
     public function canToggleToPending(): bool
     {
         return match($this) {
-            self::Published => 'false',
-            self::Draft => 'true',
-            self::Pending => 'false',
-            self::Unpublished => 'false'
+            self::Published => false,
+            self::Draft => true,
+            self::Pending => false,
+            self::Unpublished => false
         };
     }
 
     public function canToggleToPublished(): bool
     {
         return match($this) {
-            self::Published => 'false',
-            self::Draft => 'false',
-            self::Pending => 'true',
-            self::Unpublished => 'true'
+            self::Published => false,
+            self::Draft => false,
+            self::Pending => true,
+            self::Unpublished => true
         };
     }
 
     public function canToggleToUnpublished(): bool
     {
         return match($this) {
-            self::Published => 'true',
-            self::Draft => 'false',
-            self::Pending => 'false',
-            self::Unpublished => 'false'
+            self::Published => true,
+            self::Draft => false,
+            self::Pending => false,
+            self::Unpublished => false
+        };
+    }
+
+    public function canBeDeleted(): bool
+    {
+        return match($this) {
+            self::Published => false,
+            self::Draft => true,
+            self::Pending => true,
+            self::Unpublished => false
         };
     }
 }
