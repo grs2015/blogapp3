@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -17,7 +18,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+        if ($user->can('view all users')) {
             return true;
         }
     }
@@ -31,11 +32,8 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        if ($model->hasRole('super-admin')) {
-            return $user->hasRole('super-admin') === $model->hasRole('super-admin');
-        }
-
-        if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+        if ($user->can('view any user') && !$model->hasRole('super-admin')) {
+            if ($model->hasRole(['admin']) && $user->id !== $model->id) { return false; }
             return true;
         }
     }
@@ -60,7 +58,10 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        //
+        if ($user->can('update any user') && !$model->hasRole(['super-admin'])) {
+            if ($model->hasRole(['admin']) && $user->id !== $model->id) { return false; }
+            else { return true; }
+        }
     }
 
     /**
@@ -72,11 +73,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        if ($model->hasRole('super-admin')) {
-            return false;
-        }
-
-        if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+        if ($user->can('delete any user') && !$model->hasRole(['super-admin', 'admin'])) {
             return true;
         }
     }

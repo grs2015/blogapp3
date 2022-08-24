@@ -4,6 +4,7 @@ namespace App\Actions\Blog;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Exceptions\CannotUpdateUser;
 use Illuminate\Support\Facades\Hash;
 use App\DataTransferObjects\UserData;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -21,13 +22,16 @@ class UpsertUserAction
             return $user;
         });
 
-        if ($data->email !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            self::updateVerifiedUser($user, $data);
+        if ($user->hasRole('admin') || $user->status->canBeUpdated()) {
+            if ($data->email !== $user->email && $user instanceof MustVerifyEmail) {
+                self::updateVerifiedUser($user, $data);
+            } else {
+                $user->forceFill($data->only('first_name', 'last_name', 'email', 'mobile')->all())->save();
+            }
+            return $user;
         } else {
-            $user->forceFill($data->only('first_name', 'last_name', 'email', 'mobile')->all())->save();
+            throw CannotUpdateUser::because("User doesn't have Pending status");
         }
-        return $user;
     }
 
     protected static function updateVerifiedUser($user, UserData $data)
