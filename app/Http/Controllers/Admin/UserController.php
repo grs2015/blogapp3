@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Blog\DeleteUserAction;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Enums\UserStatus;
@@ -13,12 +12,14 @@ use App\Events\UserRoleUpdated;
 use App\Events\UserStatusUpdated;
 use App\Http\Requests\TrashRequest;
 use App\Exceptions\CannotDeleteUser;
+use App\Exceptions\CannotUpdateUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\DataTransferObjects\UserData;
 use App\ViewModels\GetUsersViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
+use App\Actions\Blog\DeleteUserAction;
 use App\Actions\Blog\UpsertUserAction;
 use App\ViewModels\UpsertUserViewModel;
 use App\Http\Requests\UpdateUserRequest;
@@ -30,14 +31,10 @@ class UserController extends Controller
 {
     use PasswordValidationRules;
 
-    public function __construct(
-        private UserRepositoryInterface $userRepository
-    ) {
-        // $this->authorizeResource(User::class, 'user');
-    }
-
     public function index(Request $request, UserFilter $filters)
     {
+        $this->authorize('viewAny', User::class);
+
         return Inertia::render('User/Index', [
             'model' => new GetUsersViewModel($request, $filters)
         ]);
@@ -50,6 +47,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create');
+
         return Inertia::render('User/SimpleForm', [
             'model' => new UpsertUserViewModel()
         ]);
@@ -63,6 +62,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
+
+        if ($user->hasAnyRole('author', 'member') && !$user->status->canBeUpdated()) {
+            throw CannotUpdateUser::because("User doesn't have Pending status");
+        }
+
         $view = $user->status === UserStatus::Pending || $user->hasRole('admin') ? 'User/SimpleForm' : 'User/Form';
 
         return Inertia::render($view, [
@@ -78,6 +83,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         return Inertia::render('User/Show', [
             'model' => new GetSingleUserViewModel($user)
         ]);
@@ -85,6 +92,8 @@ class UserController extends Controller
 
     public function store(UserData $data, Request $request)
     {
+        $this->authorize('create');
+
         $request->validate([
             'password' => $this->passwordRules()
         ]);
@@ -96,6 +105,8 @@ class UserController extends Controller
 
     public function update(UserData $data, Request $request)
     {
+        $this->authorize('update', User::getEntityById($data->id));
+
         UpsertUserAction::execute($data, $request);
 
         return redirect()->action([UserController::class, 'edit'], ['user' => $data->id]);
@@ -109,6 +120,8 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('delete', $user);
+
         DeleteUserAction::execute($user);
 
         return redirect()->action([UserController::class, 'index']);

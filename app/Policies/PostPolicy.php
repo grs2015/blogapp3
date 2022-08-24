@@ -18,7 +18,9 @@ class PostPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasAnyRole(['author', 'admin']);
+        if ($user->can('view all posts')) {
+            return true;
+        }
     }
 
     /**
@@ -30,7 +32,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        return $user->hasRole('admin') || ($user->hasRole('author') && $user->id === $post->author_id);
+
     }
 
     /**
@@ -41,7 +43,9 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        return $user->hasAnyRole(['author', 'admin']);
+        if ($user->can('create posts')) {
+            return true;
+        }
     }
 
     /**
@@ -53,7 +57,13 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->hasRole('admin') || ($user->hasRole('author') && $user->id === $post->author_id);
+        if ($user->can('update any post')) {
+            return true;
+        }
+
+        if ($user->can('update own post')) {
+            return $user->id == $post->author_id;
+        }
     }
 
     /**
@@ -65,7 +75,13 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->hasRole('admin') || ($user->hasRole('author') && $user->id === $post->author_id);
+        if ($user->can('delete any post')) {
+            return true;
+        }
+
+        if ($user->can('delete own post')) {
+            return $user->id == $post->author_id;
+        }
     }
 
     /**

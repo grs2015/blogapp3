@@ -23,6 +23,10 @@ class GetUsersViewModel extends ViewModel
             $items = $items->reject(fn($user) => $user->roles === 'super-admin');
         }
 
+        if (Auth::user()->hasRole('admin')) {
+            $items = $items->reject(fn($user) => $user->roles === 'admin' && $user->id !== Auth::user()->id);
+        }
+
         $page = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 15;
 

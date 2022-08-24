@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -56,8 +57,16 @@ class HandleInertiaRequests extends Middleware
             'flash' => function () use ($request) {
                 return [
                     'register' => $request->session()->get('register'),
+                    'status' => $request->session()->get('status')
                 ];
-              },
+            },
+            'can' => $request->user() ? [
+                'create_post' => Auth::user()->can('posts.create'),
+                'change_status_to_pending' => Auth::user()->can('change post status to pending'),
+                'change_status_to_published' => Auth::user()->can('change post status to published'),
+                'change_status_to_unpublished' => Auth::user()->can('change post status to unpublished'),
+                'create_user' => Auth::user()->can('users.create')
+            ] : null,
             // 'sorting' => function() use ($request) {
             //     return [
             //         'column' => $request->query('column'),

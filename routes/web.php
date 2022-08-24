@@ -15,8 +15,7 @@ use App\Http\Controllers\Trash\UserTrashController;
 
 use App\Http\Controllers\Admin\PostCommentController;
 use App\Http\Controllers\Member\PostRatingController;
-
-
+use App\Http\Middleware\EnsureUserIsEnabled;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,40 +66,44 @@ Route::middleware('auth')->group(function() {
                 // Admin routes
                 Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
 
-                Route::name('avatar.')->group(function() {
-                    Route::put('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'update'])->name('update');
-                    Route::post('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'delete'])->name('delete');
+                Route::middleware(EnsureUserIsEnabled::class)->group(function() {
+                    Route::name('avatar.')->group(function() {
+                        Route::put('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'update'])->name('update');
+                        Route::post('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'delete'])->name('delete');
+                    });
+
+
+                    Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
+                    Route::post('/tagmassdelete', App\Http\Controllers\Admin\TagDeleteController::class)->name('tagdelete');
+
+                    Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+                    Route::post('/catmassdelete', [App\Http\Controllers\Admin\CategoryDeleteController::class, 'mass_delete'])->name('catdelete');
+
+                    Route::resource('baseinfo', App\Http\Controllers\Admin\BaseinfoController::class);
+                    Route::resource('posts.postmetas', App\Http\Controllers\Admin\PostPostmetaController::class);
+                    Route::resource('posts.comments', App\Http\Controllers\Admin\PostCommentController::class);
+
+
+                    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+                    Route::name('users.')->group(function() {
+                        Route::post('/users/delete', [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('forcedelete');
+                        Route::post('/users/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('restore');
+                        Route::post('/users/status', App\Http\Controllers\Admin\StatusController::class)->name('status');
+                    });
+
+
+                    Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
+
+                    Route::post('/hero_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_heroimage'])->name('hero_image.delete');
+                    Route::post('/gallery_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_galleryimage'])->name('gallery_image.delete');
+
+                    Route::name('posts.')->group(function() {
+                        Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
+                        Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
+                        Route::post('/posts/status', App\Http\Controllers\Admin\PostStatusController::class)->name('status');
+                        Route::post('/posts/favorite', App\Http\Controllers\Admin\PostFavoriteController::class)->name('favorite');
+                    });
                 });
-
-                Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
-                Route::post('/tagmassdelete', App\Http\Controllers\Admin\TagDeleteController::class)->name('tagdelete');
-
-                Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
-                Route::post('/catmassdelete', [App\Http\Controllers\Admin\CategoryDeleteController::class, 'mass_delete'])->name('catdelete');
-
-                Route::resource('baseinfo', App\Http\Controllers\Admin\BaseinfoController::class);
-                Route::resource('posts.postmetas', App\Http\Controllers\Admin\PostPostmetaController::class);
-                Route::resource('posts.comments', App\Http\Controllers\Admin\PostCommentController::class);
-
-                Route::resource('users', App\Http\Controllers\Admin\UserController::class);
-                Route::name('users.')->group(function() {
-                    Route::post('/users/delete', [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('forcedelete');
-                    Route::post('/users/restore', [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('restore');
-                    Route::post('/users/status', App\Http\Controllers\Admin\StatusController::class)->name('status');
-                });
-
-                Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
-
-                Route::post('/hero_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_heroimage'])->name('hero_image.delete');
-                Route::post('/gallery_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_galleryimage'])->name('gallery_image.delete');
-
-                Route::name('posts.')->group(function() {
-                    Route::post('/posts/delete', [App\Http\Controllers\Admin\PostController::class, 'delete'])->name('forcedelete');
-                    Route::post('/posts/restore', [App\Http\Controllers\Admin\PostController::class, 'restore'])->name('restore');
-                    Route::post('/posts/status', App\Http\Controllers\Admin\PostStatusController::class)->name('status');
-                    Route::post('/posts/favorite', App\Http\Controllers\Admin\PostFavoriteController::class)->name('favorite');
-                });
-
             });
         // });
     });

@@ -6,7 +6,7 @@ import { Inertia, PageProps } from '@inertiajs/inertia'
 import { PostData, LinkData, tablePagination } from '@/Interfaces/PaginatedData';
 import { useQuasar } from 'quasar'
 import { format, formatDistanceToNow, compareDesc } from 'date-fns'
-// import { usePage } from '@inertiajs/inertia-vue3';
+import { usePage } from '@inertiajs/inertia-vue3';
 
 interface Paginated {
     paginatedData: {
@@ -170,7 +170,7 @@ const editPost = (row: PostData) => {
     Inertia.get(`/admin/posts/${postSlug}/edit`)
 }
 
-const deletePost = (row: Object) => {
+const deletePost = (row: PostData) => {
     let postSlug = row['slug']
     loading.value = true
     Inertia.delete(`/admin/posts/${postSlug}`, {
@@ -380,7 +380,7 @@ const favoritesChanged = async (id) => {
                 <q-btn class="q-ml-md" color="primary" outline :disable="loading" @click="reset" data-test="refresh-button"
                     :loading="loadingResetButton" icon="restart_alt" />
                 <q-separator vertical spaced inset />
-                <q-btn color="green" unelevated @click="addPost" data-test="add-button">
+                <q-btn color="green" unelevated @click="addPost" data-test="add-button" :disable="!usePage().props.value.can.create_post">
                     <q-icon left name="post_add" />
                     <div>{{ $t('ADD POST') }}</div>
                 </q-btn>

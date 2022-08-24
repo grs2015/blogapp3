@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\CannotCompleteAction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,7 @@ class StatusController extends Controller
     public function __invoke(StatusRequest $request)
     {
         $user = User::getEntityById($request->id);
+
         $request->status === 'enabled' ? $user->markAsEnabled() : $user->markAsDisabled();
 
         return redirect()->action([UserController::class, 'index'], ['page' => $request->page, 'per_page' => $request->per_page]);

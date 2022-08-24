@@ -6,6 +6,7 @@ import { useQuasar } from 'quasar'
 import { ref, computed, reactive, nextTick } from 'vue'
 import { trans } from 'laravel-vue-i18n';
 import { Inertia, PageProps } from '@inertiajs/inertia'
+import { usePage } from '@inertiajs/inertia-vue3';
 
 interface Props {
     paginatedData: PaginatedUser,
@@ -24,6 +25,9 @@ const loading = ref(false)
 const loadingResetButton = ref(false)
 
 const rowStatuses = reactive({})
+
+const role = ref(usePage().props.value.auth.user.role);
+const status = ref(usePage().props.value.auth.user.status);
 
 props.paginatedData.data.forEach((item, idx) => {
     rowStatuses[`${item.id}`] = ref(`${item.status}`)
@@ -212,7 +216,7 @@ const statusChanged = async (id) => {
             <template v-slot:body-cell-userActions="props">
                 <q-td :props="props" auto-width>
                     <div class="row flex-center q-gutter-x-sm no-wrap">
-                        <template v-if="props.row.status === 'pending' || props.row.roles === 'admin' || props.row.roles === 'super-admin'">
+                        <template v-if="props.row.status === 'pending' || (props.row.roles === 'admin' && (props.row.id === usePage().props.value.auth.user.id)) || props.row.roles === 'super-admin' || usePage().props.value.auth.user.role === 'super-admin' && props.row.roles === 'admin'">
                             <q-btn outline color="accent" icon="edit" :disable="loading" @click="editUser(props.row)" data-test="edit-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                     {{ $t('Edit user') }}
@@ -226,7 +230,7 @@ const statusChanged = async (id) => {
                                 </q-tooltip>
                             </q-btn>
                         </template>
-                        <template v-if="props.row.status === 'pending' || props.row.roles === 'admin'">
+                        <template v-if="props.row.status === 'pending' || usePage().props.value.auth.user.role === 'super-admin' && props.row.roles === 'admin'">
                             <q-btn outline color="red" icon="delete" :disable="loading" @click="deleteUser(props.row)" data-test="delete-button">
                                 <q-tooltip :delay="1000" anchor="bottom middle" self="center middle">
                                     {{ $t('Delete user') }}
@@ -305,7 +309,7 @@ const statusChanged = async (id) => {
                             true-value="enabled"
                             @update:model-value="statusChanged(props.row.id)"
                             keep-color
-                            :disable="!!(props.row.roles === 'super-admin')"
+                            :disable="!!(props.row.roles === 'super-admin' && role === 'super-admin') || !!(props.row.roles === 'admin' && role === 'admin')"
                             v-model="rowStatuses[`${props.row.id}`]"
                         />
                     </template>
@@ -328,7 +332,7 @@ const statusChanged = async (id) => {
                 <q-btn class="q-ml-md" color="primary" outline :disable="loading" @click="reset" data-test="refresh-button"
                     :loading="loadingResetButton" icon="restart_alt" />
                 <q-separator vertical spaced inset />
-                <q-btn color="green" unelevated @click="addAdminUser" data-test="add-button">
+                <q-btn color="green" unelevated @click="addAdminUser" data-test="add-button" :disable="!usePage().props.value.can.create_user">
                     <q-icon left name="post_add" />
                     <div>{{ $t('Add admin user') }}</div>
                 </q-btn>

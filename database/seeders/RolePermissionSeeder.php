@@ -25,13 +25,24 @@ class RolePermissionSeeder extends Seeder
         $memberRole = Role::create(['name' => 'member']);
         $sadminRole = Role::create(['name' => 'super-admin']);
 
-        Permission::create(['name' => Permissions::CAN_PUBLISH_BLOGPOST]);
-        Permission::create(['name' => Permissions::CAN_UNPUBLISH_BLOGPOST]);
-        Permission::create(['name' => Permissions::CAN_PENDING_BLOGPOST]);
-        Permission::create(['name' => Permissions::CAN_REJECT_BLOGPOST]);
+        Permission::create(['name' => 'change post status to pending']);
+        Permission::create(['name' => 'change post status to published']);
+        Permission::create(['name' => 'change post status to unpublished']);
 
-        Permission::create(['name' => Permissions::CAN_SET_FAVORITE_BLOGPOST]);
-        Permission::create(['name' => Permissions::CAN_UNSET_FAVORITE_BLOGPOST]);
+        Permission::create(['name' => 'change favorite']);
+
+        Permission::create(['name' => 'view all posts']);
+        Permission::create(['name' => 'create posts']);
+        Permission::create(['name' => 'delete any post']);
+        Permission::create(['name' => 'delete own post']);
+        Permission::create(['name' => 'update any post']);
+        Permission::create(['name' => 'update own post']);
+
+        Permission::create(['name' => 'view all users']);
+        Permission::create(['name' => 'create users']);
+        Permission::create(['name' => 'view any user']);
+        Permission::create(['name' => 'update any user']);
+        Permission::create(['name' => 'delete any user']);
 
         Permission::create(['name' => Permissions::CAN_PUBLISH_COMMENT]);
         Permission::create(['name' => Permissions::CAN_UNPUBLISH_COMMENT]);
@@ -46,20 +57,24 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => Permissions::CAN_PENDING_USER]);
 
         $adminRole->givePermissionTo([
-            Permissions::CAN_PUBLISH_BLOGPOST,
-            Permissions::CAN_UNPUBLISH_BLOGPOST,
-            Permissions::CAN_PENDING_BLOGPOST,
-            Permissions::CAN_REJECT_BLOGPOST,
-            Permissions::CAN_SET_FAVORITE_BLOGPOST,
-            Permissions::CAN_UNSET_FAVORITE_BLOGPOST,
-            Permissions::CAN_UNPUBLISH_COMMENT,
-            Permissions::CAN_ALLOW_USER,
-            Permissions::CAN_REJECT_USER,
-            Permissions::CAN_PENDING_USER
+            'change post status to pending',
+            'change post status to published',
+            'change post status to unpublished',
+            'change favorite',
+            'view all posts',
+            'delete any post',
+            'update any post',
+            'view all users',
+            'view any user',
+            'update any user',
+            'delete any user',
         ]);
 
         $authorRole->givePermissionTo([
-            Permissions::CAN_PENDING_BLOGPOST,
+            'change post status to pending',
+            'create posts',
+            'delete own post',
+            'update own post'
         ]);
 
         $memberRole->givePermissionTo([

@@ -24,7 +24,7 @@ interface authUser {
 }
 
 const props = defineProps<AuthProps>()
-
+const status = ref(usePage().props.value.auth.user.status)
 
 const leftDrawerOpen = ref(false)
 const text = ref('')
@@ -79,7 +79,7 @@ const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.l
                         </q-btn-group>
                         <q-btn color="green" icon="account_circle">
                             <q-menu anchor="bottom right" self="top right" :offset="[0, 10]" auto-close>
-                                <q-item clickable>
+                                <q-item clickable :disable="status === 'disabled'">
                                     <q-item-section @click="userProfile">{{ $t('Account Settings') }}</q-item-section>
                                 </q-item>
                                 <q-item clickable>
@@ -112,7 +112,8 @@ const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.l
                     </q-item-section> -->
                     <q-item-section>
                         <q-item-label class="text-white text-subtitle1">{{ $t('Hi')}}, {{ props.auth.user.full_name }}</q-item-label>
-                        <q-item-label caption class="text-white">{{ $t('Your status: ')}} {{ props.auth.user.role }}</q-item-label>
+                        <q-item-label caption class="text-white">{{ $t('Your role: ')}} {{ props.auth.user.role }}</q-item-label>
+                        <q-item-label caption class="text-white">{{ $t('Your status: ')}} {{ props.auth.user.status }}</q-item-label>
                         <q-item-label caption class="text-white">Email: {{ props.auth.user.email }}</q-item-label>
                     </q-item-section>
                 </q-item>
@@ -122,16 +123,16 @@ const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.l
                 <nav-link :href="route('admin.index')" :active="usePage().component.value === 'Dashboard/Index'" name="code">
                     {{ $t('Dashboard') }}
                 </nav-link>
-                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value.startsWith('Post')" name="code">
+                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value.startsWith('Post')" name="code" :disabled="status === 'disabled'">
                     {{ $t('Posts') }}
                 </nav-link>
-                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value.startsWith('Category')" name="code">
+                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value.startsWith('Category')" name="code" :disabled="status === 'disabled'">
                     {{ $t('Categories') }}
                 </nav-link>
-                <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="code">
+                <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="code" :disabled="status === 'disabled'">
                     {{ $t('Tags') }}
                 </nav-link>
-                <nav-link :href="route('admin.users.index')" :active="usePage().component.value.startsWith('User')" name="code">
+                <nav-link :href="route('admin.users.index')" :active="usePage().component.value.startsWith('User')" name="code" :disabled="status === 'disabled'">
                     {{ $t('Users') }}
                 </nav-link>
             </q-list>

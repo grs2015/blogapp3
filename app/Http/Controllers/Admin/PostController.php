@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\CacheService;
 use App\Services\ImageService;
+use App\Exceptions\CannotBeDeleted;
 use App\DataTransferObjects\TagData;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,7 @@ use App\DataTransferObjects\PostData;
 use App\DataTransferObjects\UserData;
 use App\ViewModels\GetPostsViewModel;
 use Illuminate\Http\RedirectResponse;
+use App\Actions\Blog\DeletePostAction;
 use App\Actions\Blog\UpsertPostAction;
 use App\Http\Requests\PostTrashRequest;
 use App\Http\Requests\StorePostRequest;
@@ -41,6 +43,8 @@ class PostController extends Controller
      */
     public function index(Request $request, CacheService $cacheService, PostFilter $filters)
     {
+        $this->authorize('viewAny', Post::class);
+
         return Inertia::render('Post/Index', [
             'model' => new GetPostsViewModel($cacheService, $request, $filters)
         ]);
@@ -51,8 +55,10 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $this->authorize('create', Post::class);
+
         return Inertia::render('Post/Form', [
             'model' => new UpsertPostViewModel()
         ]);
@@ -66,6 +72,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
+
         return Inertia::render('Post/Form', [
             'model' => new UpsertPostViewModel($post)
         ]);
@@ -92,6 +100,8 @@ class PostController extends Controller
      */
     public function store(PostData $data, Request $request, ImageService $imageService)
     {
+        $this->authorize('create', Post::class);
+
         UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
 
         return redirect()->action([PostController::class, 'index']);
@@ -106,6 +116,8 @@ class PostController extends Controller
      */
     public function update(PostData $data, Request $request, ImageService $imageService)
     {
+        $this->authorize('update', Post::getEntityById($data->id));
+
         UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
 
         return redirect()->action([PostController::class, 'edit'], ['post' => $data->slug]);
@@ -119,7 +131,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        $this->authorize('delete', $post);
+
+        DeletePostAction::execute($post);
 
         return redirect()->action([PostController::class, 'index']);
     }
