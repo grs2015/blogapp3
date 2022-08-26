@@ -26,6 +26,6 @@ class PostStatusController extends Controller
     {
         ChangePostStatusAction::execute($request);
 
-        return redirect()->action([PostController::class, 'index'], ['page' => $request->page, 'per_page' => $request->per_page]);
+        return redirect()->action([PostController::class, 'index'], ['page' => $request->page, 'per_page' => $request->per_page, 'search' => $request->search]);
     }
 }
