@@ -39,6 +39,7 @@ export interface PostData {
     'images'?: Array<File> | null,
     '_method'?: "put" | null,
     comments_count?: number,
+    rating?: number,
 }
 
 export interface SortingData {
@@ -159,5 +160,17 @@ export interface Role {
     id: number,
     name: string,
     pivot: Object
+}
 
+export interface baseinfoData {
+    id: number,
+    title: string,
+    meta_title?: string,
+    content?: string,
+    hero_image?: File | any | any[] | null,
+    address?: string,
+    email?: string,
+    phone?: string,
+    website?: string,
+    _method?: "put" | null,
 }
