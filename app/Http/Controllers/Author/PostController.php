@@ -3,43 +3,46 @@
 namespace App\Http\Controllers\Author;
 
 use App\Models\Post;
+use Inertia\Inertia;
 use App\Events\PostCreated;
 use App\Events\PostDeleted;
 use App\Events\PostUpdated;
+use App\Filters\PostFilter;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\CacheService;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\DataTransferObjects\PostData;
+use App\ViewModels\GetPostsViewModel;
 use Illuminate\Support\Facades\Cache;
+use App\Actions\Blog\DeletePostAction;
+use App\Actions\Blog\UpsertPostAction;
 use App\Http\Requests\StorePostRequest;
+use App\ViewModels\UpsertPostViewModel;
 use App\Http\Requests\UpdatePostRequest;
+use App\ViewModels\GetSinglePostViewModel;
 use App\Interfaces\PostRepositoryInterface;
 
 class PostController extends Controller
 {
     public function __construct(
-        private PostRepositoryInterface $postRepository,
         private ImageService $imageService
-    )
-    {
-        $this->authorizeResource(Post::class, 'post');
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CacheService $cacheService)
+    public function index(Request $request, CacheService $cacheService, PostFilter $filters)
     {
-        // $posts = Cache::remember($cacheService->cacheResponse(), $cacheService->cacheTime(), function() {
-        //     return $this->postRepository->getAllEntries(auth()->user()->id);
-        // });
+        $this->authorize('viewAny', Post::class);
 
-        $posts = Post::where('author_id', auth()->user()->id)->with(['comments', 'postmetas'])->get();
-
-        return view('author.post.index', ['posts' => $posts, 'user' => auth()->user()]);
+        return Inertia::render('Post/Author/Index', [
+            'model' => new GetPostsViewModel($cacheService, $request, $filters)
+        ]);
     }
 
     /**
@@ -47,53 +50,13 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('author.post.create');
-    }
+        $this->authorize('create', Post::class);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePostRequest $request)
-    {
-        $validated = $request->safe()->except(['tags', 'categories', 'hero_image', 'images']);
-        $validated['views'] = 0;
-        $validated['published'] = Post::UNPUBLISHED;
-        $validated['favorite'] = Post::NONFAVORITE;
-        $title = $validated['title'];
-        $summary = $validated['summary'] ?? $validated['title'];
-
-        if ($request->has('hero_image')) {
-
-            $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeThumbHeroImages([[100, 100], [200, 200], [640, 480]])
-                ->storeHeroImages()->generateHeroURL()->filenamesDB;
-        }
-
-        $post = $this->postRepository->createEntry(auth()->user()->id, $validated);
-
-        if ($request->has('images')) {
-
-            $this->imageService->generateGallery($request->allFiles('images'), $post, [[200, 200], [640, 480]]);
-        }
-
-        if ($request->has('tags')) {
-            $tagIDs = $request->input('tags');
-            $post->tags()->sync($tagIDs);
-        }
-
-        if ($request->has('categories')) {
-            $catsIDs = $request->input('categories');
-            $post->categories()->sync($catsIDs);
-        }
-
-        PostCreated::dispatch(auth()->user(), $title, $summary);
-
-        return redirect()->action([PostController::class, 'index']);
+        return Inertia::render('Post/Author/Form', [
+            'model' => new UpsertPostViewModel()
+        ]);
     }
 
     /**
@@ -104,10 +67,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post = Post::where('author_id', $post->author_id)->where('id', $post->id)->firstOrFail();
-        // $post = $this->postRepository->getEntryById($post->author_id, $post->id);
+        $this->authorize('view', $post);
 
-        return view('author.post.show', ['post' => $post, 'user' => $post->user]);
+        return Inertia::render('Post/Author/Show', [
+            'model' => new GetSinglePostViewModel($post)
+        ]);
     }
 
     /**
@@ -118,10 +82,26 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $post = Post::where('author_id', $post->author_id)->where('id', $post->id)->firstOrFail();
-        // $post = $this->postRepository->getEntryById($post->author_id, $post->id);
+        $this->authorize('update', $post);
 
-        return view('author.post.edit', ['post' => $post, 'user' => $post->user]);
+        return Inertia::render('Post/Author/Form', [
+            'model' => new UpsertPostViewModel($post)
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(PostData $data, Request $request, ImageService $imageService)
+    {
+        $this->authorize('create', Post::class);
+
+        UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
+
+        return redirect()->action([PostController::class, 'index']);
     }
 
     /**
@@ -131,48 +111,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(PostData $data, Request $request, ImageService $imageService)
     {
-        // TODO - email notification (for admin if updated by author, and for author if updated by admin)
-        // TODO - add necessary exceptions/test for them
+        $this->authorize('update', Post::getEntityById($data->id));
 
-        $validated = $request->safe()->except(['published', 'views', 'favorite', 'tags', 'categories', 'hero_image', 'images']);
-        $title = $validated['title'];
-        $summary = $validated['summary'] ?? $validated['title'];
+        UpsertPostAction::execute($data, $imageService, collect($request->allFiles()));
 
-        if ($request->has('title')) {
-            $validated['slug'] = Str::slug($validated['title'], '-');
-        }
-
-        if ($request->has('hero_image')) {
-
-            $this->imageService->deleteHeroImages($post->hero_image);
-            $this->imageService->generateNames($request->file('hero_image'));
-            $validated['hero_image'] = $this->imageService->storeThumbHeroImages([[100, 100], [200, 200], [640, 480]])
-                ->storeHeroImages()->generateHeroURL()->filenamesDB;
-        }
-
-        if ($request->has('images')) {
-
-            $this->imageService->deleteGallery($post);
-            $this->imageService->generateGallery($request->allFiles('images'), $post, [[200, 200], [640, 480]]);
-        }
-
-        $this->postRepository->updateEntry(auth()->user()->id, $post->id, $validated);
-
-        if ($request->has('tags')) {
-            $tagIDs = $request->input('tags');
-            $post->tags()->sync($tagIDs);
-        }
-
-        if ($request->has('categories')) {
-            $catsIDs = $request->input('categories');
-            $post->categories()->sync($catsIDs);
-        }
-
-        PostUpdated::dispatch(auth()->user(), $title, $summary);
-
-        return redirect()->action([PostController::class, 'edit'], ['post' => $post->slug]);
+        return redirect()->action([PostController::class, 'edit'], ['post' => $data->slug]);
     }
 
     /**
@@ -183,12 +128,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $title = $post->title;
-        $summary = $post->summary ?? $post->title;
+        $this->authorize('delete', $post);
 
-        $this->postRepository->deleteEntry(auth()->user()->id, $post->id);
-
-        PostDeleted::dispatch(auth()->user(), $title, $summary);
+        DeletePostAction::execute($post);
 
         return redirect()->action([PostController::class, 'index']);
     }

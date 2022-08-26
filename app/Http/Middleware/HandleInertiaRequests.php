@@ -61,12 +61,14 @@ class HandleInertiaRequests extends Middleware
                 ];
             },
             'can' => $request->user() ? [
-                'create_post' => Auth::user()->can('posts.create'),
+                'create_post' => Auth::user()->can('create post'),
                 'change_status_to_pending' => Auth::user()->can('change post status to pending'),
                 'change_status_to_published' => Auth::user()->can('change post status to published'),
                 'change_status_to_unpublished' => Auth::user()->can('change post status to unpublished'),
-                'create_user' => Auth::user()->can('users.create')
+                'create_user' => Auth::user()->can('create user'),
+                'update_settings' => Auth::user()->can('update baseinfo')
             ] : null,
+            'search' => $request->query('search'),
             // 'sorting' => function() use ($request) {
             //     return [
             //         'column' => $request->query('column'),

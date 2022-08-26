@@ -32,29 +32,23 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'change favorite']);
 
         Permission::create(['name' => 'view all posts']);
-        Permission::create(['name' => 'create posts']);
+        Permission::create(['name' => 'view own posts']);
+        Permission::create(['name' => 'create post']);
         Permission::create(['name' => 'delete any post']);
         Permission::create(['name' => 'delete own post']);
         Permission::create(['name' => 'update any post']);
         Permission::create(['name' => 'update own post']);
 
         Permission::create(['name' => 'view all users']);
-        Permission::create(['name' => 'create users']);
+        Permission::create(['name' => 'create user']);
         Permission::create(['name' => 'view any user']);
         Permission::create(['name' => 'update any user']);
         Permission::create(['name' => 'delete any user']);
+        Permission::create(['name' => 'update own user profile']);
 
-        Permission::create(['name' => Permissions::CAN_PUBLISH_COMMENT]);
-        Permission::create(['name' => Permissions::CAN_UNPUBLISH_COMMENT]);
-        Permission::create(['name' => Permissions::CAN_PENDING_COMMENT]);
+        Permission::create(['name' => 'update baseinfo']);
 
-        // Questionable permission because they allow action, but not the state changing
-        Permission::create(['name' => Permissions::CAN_RATE_POST]);
-        Permission::create(['name' => Permissions::CAN_COMMENT_POST]);
 
-        Permission::create(['name' => Permissions::CAN_ALLOW_USER]);
-        Permission::create(['name' => Permissions::CAN_REJECT_USER]);
-        Permission::create(['name' => Permissions::CAN_PENDING_USER]);
 
         $adminRole->givePermissionTo([
             'change post status to pending',
@@ -72,14 +66,16 @@ class RolePermissionSeeder extends Seeder
 
         $authorRole->givePermissionTo([
             'change post status to pending',
-            'create posts',
+            'create post',
             'delete own post',
-            'update own post'
+            'update own post',
+            'view own posts',
+            'update own user profile'
         ]);
 
-        $memberRole->givePermissionTo([
-            Permissions::CAN_RATE_POST,
-            Permissions::CAN_COMMENT_POST
-        ]);
+        // $memberRole->givePermissionTo([
+        //     Permissions::CAN_RATE_POST,
+        //     Permissions::CAN_COMMENT_POST
+        // ]);
     }
 }

@@ -27,10 +27,18 @@ class GetPostsViewModel extends ViewModel
      */
     public function posts(): LengthAwarePaginator
     {
-        $items =  Cache::remember($this->cacheService->cacheResponse(), $this->cacheService->cacheTime(), function()  {
-            return Post::withCount('comments')->with(['user:id,email,first_name,last_name,full_name'])->filter($this->filters)->get();})
-            ->map
-            ->getData();
+
+        if ($this->request->user()->hasRole(['super-admin', 'admin'])) {
+            $items =  Cache::remember($this->cacheService->cacheResponse(), $this->cacheService->cacheTime(), function()  {
+                return Post::withCount('comments')->with(['user:id,email,first_name,last_name,full_name'])->filter($this->filters)->get();})
+                ->map
+                ->getData();
+        } else {
+            $items =  Cache::remember($this->cacheService->cacheResponse(), $this->cacheService->cacheTime(), function()  {
+                return Post::withCount('comments')->whereBelongsTo($this->request->user())->filter($this->filters)->with(['user:id,email,first_name,last_name,full_name'])->get();})
+                ->map
+                ->getData();
+        }
 
         $page = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 15;
