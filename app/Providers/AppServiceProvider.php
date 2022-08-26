@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Baseinfo;
 use App\Services\ImageService;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Controllers\BaseinfoController;
@@ -25,6 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Baseinfo::firstOrCreate(['id' => 1]);
     }
 }

@@ -61,4 +61,15 @@ class Baseinfo extends Model
             get: fn() => "{$this->website} {$this->phone}"
         );
     }
+
+    protected $attributes = [
+        'title' => 'Blog App Title',
+        'content' => 'Blog App Content',
+        'meta_title' => 'Blog meta title',
+        'hero_image' => null,
+        'address' => 'Blog owner address',
+        'phone' => '000-000-000',
+        'email' => 'blog@blog.com',
+        'website' => 'blog.blog',
+    ];
 }

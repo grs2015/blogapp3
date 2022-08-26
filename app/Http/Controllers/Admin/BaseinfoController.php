@@ -20,19 +20,19 @@ class BaseinfoController extends Controller
         private ImageService $imageService
     ) {  }
 
-    public function index(CacheService $cacheService)
-    {
-        return Inertia::render('Baseinfo/Index', [
-            'model' => new GetBaseinfoViewModel($cacheService)
-        ]);
-    }
+    // public function index(CacheService $cacheService)
+    // {
+    //     return Inertia::render('Baseinfo/Index', [
+    //         'model' => new GetBaseinfoViewModel($cacheService)
+    //     ]);
+    // }
 
-    public function create()
-    {
-        return Inertia::render('Baseinfo/Form', [
-            'model' => new UpsertBaseinfoViewModel()
-        ]);
-    }
+    // public function create()
+    // {
+    //     return Inertia::render('Baseinfo/Form', [
+    //         'model' => new UpsertBaseinfoViewModel()
+    //     ]);
+    // }
 
     public function edit(Baseinfo $baseinfo)
     {
@@ -41,35 +41,35 @@ class BaseinfoController extends Controller
         ]);
     }
 
-    public function show(Baseinfo $baseinfo)
-    {
-        return Inertia::render('Baseinfo/Show', [
-            'model' => new UpsertBaseinfoViewModel($baseinfo)
-        ]);
-    }
+    // public function show(Baseinfo $baseinfo)
+    // {
+    //     return Inertia::render('Baseinfo/Show', [
+    //         'model' => new UpsertBaseinfoViewModel($baseinfo)
+    //     ]);
+    // }
 
-    public function store(BaseinfoData $data, Request $request, ImageService $imageService)
-    {
-        UpsertBaseinfoAction::execute($data, $request->file('hero_image'), $imageService);
+    // public function store(BaseinfoData $data, Request $request, ImageService $imageService)
+    // {
+    //     UpsertBaseinfoAction::execute($data, $request->file('hero_image'), $imageService);
 
-        return redirect()->action([BaseinfoController::class, 'index']);
-    }
+    //     return redirect()->action([BaseinfoController::class, 'index']);
+    // }
 
     public function update(BaseinfoData $data, Request $request, ImageService $imageService)
     {
-        UpsertBaseinfoAction::execute($data, $request->file('hero_image'), $imageService);
+        UpsertBaseinfoAction::execute($data, $imageService, collect($request->allFiles()));
 
         return redirect()->action([BaseinfoController::class, 'edit'], ['baseinfo' => $data->id]);
     }
 
-    public function destroy(Baseinfo $baseinfo, ImageService $imageService)
-    {
-        if ($baseinfo->hero_image) {
-            $imageService->deleteHeroImages(Baseinfo::getEntityById($baseinfo->id)->hero_image);
-        }
+    // public function destroy(Baseinfo $baseinfo, ImageService $imageService)
+    // {
+    //     if ($baseinfo->hero_image) {
+    //         $imageService->deleteHeroImages(Baseinfo::getEntityById($baseinfo->id)->hero_image);
+    //     }
 
-        Baseinfo::destroyEntity($baseinfo->id);
+    //     Baseinfo::destroyEntity($baseinfo->id);
 
-        return redirect()->action([BaseinfoController::class, 'index']);
-    }
+    //     return redirect()->action([BaseinfoController::class, 'index']);
+    // }
 }

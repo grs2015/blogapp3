@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 class BaseinfoData extends Data
 {
     public function __construct(
-        public readonly ?int $id,
+        public readonly int $id,
         public readonly string $title,
         public readonly ?string $meta_title,
         public readonly ?string $content,
