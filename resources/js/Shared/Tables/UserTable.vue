@@ -18,9 +18,12 @@ const $q = useQuasar()
 
 const rows = computed(() => {
     loading.value = false
+    props.paginatedData.data.forEach((item, idx) => {
+        rowStatuses[`${item.id}`] = ref(`${item.status}`)
+    })
     return props.paginatedData.data
 })
-const filter = ref('')
+const filter = ref<string>(usePage().props.value.search as string)
 const loading = ref(false)
 const loadingResetButton = ref(false)
 
@@ -166,14 +169,14 @@ const deleteUser = (row: userData) => {
 const onDeleteFail = () => {
     $q.notify({
         type: 'negative',
-        message: "Something went wrong with post deletion"
+        message: "Something went wrong with user deletion"
     })
 }
 
 const onDeleteSuccess = () => {
     $q.notify({
         type: 'positive',
-        message: "The post have been deleted successfully"
+        message: "The user have been deleted successfully"
     })
 }
 
@@ -319,7 +322,7 @@ const statusChanged = async (id) => {
             <template v-slot:top>
                 <div class="q-table__title text-primary">{{ $t('Users') }}</div>
                 <q-space />
-                <q-input clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot data-test="search-input">
+                <q-input clearable clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot data-test="search-input">
                     <template v-slot:append>
                         <q-icon name="search" color="primary" />
                     </template>

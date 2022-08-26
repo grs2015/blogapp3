@@ -102,7 +102,7 @@ const resetForm = () => {
 </script>
 
 <template>
-      <div class="q-mt-md">
+    <div class="q-mt-md">
         <q-form @submit="actionUser">
             <q-card flat bordered>
                 <q-card-section class="text-primary text-h6">
