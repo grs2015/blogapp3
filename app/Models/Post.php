@@ -126,6 +126,7 @@ class Post extends Model
             if (!$post->slug) {
                 $post->slug = Str::slug($post->title, '-');
             }
+            $post->views = 0;
         });
     }
 
@@ -280,7 +281,7 @@ class Post extends Model
 
     public function rating()
     {
-        return $this->ratings->avg('rating');
+        return round($this->ratings->avg('rating'), 1);
     }
 
     #[SearchUsingFullText(['content'])]
@@ -296,12 +297,12 @@ class Post extends Model
         'status' => PostStatus::class,
         'favorite' => FavoriteStatus::class,
         'published_at' => 'immutable_datetime:Y-m-d',
+        'views' => 'integer'
     ];
 
     protected $attributes = [
         'status' => PostStatus::Draft,
-        'favorite' => FavoriteStatus::Nonfavorite,
-        'views' => 0
+        'favorite' => FavoriteStatus::Nonfavorite
     ];
 
     public function newEloquentBuilder($query): PostBuilder

@@ -59,19 +59,15 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                                 <div class="col q-mb-md">
                                                     <div class="text-subtitle2 text-primary text-weight-thin">
                                                         {{ $t('First name') }}</div>
-                                                    <q-input readonly v-model="form.first_name" dense data-test="first_name-input">
-                                                        <template v-slot:prepend>
-                                                            <q-icon name="edit" color="orange" />
-                                                        </template>
+                                                    <q-input disable v-model="form.first_name" dense data-test="first_name-input"
+                                                        input-class="bg-grey-3" filled >
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
                                                     <div class="text-subtitle2 text-primary text-weight-thin">
                                                         {{ $t('Last name') }}</div>
-                                                    <q-input readonly v-model="form.last_name" dense data-test="last_name-input">
-                                                        <template v-slot:prepend>
-                                                            <q-icon name="edit" color="orange" />
-                                                        </template>
+                                                    <q-input disable v-model="form.last_name" dense data-test="last_name-input"
+                                                        input-class="bg-grey-3" filled >
                                                     </q-input>
                                                 </div>
                                             </q-card-section>
@@ -83,19 +79,15 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                                 <div class="col q-mb-md">
                                                     <div class="text-subtitle2 text-primary text-weight-thin">
                                                         {{ $t('Mobile') }}</div>
-                                                    <q-input readonly v-model="form.mobile" type="tel" dense data-test="mobile-input">
-                                                        <template v-slot:prepend>
-                                                            <q-icon name="phone_iphone" color="orange" />
-                                                        </template>
+                                                    <q-input disable v-model="form.mobile" type="tel" dense data-test="mobile-input"
+                                                        input-class="bg-grey-3" filled >
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
                                                     <div class="text-subtitle2 text-primary text-weight-thin">
                                                         {{ $t('Email') }}</div>
-                                                    <q-input readonly v-model="form.email" type="email" dense data-test="email-input">
-                                                        <template v-slot:prepend>
-                                                            <q-icon name="email" color="orange" />
-                                                        </template>
+                                                    <q-input disable v-model="form.email" type="email" dense data-test="email-input"
+                                                        input-class="bg-grey-3" filled >
                                                     </q-input>
                                                 </div>
                                             </q-card-section>
@@ -109,14 +101,14 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                                 <div class="col q-mb-md">
                                                     <div class="text-subtitle2 text-primary text-weight-thin">
                                                         {{ $t('Short introduction info') }}</div>
-                                                    <q-editor readonly :placeholder="$t('Drop some lines...')" v-model="form.intro"
-                                                        min-height="5rem" />
+                                                    <q-editor disable :placeholder="$t('Drop some lines...')" v-model="form.intro"
+                                                        min-height="5rem" content-class="bg-grey-4" />
                                                 </div>
                                                 <div class="col">
                                                     <div class="text-subtitle2 text-primary text-weight-thin">
                                                         {{ $t('Profile description') }}</div>
-                                                    <q-editor readonly min-height="8rem" :placeholder="$t('Drop some lines...')"
-                                                        v-model="form.profile" />
+                                                    <q-editor disable min-height="8rem" :placeholder="$t('Drop some lines...')"
+                                                        v-model="form.profile" content-class="bg-grey-4" />
                                                 </div>
                                             </q-card-section>
                                         </q-card>

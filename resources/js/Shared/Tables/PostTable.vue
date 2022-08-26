@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { ref, computed, reactive, nextTick } from 'vue'
+import { ref, computed, reactive, watch, nextTick } from 'vue'
 import { trans } from 'laravel-vue-i18n';
 import { Inertia, PageProps } from '@inertiajs/inertia'
 import { PostData, LinkData, tablePagination } from '@/Interfaces/PaginatedData';
@@ -41,21 +41,21 @@ interface pageActions extends PageProps
 const props = defineProps<Paginated>()
 const $q = useQuasar()
 
-const rows = computed(() => {
-    loading.value = false
-    return props.paginatedData.data
-})
-const filter = ref('')
-const loading = ref(false)
-const loadingResetButton = ref(false)
-
 const rowStatuses = reactive({})
 const rowFavorites = reactive({})
 
-props.paginatedData.data.forEach((item, idx) => {
-    rowStatuses[`${item.id}`] = ref(`${item.status}`)
-    rowFavorites[`${item.id}`] = ref(`${item.favorite}`)
+const rows = computed(() => {
+    loading.value = false
+    props.paginatedData.data.forEach((item, idx) => {
+        rowStatuses[`${item.id}`] = ref(`${item.status}`)
+        rowFavorites[`${item.id}`] = ref(`${item.favorite}`)
+    })
+    return props.paginatedData.data
 })
+const filter = ref<string>(usePage().props.value.search as string)
+
+const loading = ref(false)
+const loadingResetButton = ref(false)
 
 const pagination = ref<tablePagination>({
     // sortBy: usePage<pageActions>().props.value.sorting.column,
@@ -152,7 +152,8 @@ const onRequest = (props: { pagination : tablePagination, filter: string }) => {
     loading.value = true
     const { page, rowsPerPage, sortBy, descending } = props.pagination
     const filter = props.filter
-    Inertia.get('/admin/posts', { per_page: rowsPerPage, page: page, [sortBy]: descending ? "asc" : "desc", column: sortBy, descending: descending, search: filter })
+    Inertia.get('/admin/posts', { per_page: rowsPerPage, page: page, [sortBy]: descending ? "asc" : "desc", column: sortBy, descending: descending, search: filter }, { replace: true })
+
     pagination.value.page = page
     pagination.value.rowsPerPage = rowsPerPage
     pagination.value.sortBy = sortBy
@@ -199,7 +200,7 @@ const addPost = () => {
 
 const statusChanged = async (id) => {
     await nextTick()
-    Inertia.post('/admin/posts/status', { id: id, status: rowStatuses[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page }, {
+    Inertia.post('/admin/posts/status', { id: id, status: rowStatuses[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page, search: filter.value }, {
         onStart: () => loading.value = true,
         onFinish: () => loading.value = false,
         preserveScroll: true
@@ -207,7 +208,7 @@ const statusChanged = async (id) => {
 }
 const favoritesChanged = async (id) => {
     await nextTick()
-    Inertia.post('/admin/posts/favorite', { id: id, favorite: rowFavorites[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page }, {
+    Inertia.post('/admin/posts/favorite', { id: id, favorite: rowFavorites[id], page: props.paginatedData.current_page, per_page: props.paginatedData.per_page, search: filter.value }, {
         onStart: () => loading.value = true,
         onFinish: () => loading.value = false,
         preserveScroll: true
@@ -367,7 +368,7 @@ const favoritesChanged = async (id) => {
             <template v-slot:top>
                 <div class="q-table__title text-primary">{{ $t('Posts') }}</div>
                 <q-space />
-                <q-input clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot data-test="search-input">
+                <q-input clearable clear-icon="close" dense debounce="300" label-color="primary" v-model="filter" label-slot data-test="search-input">
                     <template v-slot:append>
                         <q-icon name="search" color="primary" />
                     </template>

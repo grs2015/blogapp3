@@ -34,6 +34,15 @@ enum UserStatus: string
             self::Pending => false
         };
     }
+
+    public function canBeLoggedin(): bool
+    {
+        return match($this) {
+            self::Enabled => true,
+            self::Disabled => true,
+            self::Pending => false
+        };
+    }
 }
 
 

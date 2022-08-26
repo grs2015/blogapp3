@@ -34,6 +34,10 @@ class FortifyServiceProvider extends ServiceProvider
                     return redirect('/');
                 };
 
+                if ($request->user()->status->canBeLoggedin() && $request->user()->hasRole('author')) {
+                    return redirect()->route('author.index');
+                }
+
                 return redirect('/admin');
             }
         });

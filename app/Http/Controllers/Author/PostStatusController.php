@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
-use App\Actions\Blog\ChangePostFavoriteAction;
-use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FavoriteRequest;
+use App\Http\Requests\PostStatusRequest;
+use App\Actions\Blog\ChangePostStatusAction;
 
-class PostFavoriteController extends Controller
+class PostStatusController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -16,9 +15,9 @@ class PostFavoriteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(FavoriteRequest $request)
+    public function __invoke(PostStatusRequest $request)
     {
-        ChangePostFavoriteAction::execute($request);
+        ChangePostStatusAction::execute($request);
 
         return redirect()->action([PostController::class, 'index'], ['page' => $request->page, 'per_page' => $request->per_page, 'search' => $request->search]);
     }

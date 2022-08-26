@@ -21,6 +21,10 @@ class PostPolicy
         if ($user->can('view all posts')) {
             return true;
         }
+
+        if ($user->can('view own posts')) {
+            return true;
+        }
     }
 
     /**
@@ -32,7 +36,9 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-
+        if ($user->can('view own posts')) {
+            return $user->id == $post->author_id;
+        }
     }
 
     /**
@@ -43,7 +49,7 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        if ($user->can('create posts')) {
+        if ($user->can('create post')) {
             return true;
         }
     }
@@ -61,7 +67,7 @@ class PostPolicy
             return true;
         }
 
-        if ($user->can('update own post')) {
+        if ($user->can('update own post') && $post->status->canBeUpdated()) {
             return $user->id == $post->author_id;
         }
     }
@@ -75,11 +81,11 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        if ($user->can('delete any post')) {
+        if ($user->can('delete any post') && $post->status->canBeDeleted()) {
             return true;
         }
 
-        if ($user->can('delete own post')) {
+        if ($user->can('delete own post') && $post->status->canBeDeleted()) {
             return $user->id == $post->author_id;
         }
     }

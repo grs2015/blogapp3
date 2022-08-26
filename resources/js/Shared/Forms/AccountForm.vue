@@ -3,11 +3,10 @@
 
 import { trans } from 'laravel-vue-i18n'
 import { Inertia } from '@inertiajs/inertia'
-import { userData } from '@/Interfaces/PaginatedData';
+import { userData, UserRole } from '@/Interfaces/PaginatedData';
 import { useQuasar } from 'quasar';
 import { ref, computed } from 'vue';
-import { useForm, Link } from '@inertiajs/inertia-vue3'
-
+import { useForm, Link, usePage } from '@inertiajs/inertia-vue3'
 
 
 interface Props {
@@ -37,6 +36,9 @@ const expandedPassword = ref(false)
 const expandedAvatar = ref(false)
 // const hasAvatarImage = ref(false)
 // let currentAvatarPath = ref<string>('')
+
+const userRole = usePage().props.value.auth.user.role
+const authUser = ref(userRole === UserRole.SuperAdmin ? 'admin' : userRole === UserRole.Admin ? 'admin' : userRole === UserRole.Author ? 'author' : 'member')
 
 
 const form = useForm<userData>({
@@ -83,12 +85,12 @@ const updatePassword = () => formPwd.put('/user/password', {
         onError: () => onUpdatePasswordFail(),
     })
 
-const updateAvatar = () => formAvatar.post('/admin/avatar', {
+const updateAvatar = () => formAvatar.post(`/${authUser.value}/avatar`, {
         onSuccess: () => onUpdateAvatarSuccess(),
         onError: () => onUpdateAvatarFail()
 })
 
-const removeAvatar = () => Inertia.post('/admin/avatar', { 'id': props.data.user.id }, {
+const removeAvatar = () => Inertia.post(`/${authUser.value}/avatar`, { 'id': props.data.user.id }, {
     onStart: () => {
         imageLoad.value = true,
         deleteBtn.value = true

@@ -41,7 +41,7 @@ class PostData extends Data
         #[WithCast(DateTimeInterfaceCast::class)]
         public readonly ?DateTime $published_at,
         public readonly ?string $content,
-        public ?int $views,
+        public ?int $views = 0,
         public ?string $hero_image,
         // public ?string $images,
         public readonly ?int $time_to_read,
@@ -59,6 +59,7 @@ class PostData extends Data
         public readonly null|Lazy|DataCollection $categories,
         public readonly null|Lazy|UserData $user,
         public readonly ?int $comments_count,
+        public readonly float|int|null $rating
     ) {}
 
     public static function fromModel(Post $post): self
@@ -70,7 +71,8 @@ class PostData extends Data
             'galleries' => Lazy::whenLoaded('galleries', $post, fn() => GalleryData::collection($post->galleries)),
             'tags' => Lazy::whenLoaded('tags', $post, fn() => TagData::collection($post->tags)),
             'categories' => Lazy::whenLoaded('categories', $post, fn() => CategoryData::collection($post->categories)),
-            'user' => Lazy::whenLoaded('user', $post, fn() => UserData::from($post->user))
+            'user' => Lazy::whenLoaded('user', $post, fn() => UserData::from($post->user)),
+            'rating' => $post->rating()
         ]);
     }
 
@@ -98,9 +100,9 @@ class PostData extends Data
             'images' => ['nullable', 'sometimes', 'array'],
             'tag_ids' => ['nullable', 'sometimes', 'array'],
             'cat_ids' => ['required', 'array'],
-            'status' => ['nullable', 'sometimes', Rule::in(['draft', 'pending'])],
-            // 'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
-            'favorite' => ['nullable', 'sometimes', Rule::in(['usual'])],
+            // 'status' => ['nullable', 'sometimes', Rule::in(['draft', 'pending'])],
+            'status' => ['nullable', 'sometimes', new Enum(PostStatus::class)],
+            'favorite' => ['nullable', 'sometimes', new Enum(FavoriteStatus::class)],
             'author_id' => ['required', 'exists:users,id'],
         ];
     }

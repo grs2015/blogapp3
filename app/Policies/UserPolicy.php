@@ -62,6 +62,10 @@ class UserPolicy
             if ($model->hasRole(['admin']) && $user->id !== $model->id) { return false; }
             else { return true; }
         }
+
+        if ($user->can('update own user profile')) {
+            return $user->id === $model->id;
+        }
     }
 
     /**

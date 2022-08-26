@@ -48,4 +48,14 @@ enum PostStatus: string
             self::Unpublished => false
         };
     }
+
+    public function canBeUpdated(): bool
+    {
+        return match($this) {
+            self::Published => false,
+            self::Draft => true,
+            self::Pending => true,
+            self::Unpublished => false
+        };
+    }
 }
