@@ -28,21 +28,25 @@ use App\Http\Middleware\EnsureUserIsEnabled;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Public/Index', [
-        'name' => 'Grigorii'
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Public/Index', [
+//         'name' => 'Grigorii'
+//     ]);
+// });
 
 // Route::get('/', function() {
 //     return Post::search('Similique')->get();
 // });
 
 /* ------------------------------- Public part ------------------------------ */
+Route::get('/', [App\Http\Controllers\Public\PostController::class, 'index'])->name('index');
+Route::get('/posts/{post:slug}', [App\Http\Controllers\Public\PostController::class, 'show'])->name('show');
+Route::redirect('/filters', '/');
+Route::post('/filters',App\Http\Controllers\Public\FilterController::class)->name('filter');
 
 Route::name('posts.')->group(function() {
-    Route::get('/posts', [App\Http\Controllers\Public\PostController::class, 'index'])->name('index');
-    Route::get('/posts/{post:slug}', [App\Http\Controllers\Public\PostController::class, 'show'])->name('show');
+    // Route::get('/posts', [App\Http\Controllers\Public\PostController::class, 'index'])->name('index');
+    // Route::get('/posts/{post:slug}', [App\Http\Controllers\Public\PostController::class, 'show'])->name('show');
 });
 
 Route::name('public.')->group(function() {
@@ -59,7 +63,7 @@ Route::name('public.')->group(function() {
 // Here goes the root with Auth middleware
 
 // Admin part
-Route::middleware('auth')->group(function() {
+Route::middleware(['auth', 'not_pending'])->group(function() {
     Route::prefix('admin')->group(function() {
         Route::middleware('role:super-admin|admin')->group(function() {
             Route::name('admin.')->group(function() {
@@ -104,6 +108,12 @@ Route::middleware('auth')->group(function() {
                         Route::post('/posts/favorite', App\Http\Controllers\Admin\PostFavoriteController::class)->name('favorite');
                     });
 
+                    Route::name('comments.')->group(function() {
+                        Route::post('/comments/status', App\Http\Controllers\Admin\CommentStatusController::class)->name('status');
+                    });
+
+                    Route::resource('comments', App\Http\Controllers\Admin\CommentController::class)->only(['destroy']);
+
                     Route::resource('baseinfos', App\Http\Controllers\Admin\BaseinfoController::class)->only(['edit', 'update']);
                     // Route::get('/baseinfos/{id}/edit', [App\Http\Controllers\Admin\BaseinfoController::class, 'edit']);
                 });
@@ -142,8 +152,9 @@ Route::middleware('auth')->group(function() {
         Route::middleware('role:member|admin|super-admin')->group(function() {
             Route::name('member')->group(function() {
                 // Member routes
-                Route::resource('posts.comments', App\Http\Controllers\Member\PostCommentController::class)->only(['create', 'store']);
+                // Route::resource('posts.comments', App\Http\Controllers\Member\PostCommentController::class)->only(['create', 'store']);
                 Route::post('posts/{post:slug}/rate', [PostRatingController::class, 'store'])->name('rate');
+                Route::post('/comments', App\Http\Controllers\Member\CommentController::class)->name('comment');
                 // Route::post('posts/{post:slug}/comment', [PostCommentController::class, 'store'])->name('comment');
             });
         });
