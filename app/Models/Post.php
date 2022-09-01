@@ -262,16 +262,9 @@ class Post extends Model
             throw new InvalidArgumentException('Ratings must be between 1-5');
         }
 
-        // dump(Rating::all());
-
-        $this
-            ->ratings()
-        	->updateOrCreate([
+        $this->ratings()->updateOrCreate([
                 'author_id' => $user ? $user->id : auth()->id(),
-                // 'post_id' => $this->id
-            ], compact('rating'));
-
-        // $this->ratings()->create(['rating' => $rating]);
+            ], compact('rating'));;
     }
 
     public function ratings()
