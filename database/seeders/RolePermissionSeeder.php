@@ -48,6 +48,11 @@ class RolePermissionSeeder extends Seeder
 
         Permission::create(['name' => 'update baseinfo']);
 
+        Permission::create(['name' => 'view post comments']);
+        Permission::create(['name' => 'change comments status']);
+
+        Permission::create(['name' => 'have credentials shown']);
+
 
 
         $adminRole->givePermissionTo([
@@ -62,6 +67,8 @@ class RolePermissionSeeder extends Seeder
             'view any user',
             'update any user',
             'delete any user',
+            'view post comments',
+            'change comments status'
         ]);
 
         $authorRole->givePermissionTo([
@@ -73,9 +80,8 @@ class RolePermissionSeeder extends Seeder
             'update own user profile'
         ]);
 
-        // $memberRole->givePermissionTo([
-        //     Permissions::CAN_RATE_POST,
-        //     Permissions::CAN_COMMENT_POST
-        // ]);
+        $memberRole->givePermissionTo([
+            'have credentials shown'
+        ]);
     }
 }

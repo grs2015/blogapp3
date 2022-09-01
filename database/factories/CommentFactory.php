@@ -22,6 +22,7 @@ class CommentFactory extends Factory
             'post_id' => Post::factory(),
             'title' => $this->faker->word(),
             'content' => $this->faker->text(),
+            'published_at' => $this->faker->dateTimeBetween('-2 weeks')
         ];
     }
 

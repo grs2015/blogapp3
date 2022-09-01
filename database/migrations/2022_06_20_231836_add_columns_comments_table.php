@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->dateTime('published_at')->nullable();
             $table->char('status', 100)->nullable();
+            $table->string('author')->nullable();
 
             $table->foreignId('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
         });
