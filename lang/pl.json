@@ -166,6 +166,21 @@
     "Hi": "Cześć",
     "Your status: ": "Jesteś: ",
 
-    "Edit Post": "Edytuj post"
+    "Edit Post": "Edytuj post",
+
+    "Settings": "Ustawienia",
+    "The settings data has been updated successfully": "Dane ustawień zostały zaktualizowane pomyślnie",
+    "Blog Settings": "Ustawienia blogu",
+    "Blog title": "Tytuł blogu",
+    "Blog meta title (SEO)": "Meta tytuł blogu (SEO)",
+    "Phone": "Numer telefonu",
+    "Address": "Adres",
+    "Website": "Strona internetowa",
+    "Blog information": "Informacja o blogu",
+    "Pick new blog image": "Wybierz nowy obrazek dla blogu",
+    "Current blog image": "Bieżący obrazek blogu",
+    "No blog image attached at this time": "Obecnie nie wybrago żadnego obrazku",
+
+    "Your role: ": "Twoja rola: "
 }
 

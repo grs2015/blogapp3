@@ -167,5 +167,21 @@
     "Hi": "Hi",
     "Your status: ": "Your status: ",
 
-    "Edit Post": "Edit Post"
+    "Edit Post": "Edit Post",
+
+    "Settings": "Settings",
+    "The settings data has been updated successfully": "The settings data has been updated successfully",
+    "Blog Settings": "Blog Settings",
+    "Blog title": "Blog title",
+    "Blog meta title (SEO)": "Blog meta title (SEO)",
+    "Phone": "Phone",
+    "Address": "Address",
+    "Website": "Website",
+    "Blog information": "Blog information",
+    "Pick new blog image": "Pick new blog image",
+    "Current blog image": "Current blog image",
+    "No blog image attached at this time": "No blog image attached at this time",
+
+    "Your role: ": "Your role: "
+
 }

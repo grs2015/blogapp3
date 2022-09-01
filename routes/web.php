@@ -61,7 +61,7 @@ Route::name('public.')->group(function() {
 // Admin part
 Route::middleware('auth')->group(function() {
     Route::prefix('admin')->group(function() {
-        // Route::middleware('role:super-admin|admin')->group(function() {
+        Route::middleware('role:super-admin|admin')->group(function() {
             Route::name('admin.')->group(function() {
                 // Admin routes
                 Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
@@ -71,7 +71,6 @@ Route::middleware('auth')->group(function() {
                         Route::put('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'update'])->name('update');
                         Route::post('/avatar', [App\Http\Controllers\Admin\AvatarController::class, 'delete'])->name('delete');
                     });
-
 
                     Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
                     Route::post('/tagmassdelete', App\Http\Controllers\Admin\TagDeleteController::class)->name('tagdelete');
@@ -95,6 +94,7 @@ Route::middleware('auth')->group(function() {
                     Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
 
                     Route::post('/hero_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_heroimage'])->name('hero_image.delete');
+                    Route::delete('/blog_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_blogimage'])->name('blog_image.delete');
                     Route::post('/gallery_image', [App\Http\Controllers\Admin\ImageController::class, 'delete_galleryimage'])->name('gallery_image.delete');
 
                     Route::name('posts.')->group(function() {
@@ -103,19 +103,37 @@ Route::middleware('auth')->group(function() {
                         Route::post('/posts/status', App\Http\Controllers\Admin\PostStatusController::class)->name('status');
                         Route::post('/posts/favorite', App\Http\Controllers\Admin\PostFavoriteController::class)->name('favorite');
                     });
+
+                    Route::resource('baseinfos', App\Http\Controllers\Admin\BaseinfoController::class)->only(['edit', 'update']);
+                    // Route::get('/baseinfos/{id}/edit', [App\Http\Controllers\Admin\BaseinfoController::class, 'edit']);
                 });
             });
-        // });
+        });
     });
 
     Route::prefix('author')->group(function() {
         Route::middleware('role:author|admin|super-admin')->group(function() {
             Route::name('author.')->group(function() {
+                Route::get('/', [App\Http\Controllers\Author\DashboardController::class, 'index'])->name('index');
                 // Users routes
                 Route::resource('tags', App\Http\Controllers\Author\TagController::class)->only(['index', 'show']);
                 Route::resource('categories', App\Http\Controllers\Author\CategoryController::class)->only(['index', 'show']);
                 Route::resource('posts.postmetas', App\Http\Controllers\Author\PostPostmetaController::class);
-                Route::resource('posts', App\Http\Controllers\Author\PostController::class)->except(['destroy']);
+                Route::resource('posts', App\Http\Controllers\Author\PostController::class);
+
+                Route::post('/hero_image', [App\Http\Controllers\Author\ImageController::class, 'delete_heroimage'])->name('hero_image.delete');
+                Route::post('/gallery_image', [App\Http\Controllers\Author\ImageController::class, 'delete_galleryimage'])->name('gallery_image.delete');
+
+                Route::name('posts.')->group(function() {
+                    Route::post('/posts/status', App\Http\Controllers\Author\PostStatusController::class)->name('status');
+                });
+
+                Route::resource('users', App\Http\Controllers\Author\UserController::class)->only(['edit', 'update']);
+
+                Route::name('avatar.')->group(function() {
+                    Route::put('/avatar', [App\Http\Controllers\Author\AvatarController::class, 'update'])->name('update');
+                    Route::post('/avatar', [App\Http\Controllers\Author\AvatarController::class, 'delete'])->name('delete');
+                });
             });
         });
     });

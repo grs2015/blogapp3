@@ -1,9 +1,10 @@
+/* ------------------------ Admin section breadcrumbs ----------------------- */
+
 export const postsBreadcrumbs = [
     {
         label: "Dashboard",
         icon: "home",
         route: "/admin"
-
     },
     {
         label: "Posts",
@@ -143,7 +144,6 @@ export const usersBreadcrumbs = [
         label: "Dashboard",
         icon: "home",
         route: "/admin"
-
     },
     {
         label: "Users",
@@ -190,7 +190,6 @@ export const accountBreadcrumbs = [
         label: "Dashboard",
         icon: "home",
         route: "/admin"
-
     },
     {
         label: "User Account",
@@ -203,7 +202,6 @@ export const profileBreadcrumbs = [
         label: "Dashboard",
         icon: "home",
         route: "/admin"
-
     },
     {
         label: "Users",
@@ -215,3 +213,95 @@ export const profileBreadcrumbs = [
         icon: "person",
     },
 ]
+
+export const settingsBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/admin"
+    },
+    {
+        label: "Blog Settings",
+        icon: "settings",
+    },
+];
+
+
+/* ----------------------- Author section breadcrumbs ----------------------- */
+
+export const postsAuthorBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/author"
+    },
+    {
+        label: "Posts",
+        icon: "widgets",
+    },
+];
+
+export const postAuthorViewBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/author"
+    },
+    {
+        label: "Posts",
+        icon: "widgets",
+        route: "/author/posts"
+    },
+    {
+        label: "View",
+        icon: "visibility",
+    }
+];
+
+export const postAuthorCreateBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/author"
+    },
+    {
+        label: "Posts",
+        icon: "widgets",
+        route: "/author/posts"
+    },
+    {
+        label: "Create",
+        icon: "edit",
+    }
+];
+
+export const postAuthorEditBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/author"
+    },
+    {
+        label: "Posts",
+        icon: "widgets",
+        route: "/author/posts"
+    },
+    {
+        label: "Edit",
+        icon: "edit",
+    }
+];
+
+export const accountAuthorBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+        route: "/author"
+    },
+    {
+        label: "User Account",
+        icon: "account_circle",
+    },
+];
+
+

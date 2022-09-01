@@ -8,14 +8,14 @@ use App\Models\Baseinfo;
 class UpsertBaseinfoViewModel extends ViewModel
 {
     public function __construct(
-        public readonly ?Baseinfo $baseinfo = null
+        public readonly Baseinfo $baseinfo
     ) {}
 
-    public function baseinfo(): ?BaseinfoData
+    public function baseinfo(): BaseinfoData
     {
-        if (!$this->baseinfo) {
-            return null;
-        }
+        // if (!$this->baseinfo) {
+        //     return null;
+        // }
 
         return BaseinfoData::from($this->baseinfo);
     }

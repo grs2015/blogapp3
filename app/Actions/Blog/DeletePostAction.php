@@ -9,6 +9,7 @@ class DeletePostAction
 {
     public static function execute(Post $post)
     {
-        $post->status->canBeDeleted() ? $post->delete() : throw CannotBeDeleted::because("Post doesn't have Draft/Pending status");
+        // $post->status->canBeDeleted() ? $post->delete() : throw CannotBeDeleted::because("Post doesn't have Draft/Pending status");
+        $post->delete();
     }
 }
