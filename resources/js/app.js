@@ -7,10 +7,14 @@ import Layout from '@/Shared/Layout.vue'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { Quasar, Notify } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
+import '@quasar/extras/roboto-font/roboto-font.css'
 import 'quasar/src/css/index.sass'
 // import route from 'ziggy-js';
 import { Ziggy } from './ziggy';
 import { ZiggyVue } from 'ziggy';
+
+import '@quasar/extras/animate/fadeIn.css'
+import '@quasar/extras/animate/fadeOut.css'
 
 InertiaProgress.init()
 

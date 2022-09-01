@@ -1,5 +1,12 @@
 /* ------------------------ Admin section breadcrumbs ----------------------- */
 
+export const dashboardBreadcrumbs = [
+    {
+        label: "Dashboard",
+        icon: "home",
+    },
+];
+
 export const postsBreadcrumbs = [
     {
         label: "Dashboard",

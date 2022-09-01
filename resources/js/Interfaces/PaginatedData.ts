@@ -1,6 +1,6 @@
 export interface Paginated {
     'current_page': number;
-    'data': Array<PostData>;
+    'data': Array<PostData | PublicPostData>;
     'first_page_url': string;
     'from': number;
     'last_page': number;
@@ -14,6 +14,16 @@ export interface Paginated {
     'total': number;
 }
 
+export interface PublicPostData {
+    id: number,
+    title: string,
+    summary: string,
+    published_at: string,
+    time_to_read: number,
+    slug: string,
+    views: number,
+    rating: number
+}
 export interface PostData {
     'author_id'?: number | null;
     'content'?: string | null;
@@ -29,7 +39,7 @@ export interface PostData {
     'time_to_read': number;
     'title': string;
     'user'?: UserData | null;
-    'views'?: string | null;
+    'views'?: number | null;
     'galleries'?: Array<GalleryData> | null,
     'postmetas'?: Array<PostmetaData> | null,
     'tag_ids'?: Array<number> | null,
@@ -40,6 +50,16 @@ export interface PostData {
     '_method'?: "put" | null,
     comments_count?: number,
     rating?: number,
+    comments?: Array<CommentData>
+}
+
+export interface CommentData {
+    id?: number,
+    content?: string,
+    post_id?: number,
+    title?: string,
+    status?: CommentStatus,
+    published_at?: string
 }
 
 export interface SortingData {
@@ -92,6 +112,12 @@ export enum Status {
     Draft = 'draft',
     Pending = 'pending',
     Unpublished = 'unpublished',
+}
+
+export enum CommentStatus {
+    Published = 'published',
+    Unpublished = 'unpublished',
+    Pending = 'pending'
 }
 
 export enum UserStatus {

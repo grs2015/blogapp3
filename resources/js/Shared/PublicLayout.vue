@@ -1,10 +1,16 @@
 <script setup lang="ts">
 
 import { Inertia } from '@inertiajs/inertia';
-import { usePage } from '@inertiajs/inertia-vue3';
 import { ref, computed, watch } from 'vue'
-import { useForm } from '@inertiajs/inertia-vue3';
-import { UserStatus } from '@/Interfaces/PaginatedData';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { categoryData, Paginated, tagData, UserStatus } from '@/Interfaces/PaginatedData';
+import { scroll } from 'quasar'
+import PublicFilters from './Filters/Public/PublicFilters.vue';
+import { useQuasar } from 'quasar'
+import { trans } from 'laravel-vue-i18n';
+
+const { getScrollTarget } = scroll
+const { getVerticalScrollPosition, setVerticalScrollPosition } = scroll
 
 const login = () => Inertia.get('/login')
 const logout = () => Inertia.post('/logout')
@@ -13,6 +19,11 @@ const register = () => Inertia.get('/register')
 interface AuthProps {
     auth : {
         user: authUser
+    },
+    model: {
+        posts: Paginated,
+        categories: Array<categoryData>,
+        tags: Array<tagData>
     }
 }
 
@@ -26,14 +37,43 @@ interface authUser {
     role: Array<string>
 }
 
+const leftDrawerOpen = ref(false)
+const rightDrawerOpen = ref(false)
+const $q = useQuasar()
+
+
+const msg = computed(() => usePage().props.value.flash.status)
+    if (msg.value) {
+        $q.notify({
+        type: 'negative',
+        message: trans(msg.value)
+    })
+}
+
 const props = defineProps<AuthProps>()
+const layout = ref(null)
+const btnVisibility = ref(false)
+
+const scrollHandler = (val) => {
+    btnVisibility.value = val.position >= 700 ? true : false
+    }
+
+const toTop = () => {
+    const el = getScrollTarget(layout.value.$el)
+    const duration = 400
+    setVerticalScrollPosition(el, 10, duration)
+}
+
+
 
 </script>
 
 <template>
-    <q-layout view="hHh lpR fFf">
+    <!-- <q-layout view="hHh lpR fFf" @scroll="scrollHandler" ref="layout" class="scroll"> -->
+    <!-- <q-layout view="hHh lpR fFf" @scroll="scrollHandler" ref="layout"> -->
+    <q-layout view="hHh LpR fFf" @scroll="scrollHandler" ref="layout">
 
-        <q-header reveal elevated class="bg-primary text-white" height-hint="98">
+        <q-header reveal elevated class="text-white" height-hint="98" style="opacity: 0.9; background-color: #0000005a; backdrop-filter: blur(10px);">
             <q-toolbar>
                 <q-toolbar-title>
                     <q-avatar>
@@ -42,27 +82,62 @@ const props = defineProps<AuthProps>()
                     Blog Application
                 </q-toolbar-title>
                 <q-space />
-                <div v-if="!props.auth.user">
-                    <q-btn flat @click="login">Sign In</q-btn>
-                    <q-btn flat @click="register">Sign Up</q-btn>
-                </div>
-                <div v-else>
-                    <q-btn flat @click="logout">Logout</q-btn>
+                <div class="row items-center">
+                    <div v-if="props.auth.user && usePage().props.value.can.see_credentials" class="q-mr-md">
+                        Hi, {{ props.auth.user.full_name }}! Role: {{ props.auth.user.role }}. Status: <span class="text-negative">{{ props.auth.user.status }}</span>
+                    </div>
+                    <div v-if="!props.auth.user">
+                        <q-btn flat @click="login">Sign In</q-btn>
+                        <q-btn flat @click="register">Sign Up</q-btn>
+                    </div>
+                    <div v-else>
+                        <q-btn flat @click="logout">Logout</q-btn>
+                    </div>
                 </div>
             </q-toolbar>
         </q-header>
 
+        <q-drawer show-if-above v-model="leftDrawerOpen" side="left" >
+            <div class="full-width">
+                <PublicFilters :data="{cats: props.model.categories, tags: props.model.tags }" />
+            </div>
+
+        </q-drawer>
+
+        <q-drawer show-if-above v-model="rightDrawerOpen" side="right" >
+
+        </q-drawer>
+
         <q-page-container>
-            <slot></slot>
+            <div class="q-px-xl">
+                <slot></slot>
+            </div>
         </q-page-container>
 
-        <q-footer elevated class="bg-grey-8 text-white">
+        <q-page-sticky v-if="btnVisibility" @click="toTop" position="bottom-right" :offset="[20, 20]">
+            <transition
+                appear
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut">
+                <q-btn round color="teal" icon="expand_less" glossy />
+            </transition>
+        </q-page-sticky>
+
+
+        <!-- <q-footer elevated class="bg-grey-8 text-white">
             <q-toolbar>
                 <q-toolbar-title>
                     <div>Title</div>
                 </q-toolbar-title>
             </q-toolbar>
-        </q-footer>
+        </q-footer> -->
 
     </q-layout>
 </template>
+
+<style scoped lang="sass">
+
+.position
+    right: 20%
+    bottom: 20px
+</style>
