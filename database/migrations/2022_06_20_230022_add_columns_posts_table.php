@@ -27,7 +27,7 @@ return new class extends Migration
             $table->dateTime('published_at')->nullable();
             // $table->text('content')->nullable()->fulltext();
             $table->text('content')->nullable();
-            $table->unsignedInteger('views')->nullable();
+            $table->unsignedInteger('views')->nullable()->default(0);
             $table->string('hero_image')->nullable();
             $table->string('images')->nullable();
             $table->unsignedSmallInteger('time_to_read')->nullable();

@@ -23,7 +23,7 @@ class PostSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
 
         $authors = User::factory(6)
-        ->has(Post::factory(3)->hasComments(3)->hasPostmetas(3)->hasTags(1)->hasCategories(1)->hasRatings(3)
+        ->has(Post::factory(3)->hasComments(30)->hasPostmetas(3)->hasTags(1)->hasCategories(1)->hasRatings(3)
         ->state(new Sequence(
             ['status' => PostStatus::Draft],
             ['status' => PostStatus::Pending],
