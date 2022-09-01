@@ -120,25 +120,28 @@ const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.l
             </q-img>
             <q-separator color="green" />
             <q-list>
-                <nav-link :href="route('admin.index')" :active="usePage().component.value.startsWith('Dashboard')" name="code">
+                <nav-link :href="route('admin.index')" :active="usePage().component.value.startsWith('Dashboard')" name="home">
                     {{ $t('Dashboard') }}
                 </nav-link>
-                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value.startsWith('Post')" name="code" :disabled="status === 'disabled'">
+                <nav-link :href="route('admin.posts.index')" :active="usePage().component.value.startsWith('Post')" name="article" :disabled="status === 'disabled'">
                     {{ $t('Posts') }}
                 </nav-link>
-                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value.startsWith('Category')" name="code" :disabled="status === 'disabled'">
+                <nav-link :href="route('admin.categories.index')" :active="usePage().component.value.startsWith('Category')" name="style" :disabled="status === 'disabled'">
                     {{ $t('Categories') }}
                 </nav-link>
-                <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="code" :disabled="status === 'disabled'">
+                <nav-link :href="route('admin.tags.index')" :active="usePage().component.value.startsWith('Tag')" name="sell" :disabled="status === 'disabled'">
                     {{ $t('Tags') }}
                 </nav-link>
-                <nav-link :href="route('admin.users.index')" :active="usePage().component.value.startsWith('User')" name="code" :disabled="status === 'disabled'">
+                <nav-link :href="route('admin.users.index')" :active="usePage().component.value.startsWith('User')" name="people" :disabled="status === 'disabled'">
                     {{ $t('Users') }}
                 </nav-link>
                 <template v-if="usePage().props.value.can.update_settings">
                     <q-separator />
                     <nav-link :href="route('admin.baseinfo.edit', 1)" :active="usePage().component.value.startsWith('Baseinfo')" name="settings" :disabled="status === 'disabled'">
                         {{ $t('Settings') }}
+                    </nav-link>
+                    <nav-link :href="route('admin.baseinfo.edit', 1)" :active="usePage().component.value.startsWith('Baseinfo')" name="restore_from_trash" :disabled=true>
+                        {{ $t('Trashed/Restore') }}
                     </nav-link>
                 </template>
             </q-list>

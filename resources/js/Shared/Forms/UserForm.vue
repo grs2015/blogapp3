@@ -134,7 +134,7 @@ const resetForm = () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('First name') }}</div>
                                                     <q-input v-model="form.first_name" dense data-test="first_name-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -148,7 +148,7 @@ const resetForm = () => {
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Last name') }}</div>
                                                     <q-input v-model="form.last_name" dense data-test="last_name-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -168,7 +168,7 @@ const resetForm = () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Mobile') }}</div>
                                                     <q-input v-model="form.mobile" type="tel" dense data-test="mobile-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -182,7 +182,7 @@ const resetForm = () => {
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Email') }}</div>
                                                     <q-input v-model="form.email" type="email" dense data-test="email-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -202,7 +202,7 @@ const resetForm = () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Password') }}</div>
                                                     <q-input v-model="form.password" dense clearable clear-icon="close"
                                                         :type="isPassword ? 'password' : 'text'" bottom-slots
@@ -222,7 +222,7 @@ const resetForm = () => {
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Password confirmation') }}</div>
                                                     <q-input v-model="form.password_confirmation" dense clearable clear-icon="close"
                                                         :type="isPassword ? 'password' : 'text'" bottom-slots

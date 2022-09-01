@@ -15,7 +15,7 @@ export const postsBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
     },
 ];
 
@@ -27,7 +27,7 @@ export const postCreateBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
         route: "/admin/posts"
     },
     {
@@ -44,7 +44,7 @@ export const postEditBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
         route: "/admin/posts"
     },
     {
@@ -62,7 +62,7 @@ export const catsBreadcrumbs = [
     },
     {
         label: "Categories",
-        icon: "category",
+        icon: "style",
     },
 ];
 
@@ -74,7 +74,7 @@ export const categoryCreateBreadcrumbs = [
     },
     {
         label: "Categories",
-        icon: "category",
+        icon: "style",
         route: "/admin/categories"
     },
     {
@@ -91,7 +91,7 @@ export const categoryEditBreadcrumbs = [
     },
     {
         label: "Categories",
-        icon: "category",
+        icon: "style",
         route: "/admin/categories"
     },
     {
@@ -244,7 +244,7 @@ export const postsAuthorBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
     },
 ];
 
@@ -256,7 +256,7 @@ export const postAuthorViewBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
         route: "/author/posts"
     },
     {
@@ -273,7 +273,7 @@ export const postAuthorCreateBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
         route: "/author/posts"
     },
     {
@@ -290,7 +290,7 @@ export const postAuthorEditBreadcrumbs = [
     },
     {
         label: "Posts",
-        icon: "widgets",
+        icon: "article",
         route: "/author/posts"
     },
     {

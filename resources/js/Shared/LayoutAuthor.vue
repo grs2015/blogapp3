@@ -120,10 +120,10 @@ const symbols = computed(() => props.auth.user.first_name[0] + props.auth.user.l
             </q-img>
             <q-separator color="green" />
             <q-list>
-                <nav-link :href="route('author.index')" :active="usePage().component.value.startsWith('Dashboard')" name="code">
+                <nav-link :href="route('author.index')" :active="usePage().component.value.startsWith('Dashboard')" name="home">
                     {{ $t('Dashboard') }}
                 </nav-link>
-                <nav-link :href="route('author.posts.index')" :active="usePage().component.value.startsWith('Post')" name="code" :disabled="status === 'disabled'">
+                <nav-link :href="route('author.posts.index')" :active="usePage().component.value.startsWith('Post')" name="article" :disabled="status === 'disabled'">
                     {{ $t('Posts') }}
                 </nav-link>
             </q-list>
