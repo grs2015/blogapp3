@@ -12,14 +12,15 @@ use App\DataTransferObjects\CommentData;
 class GetCommentsViewModel extends ViewModel
 {
     public function __construct(
-        public CacheService $cacheService,
         public Post $post
     ) {  }
 
     public function comments(): ?Collection
     {
-        return Cache::remember($this->cacheService->cacheResponse(), $this->cacheService->cacheTime(), function() {
-            return Comment::whereBelongsTo($this->post)->get(); })
-            ->map(fn(Comment $comment) => CommentData::from($comment));
+        if (!$this->post) {
+            return null;
+        }
+
+        return Comment::whereBelongsTo($this->post)->get()->map->getData();
     }
 }

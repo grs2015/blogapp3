@@ -4,6 +4,7 @@ namespace App\ViewModels;
 
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Category;
 use Illuminate\Support\Collection;
 use App\DataTransferObjects\TagData;
@@ -21,7 +22,12 @@ class UpsertPostViewModel extends ViewModel
             return null;
         }
 
-        return PostData::from($this->post->load('galleries', 'tags', 'categories', 'user', 'postmetas'));
+        $postCommentsOrdered = $this->post->load(['comments' => function($query) {
+            // $query->orderBy('published_at', 'desc');
+            $query->latest('published_at');
+        }]);
+
+        return PostData::from($postCommentsOrdered->load('galleries', 'tags', 'categories', 'user', 'postmetas'));
     }
 
     public function tags(): Collection

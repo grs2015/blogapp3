@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\CommentStatus;
 use Illuminate\Support\Str;
+use App\Enums\CommentStatus;
+use Spatie\LaravelData\WithData;
 use App\Models\Builders\CommentBuilder;
 use Illuminate\Database\Eloquent\Model;
+use App\DataTransferObjects\CommentData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,7 +50,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, WithData;
 
     const PUBLISHED = 'published';
     const PENDING = 'pending';
@@ -56,8 +58,11 @@ class Comment extends Model
 
     public $guarded = [];
 
+    protected $dataClass = CommentData::class;
+
     protected $casts = [
-        'status' => CommentStatus::class
+        'status' => CommentStatus::class,
+        'published_at' => 'immutable_datetime:Y-m-d'
     ];
 
     protected $attributes = [

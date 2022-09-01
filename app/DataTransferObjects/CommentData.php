@@ -2,6 +2,7 @@
 
 namespace App\DataTransferObjects;
 
+use DateTime;
 use App\Models\Post;
 use App\Models\Comment;
 use App\Enums\CommentStatus;
@@ -12,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Enum;
 use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 
 class CommentData extends Data
 {
@@ -21,14 +23,18 @@ class CommentData extends Data
         public readonly ?CommentStatus $status = CommentStatus::Pending,
         public readonly string $title,
         public readonly ?string $content,
-        public readonly ?Carbon $published_at,
-        public readonly int $post_id
+        #[WithCast(DateTimeInterfaceCast::class)]
+        public readonly ?DateTime $published_at,
+        public readonly int $post_id,
+        public readonly ?string $slug,
+        public readonly ?string $author
     ) {}
 
     public static function fromRequest(Request $request): self
     {
         return self::from([
             ...$request->all(),
+            'published_at' => now()->toDateString(),
             'status' => $request->status ?? CommentStatus::Pending
         ]);
     }

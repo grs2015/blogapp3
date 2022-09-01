@@ -34,6 +34,7 @@ class CommentBuilder extends BaseBuilder
     public function markAsPublished(): void
     {
         $this->model->status = CommentStatus::Published;
+        // $this->model->published_at = now()->toDateString();
         $this->model->save();
     }
 
