@@ -1,24 +1,26 @@
 <script setup lang="ts">
 
-import { categoryData, Favorite, PostData, Status, tagData, UserRole } from '@/Interfaces/PaginatedData'
-import { reactive, ref, watch, computed } from 'vue'
+import { categoryData, CommentData, Favorite, PostData, Status, tagData, UserRole } from '@/Interfaces/PaginatedData'
+import { reactive, ref, watch, nextTick } from 'vue'
 import { useForm, Link, usePage } from '@inertiajs/inertia-vue3'
 import { useQuasar } from 'quasar'
 import { Inertia } from '@inertiajs/inertia'
 import { trans } from 'laravel-vue-i18n';
+import CommentForm from '@/Shared/Forms/CommentForm.vue'
 
 
 interface Props {
     data: {
         categories: Array<categoryData>,
         tags: Array<tagData>,
-        post?: PostData | null
+        post?: PostData | null,
     },
     readonly?: boolean
 }
 
 const $q = useQuasar()
 const props = defineProps<Props>()
+
 const modeCreate = ref(true) // Create/Edit mode of the component
 
 const imageLoad = ref(false) // Image processing indicator while deleting image
@@ -26,6 +28,7 @@ const deleteBtn = ref(false) // Button disable indicator while processing the ac
 const imageGalleryLoad = reactive({})
 const confirm = ref(false) // Confirmation of resetting form
 const readonly = ref(props.readonly) // Readonly (view) mode
+const processComment = ref(false)
 
 const postTitleRef = ref(null) // Ref for title input
 const currentHeroimagePaths = ref<string>('')
@@ -56,7 +59,8 @@ let form = useForm<PostData>({
     cat_ids: [],
     hero_image: null,
     images: null,
-    author_id: usePage().props.value.auth.user.id
+    author_id: usePage().props.value.auth.user.id,
+    views: 0
 })
 
 if (props.data.post) {
@@ -97,7 +101,8 @@ if (props.data.post) {
     cat_ids: cat_ids,
     hero_image: null,
     images: null,
-    author_id: props.data.post.author_id
+    author_id: props.data.post.author_id,
+    views: props.data.post.views
 })}
 
 const actionPost = () => {
@@ -217,6 +222,24 @@ watch(() => props.data.post, () => {
     currentGalleryImagePaths.value = props.data.post.galleries.map(item => item.thumbs.split(',')[0])
 })
 
+const statusChanged = async ({ id, status }) => {
+    await nextTick()
+    processComment.value = true
+    Inertia.post('/admin/comments/status', { id: id, status: status }, {
+        onFinish: () => processComment.value = false,
+        preserveScroll: true
+    })
+}
+
+const deleteComment = async({ id }) => {
+    await nextTick()
+    processComment.value = true
+    Inertia.delete(`/admin/comments/${id}`, {
+        onFinish: () => processComment.value = false,
+        preserveScroll: true
+    })
+}
+
 </script>
 
 <template>
@@ -239,7 +262,7 @@ watch(() => props.data.post, () => {
                                 <q-card flat bordered>
                                     <q-card-section>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Post Title') }}</div>
                                             <q-input v-model="form.title" dense :disable="readonly" :filled="readonly"
                                                 :rules="[val => !!val || 'Field is required']" ref="postTitleRef"
@@ -250,19 +273,99 @@ watch(() => props.data.post, () => {
                                             </q-input>
                                         </div>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Short description') }}</div>
                                             <q-editor :placeholder="$t('Start creating here...')" v-model="form.summary"
-                                                min-height="5rem" :disable="readonly" :content-class="[ readonly ? 'bg-grey-4': '' ]"/>
+                                                min-height="5rem" :disable="readonly" :content-class="[ readonly ? 'bg-grey-4': '' ]"
+                                                :toolbar="[
+                                                    [
+                                                        {
+                                                            label: $q.lang.editor.align,
+                                                            icon: $q.iconSet.editor.align,
+                                                            fixedLabel: true,
+                                                            list: 'only-icons',
+                                                            options: ['left', 'center', 'right', 'justify']
+                                                        }
+                                                    ],
+                                                    [
+                                                        {
+                                                            label: 'Font',
+                                                            icon: $q.iconSet.editor.bold,
+                                                            fixedLabel: true,
+                                                            list: 'only-icons',
+                                                            options: ['bold', 'italic', 'strike', 'underline']
+                                                        }
+                                                    ],
+                                                    ['token', 'hr', 'link', 'custom_btn'],
+                                                    ['undo', 'redo'],
+                                                    ['removeFormat']
+                                                ]" />
                                         </div>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Post contents') }}</div>
-                                            <q-editor min-height="15rem" :placeholder="$t('Start creating here...')"
-                                                v-model="form.content" :disable="readonly" :content-class="[ readonly ? 'bg-grey-4': '' ]" />
+                                            <q-editor min-height="15rem" max-height="400px" :placeholder="$t('Start creating here...')" :dense="$q.screen.lt.md"
+                                                v-model="form.content" :disable="readonly" :content-class="[ readonly ? 'bg-grey-4': '' ]"
+                                                :toolbar="[
+                                                    [
+                                                        {
+                                                            label: $q.lang.editor.align,
+                                                            icon: $q.iconSet.editor.align,
+                                                            fixedLabel: true,
+                                                            list: 'only-icons',
+                                                            options: ['left', 'center', 'right', 'justify']
+                                                        }
+                                                    ],
+                                                    [
+                                                        {
+                                                            label: 'Font',
+                                                            icon: $q.iconSet.editor.bold,
+                                                            fixedLabel: true,
+                                                            list: 'only-icons',
+                                                            options: ['bold', 'italic', 'strike', 'underline']
+                                                        }
+                                                    ],
+                                                    ['token', 'hr', 'link', 'custom_btn'],
+                                                    ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+                                                    ['undo', 'redo'],
+                                                    [
+                                                        {
+                                                            label: $q.lang.editor.formatting,
+                                                            icon: $q.iconSet.editor.formatting,
+                                                            list: 'no-icons',
+                                                            options: [
+                                                            'p',
+                                                            'h1',
+                                                            'h2',
+                                                            'h3',
+                                                            'h4',
+                                                            'h5',
+                                                            'h6',
+                                                            'code'
+                                                            ]
+                                                        },
+                                                        {
+                                                            label: $q.lang.editor.fontSize,
+                                                            icon: $q.iconSet.editor.fontSize,
+                                                            fixedLabel: true,
+                                                            fixedIcon: true,
+                                                            list: 'no-icons',
+                                                            options: [
+                                                            'size-1',
+                                                            'size-2',
+                                                            'size-3',
+                                                            'size-4',
+                                                            'size-5',
+                                                            'size-6',
+                                                            'size-7'
+                                                            ]
+                                                        },
+                                                        'removeFormat'
+                                                    ]
+                                                ]" />
                                         </div>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin ">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular ">
                                                 {{ $t('Post Meta Description (SEO)') }}</div>
                                             <q-input v-model="form.meta_title" :disable="readonly" dense :filled="readonly" :input-class="[ readonly ? 'bg-grey-3': '' ]">
                                                 <template v-if="!readonly" v-slot:prepend>
@@ -274,7 +377,7 @@ watch(() => props.data.post, () => {
                                             <div class="row q-col-gutter-md">
                                                 <div class="col-7">
                                                     <div
-                                                        class="text-subtitle2 text-primary text-weight-thin" :class="{ 'text-negative': form.errors.cat_ids }">
+                                                        class="text-subtitle2 text-primary text-weight-regular" :class="{ 'text-negative': form.errors.cat_ids }">
                                                         <template v-if="readonly">
                                                             {{ $t('Picked post category(-ies)') }}
                                                         </template>
@@ -294,7 +397,7 @@ watch(() => props.data.post, () => {
                                                 </div>
                                                 <div class="col-5">
                                                     <div
-                                                        class="form_header text-subtitle2 text-primary text-weight-thin">
+                                                        class="form_header text-subtitle2 text-primary text-weight-regular">
                                                         <template v-if="readonly">
                                                             {{ $t('Picked post tag(s)') }}
                                                         </template>
@@ -320,17 +423,17 @@ watch(() => props.data.post, () => {
                             <div class="col-auto">
                                 <q-card flat bordered>
                                     <q-card-section class="column">
-                                        <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                        <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Post publish date') }}</div>
                                         <q-separator spaced />
                                         <q-date color="secondary" :readonly="readonly" mask="YYYY-MM-DD" v-model="form.published_at" minimal flat :options="calendarOptions" />
-                                        <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                        <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Post time to read (mins. approx.)') }}</div>
                                         <q-separator spaced />
                                         <q-slider class="q-yt-sm" :readonly="readonly" v-model="form.time_to_read" :min="0" :max="50" track-size="4px"
                                             :step="1" label color="orange" />
                                         <div class="row q-mt-md justify-between items-center">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Post status:') }}
                                             </div>
                                             <div class="text-right">
@@ -339,7 +442,7 @@ watch(() => props.data.post, () => {
                                         </div>
                                         <q-separator spaced />
                                         <div class="row q-mt-md justify-between items-center">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Favorite post:') }}
                                             </div>
                                             <div class="text-right">
@@ -351,11 +454,15 @@ watch(() => props.data.post, () => {
                             </div>
                         </div>
 
+                        <div v-if="!modeCreate && usePage().props.value.can.view_comments">
+                            <CommentForm :data="props.data.post.comments" @status="statusChanged" @delete="deleteComment" :loading="processComment"/>
+                        </div>
+
                         <div v-if="modeCreate" class="column q-gutter-md">
                             <q-card flat bordered>
                                 <q-card-section>
                                     <div class="column">
-                                        <div class="text-subtitle2 text-primary text-weight-thin">
+                                        <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Pick hero-image for your post') }}</div>
                                         <q-file max-file-size="1024000" v-model="form.hero_image" counter max-files="1"
                                             use-chips accept=".jpg, .png, image/*" @rejected="onRejected">
@@ -368,7 +475,7 @@ watch(() => props.data.post, () => {
                                         </q-file>
                                     </div>
                                     <div class="column q-mt-md">
-                                        <div class="text-subtitle2 text-primary text-weight-thin">
+                                        <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Pick images for your post gallery') }}</div>
                                         <q-file max-total-size="3000000" multiple v-model="form.images" counter
                                             max-files="5" accept=".jpg, .png, image/*" use-chips @rejected="onRejected">
@@ -388,7 +495,7 @@ watch(() => props.data.post, () => {
                                 <q-card-section>
                                     <div class="column">
                                         <template v-if="!readonly">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Pick new hero-image for your post') }}</div>
                                             <q-file max-file-size="1024000" v-model="form.hero_image" counter max-files="1"
                                                 use-chips accept=".jpg, .png, image/*" @rejected="onRejected">
@@ -401,7 +508,7 @@ watch(() => props.data.post, () => {
                                             </q-file>
                                         </template>
                                         <template v-if="currentHeroimagePaths">
-                                            <div class="text-subtitle2 text-primary text-weight-thin"
+                                            <div class="text-subtitle2 text-primary text-weight-regular"
                                                 :class="{ 'q-mt-md': !readonly }" >
                                                 {{ $t('Post current hero-image') }}</div>
                                             <div class="row">
@@ -426,7 +533,7 @@ watch(() => props.data.post, () => {
                                             </div>
                                         </template>
                                         <template v-else>
-                                            <div class="text-subtitle2 text-primary text-weight-thin"
+                                            <div class="text-subtitle2 text-primary text-weight-regular"
                                                 :class="{ 'q-mt-md': !readonly }" >
                                                 {{ $t('No hero-image attached at this time') }}</div>
                                         </template>
@@ -439,7 +546,7 @@ watch(() => props.data.post, () => {
                                 <q-card-section>
                                     <div class="column">
                                         <template v-if="!readonly">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Pick new images for your post gallery') }}</div>
                                             <q-file max-total-size="3000000" multiple v-model="form.images" counter
                                                 max-files="5" accept=".jpg, .png, image/*" use-chips @rejected="onRejected">
@@ -452,7 +559,7 @@ watch(() => props.data.post, () => {
                                             </q-file>
                                         </template>
                                         <template v-if="currentGalleryImagePaths.length != 0">
-                                            <div class="text-subtitle2 text-primary text-weight-thin"
+                                            <div class="text-subtitle2 text-primary text-weight-regular"
                                                 :class="{ 'q-mt-md': !readonly }">
                                                 {{ $t('Post images in your gallery') }}</div>
                                             <div class="row q-col-gutter-md">
@@ -476,7 +583,7 @@ watch(() => props.data.post, () => {
                                             </div>
                                         </template>
                                         <template v-else>
-                                            <div class="text-subtitle2 text-primary text-weight-thin"
+                                            <div class="text-subtitle2 text-primary text-weight-regular"
                                                 :class="{ 'q-mt-md': !readonly }" >
                                                 {{ $t('No image gallery attached at this time') }}</div>
                                         </template>
@@ -532,4 +639,5 @@ watch(() => props.data.post, () => {
             </q-card-actions>
         </q-card>
     </q-dialog>
+
 </template>
