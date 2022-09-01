@@ -25,7 +25,7 @@ const loginUser = () => form.post('/login')
         <q-form @submit.prevent="loginUser" style="width: 30%">
             <q-card flat bordered>
                 <q-card-section class="text-primary text-h6">
-                    Register Form
+                    Sign-in Form
                 </q-card-section>
                 <q-card-section>
                     <div class="column q-col-gutter-y-md">

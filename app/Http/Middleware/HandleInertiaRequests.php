@@ -66,7 +66,10 @@ class HandleInertiaRequests extends Middleware
                 'change_status_to_published' => Auth::user()->can('change post status to published'),
                 'change_status_to_unpublished' => Auth::user()->can('change post status to unpublished'),
                 'create_user' => Auth::user()->can('create user'),
-                'update_settings' => Auth::user()->can('update baseinfo')
+                'update_settings' => Auth::user()->can('update baseinfo'),
+                'view_comments' => Auth::user()->can('view post comments'),
+                'change_comments_status' => Auth::user()->can('change comments status'),
+                'see_credentials' => Auth::user()->can('have credentials shown')
             ] : null,
             'search' => $request->query('search'),
             // 'sorting' => function() use ($request) {

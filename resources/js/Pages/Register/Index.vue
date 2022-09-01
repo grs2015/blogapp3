@@ -14,6 +14,7 @@ import { ref } from 'vue'
 const isPassword = ref(true)
 const form = useForm({
     first_name: null,
+    last_name: null,
     email: null,
     password: null,
     password_confirmation: null,
@@ -34,10 +35,20 @@ const registerUser = () => form.post('/register')
                 <q-card-section>
                     <div class="column q-col-gutter-y-md">
                         <div class="col">
-                            <q-input v-model="form.first_name" dense clearable clear-icon="close" outlined label="Your name"
+                            <q-input v-model="form.first_name" dense clearable clear-icon="close" outlined label="Your first name"
                                 type="text" bottom-slots
                                 :error-message="form.errors.first_name"
                                 :error="!!(form.errors.first_name)">
+                                <template v-slot:prepend>
+                                    <q-icon name="person" color="orange" />
+                                </template>
+                            </q-input>
+                        </div>
+                        <div class="col">
+                            <q-input v-model="form.last_name" dense clearable clear-icon="close" outlined label="Your last name"
+                                type="text" bottom-slots
+                                :error-message="form.errors.last_name"
+                                :error="!!(form.errors.last_name)">
                                 <template v-slot:prepend>
                                     <q-icon name="person" color="orange" />
                                 </template>
