@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\Post;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Comment;
 use App\Models\Category;
 use App\Filters\PostFilter;
 use Illuminate\Support\Str;
@@ -30,6 +31,7 @@ use App\DataTransferObjects\CategoryData;
 use App\ViewModels\GetSinglePostViewModel;
 use App\Actions\Blog\ForceDeletePostAction;
 use App\DataTransferObjects\ForceDeletePostData;
+use App\ViewModels\GetCommentsViewModel;
 
 class PostController extends Controller
 {

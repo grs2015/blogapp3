@@ -29,11 +29,11 @@ use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 class PostData extends Data
 {
     public function __construct(
-        public readonly ?int $id,
+        public readonly ?int $id = null,
         public readonly int $author_id,
         public readonly ?int $parent_id,
         public readonly ?string $title,
-        public readonly ?string $meta_title,
+        public readonly ?string $meta_title = null,
         public readonly ?string $slug,
         public readonly ?string $summary,
         #[WithCast(EnumCast::class)]

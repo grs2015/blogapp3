@@ -32,6 +32,8 @@ class UserData extends Data
         #[WithCast(DateTimeInterfaceCast::class)]
         public readonly ?DateTime $registered_at,
         #[WithCast(DateTimeInterfaceCast::class)]
+        public readonly ?DateTime $created_at,
+        #[WithCast(DateTimeInterfaceCast::class)]
         public readonly ?DateTime $last_login,
         public readonly ?Carbon $email_verified_at,
         public readonly ?string $intro,

@@ -19,13 +19,13 @@ class GetSinglePostViewModel extends ViewModel
         return PostData::from($this->post->load('galleries', 'tags', 'categories', 'user', 'postmetas'));
     }
 
-    public function tags(): Collection
-    {
-        return Tag::all()->map->getData();
-    }
+    // public function tags(): Collection
+    // {
+    //     return Tag::all()->map->getData();
+    // }
 
-    public function categories(): Collection
-    {
-        return Category::all()->map->getData();
-    }
+    // public function categories(): Collection
+    // {
+    //     return Category::all()->map->getData();
+    // }
 }
