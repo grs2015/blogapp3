@@ -41,7 +41,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-amber-1">
-                                <div class="text-primary">Overall posts:</div>
+                                <div class="text-primary">{{ $t('Overall posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.posts_count }}</div>
@@ -51,7 +51,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-green-1">
-                                <div class="text-primary">Published posts:</div>
+                                <div class="text-primary">{{ $t('Published posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
 
@@ -62,7 +62,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-red-1">
-                                <div class="text-primary">Pending posts:</div>
+                                <div class="text-primary">{{ $t('Pending posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.pending_posts_count }}</div>
@@ -72,7 +72,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat color="primary">
                             <q-card-section class="bg-grey-2">
-                                <div class="text-primary">Draft posts:</div>
+                                <div class="text-primary">{{ $t('Draft posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.draft_posts_count }}</div>
@@ -85,7 +85,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="schedule"
-                                label="Recently added posts with pending status">
+                                :label="$t('Recently added posts with pending status')">
                                 <RecentPostsTable :data="rowsRecentPosts" />
                             </q-expansion-item>
                         </q-list>
@@ -96,7 +96,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="thumb_up_off_alt"
-                                label="Most rated posts">
+                                :label="$t('Most rated posts')">
                                 <RatedPostsTable :data="rowsRatedPosts" />
                             </q-expansion-item>
                         </q-list>
@@ -107,7 +107,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="visibility"
-                                label="Most viewed posts">
+                                :label="$t('Most viewed posts')">
                                 <ViewedPostsTable :data="rowsViewedPosts" />
                             </q-expansion-item>
                         </q-list>
@@ -118,7 +118,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                             header-class="text-primary bg-grey-2"
                             expand-separator
                             icon="chat"
-                            label="Most commented posts" >
+                            :label="$t('Most commented posts')" >
                             <CommentedPostsTable :data="rowsCommentedPosts" />
                         </q-expansion-item>
                         </q-list>
@@ -134,7 +134,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-blue-1">
-                                <div class="text-primary">Author users:</div>
+                                <div class="text-primary">{{ $t('Author users:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.count_author_users }}</div>
@@ -144,7 +144,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-blue-1">
-                                <div class="text-primary">Member users:</div>
+                                <div class="text-primary">{{ $t('Member users:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.count_member_users }}</div>
@@ -154,7 +154,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-green-1">
-                                <div class="text-primary">Enabled users:</div>
+                                <div class="text-primary">{{ $t('Enabled users:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.enabled_users_count }}</div>
@@ -164,7 +164,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-red-1">
-                                <div class="text-primary">Pending users:</div>
+                                <div class="text-primary">{{ $t('Pending users:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.pending_users_count }}</div>
@@ -177,7 +177,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="person_add"
-                                label="Recently added users with pending status">
+                                :label="$t('Recently added users with pending status')">
                                 <RecentUsersTable :data="rowsRecentUsers" />
                             </q-expansion-item>
                         </q-list>
@@ -188,7 +188,7 @@ const rowsActiveUsers = computed(() => props.dashboardData.active_authors)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="emoji_events"
-                                label="Most active authors">
+                                :label="$t('Most active authors')">
                                 <ActiveUsersTable :data="rowsActiveUsers" />
                             </q-expansion-item>
                         </q-list>

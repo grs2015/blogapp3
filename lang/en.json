@@ -182,6 +182,38 @@
     "Current blog image": "Current blog image",
     "No blog image attached at this time": "No blog image attached at this time",
 
-    "Your role: ": "Your role: "
+    "Your role: ": "Your role: ",
+
+    "Trashed/Restore": "Trashed/Restore",
+
+    "Full name": "Full name",
+    "Last Log-in": "Last Log-in",
+    "Roles": "Roles",
+    "Created at": "Created at",
+    "Published at": "Published at",
+    "Rating": "Rating",
+
+    "Overall posts:": "Overall posts:",
+    "Published posts:": "Published posts:",
+    "Pending posts:": "Pending posts:",
+    "Draft posts:": "Draft posts:",
+    "Recently added posts with pending status": "Recently added posts with pending status",
+    "Most rated posts": "Most rated posts",
+    "Most viewed posts": "Most viewed posts",
+    "Most commented posts": "Most commented posts",
+    "User Statistics": "User Statistics",
+    "Author users:": "Author users:",
+    "Member users:": "Member users:",
+    "Enabled users:": "Enabled users:",
+    "Pending users:": "Pending users:",
+    "Recently added users with pending status": "Recently added users with pending status",
+    "Most active authors": "Most active authors",
+    "Post Statistics": "Post Statistics",
+
+    "Power Analysis Blog": "Blog - Electrical Power Analyzers",
+
+    "Post comments": "Post comments",
+
+    "My Post Statistics": "My Post Statistics"
 
 }

@@ -79,7 +79,7 @@ const toTop = () => {
                     <q-avatar>
 
                     </q-avatar>
-                    Blog Application
+                    {{ $t('Power Analysis Blog') }}
                 </q-toolbar-title>
                 <q-space />
                 <div class="row items-center">

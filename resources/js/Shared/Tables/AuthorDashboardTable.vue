@@ -34,7 +34,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-amber-1">
-                                <div class="text-primary">Overall posts:</div>
+                                <div class="text-primary">{{ $t('Overall posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.posts_count }}</div>
@@ -44,7 +44,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-green-1">
-                                <div class="text-primary">Published posts:</div>
+                                <div class="text-primary">{{ $t('Published posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
 
@@ -55,7 +55,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                     <div class="col-3">
                         <q-card bordered flat>
                             <q-card-section class="bg-red-1">
-                                <div class="text-primary">Pending posts:</div>
+                                <div class="text-primary">{{ $t('Pending posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.pending_posts_count }}</div>
@@ -65,7 +65,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                     <div class="col-3">
                         <q-card bordered flat color="primary">
                             <q-card-section class="bg-grey-2">
-                                <div class="text-primary">Draft posts:</div>
+                                <div class="text-primary">{{ $t('Draft posts:') }}</div>
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-h3 text-center text-primary">{{ props.dashboardData.draft_posts_count }}</div>
@@ -78,7 +78,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="schedule"
-                                label="Recently added posts with pending status">
+                                :label="$t('Recently added posts with pending status')">
                                 <RecentPostsTable :data="rowsRecentPosts" />
                             </q-expansion-item>
                         </q-list>
@@ -89,7 +89,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="thumb_up_off_alt"
-                                label="Most rated posts">
+                                :label="$t('Most rated posts')">
                                 <RatedPostsTable :data="rowsRatedPosts" />
                             </q-expansion-item>
                         </q-list>
@@ -100,7 +100,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                                 header-class="text-primary bg-grey-2"
                                 expand-separator
                                 icon="visibility"
-                                label="Most viewed posts">
+                                :label="$t('Most viewed posts')">
                                 <ViewedPostsTable :data="rowsViewedPosts" />
                             </q-expansion-item>
                         </q-list>
@@ -111,7 +111,7 @@ const rowsCommentedPosts = computed(() => props.dashboardData.most_commented)
                             header-class="text-primary bg-grey-2"
                             expand-separator
                             icon="chat"
-                            label="Most commented posts" >
+                            :label="$t('Most commented posts')" >
                             <CommentedPostsTable :data="rowsCommentedPosts" />
                         </q-expansion-item>
                         </q-list>
