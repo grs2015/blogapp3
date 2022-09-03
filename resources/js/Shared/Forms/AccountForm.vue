@@ -195,7 +195,7 @@ const redirectBack = () => { window.history.back() }
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('First name') }}</div>
                                                     <q-input v-model="form.first_name" dense data-test="first_name-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -209,7 +209,7 @@ const redirectBack = () => { window.history.back() }
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Last name') }}</div>
                                                     <q-input v-model="form.last_name" dense data-test="last_name-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -229,7 +229,7 @@ const redirectBack = () => { window.history.back() }
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Mobile') }}</div>
                                                     <q-input v-model="form.mobile" type="tel" dense data-test="mobile-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -243,7 +243,7 @@ const redirectBack = () => { window.history.back() }
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Email') }}</div>
                                                     <q-input v-model="form.email" type="email" dense data-test="email-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -265,13 +265,13 @@ const redirectBack = () => { window.history.back() }
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Short introduction info') }}</div>
                                                     <q-editor :placeholder="$t('Drop some lines...')" v-model="form.intro"
                                                         min-height="5rem" />
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Profile description') }}</div>
                                                     <q-editor min-height="8rem" :placeholder="$t('Drop some lines...')"
                                                         v-model="form.profile" />
@@ -285,7 +285,7 @@ const redirectBack = () => { window.history.back() }
                                 <div class="col-auto">
                                     <q-card flat bordered>
                                         <q-card-section class="column">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Current avatar') }}</div>
                                             <q-separator spaced />
                                             <div class="row flex-center relative-position">
@@ -308,7 +308,7 @@ const redirectBack = () => { window.history.back() }
                                                 <div v-if="imageLoad" class="light-dimmed transparent absolute-full bg-grey-3"></div>
                                             </div>
                                             <div class="row q-mt-md justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User registered at:') }}
                                                 </div>
                                                 <div class="text-right">
@@ -317,7 +317,7 @@ const redirectBack = () => { window.history.back() }
                                             </div>
                                             <q-separator spaced />
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User last logged-in:') }}
                                                 </div>
                                                 <div class="text-right">
@@ -326,7 +326,7 @@ const redirectBack = () => { window.history.back() }
                                             </div>
                                             <q-separator spaced />
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('Email status:') }}
                                                 </div>
                                                 <div v-if="form.email_verified_at" class="row items-center">
@@ -341,7 +341,7 @@ const redirectBack = () => { window.history.back() }
                                             </div>
                                             <q-separator spaced />
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User role:') }}
                                                 </div>
                                                 <div class="text-right">
@@ -351,7 +351,7 @@ const redirectBack = () => { window.history.back() }
                                             <q-separator spaced />
 
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User status:') }}
                                                 </div>
                                                 <div class="text-right" :class="[form.status === 'enabled' ? 'text-green' : 'text-red']">
@@ -359,7 +359,7 @@ const redirectBack = () => { window.history.back() }
                                                 </div>
                                             </div>
                                             <q-separator spaced />
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('User posts') }}</div>
                                             <div class="row flex-center text-h2 text-grey">
                                                 {{ form.posts_count }}

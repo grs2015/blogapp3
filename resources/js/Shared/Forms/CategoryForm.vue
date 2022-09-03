@@ -109,7 +109,7 @@ const resetForm = () => {
                                 <q-card flat bordered>
                                     <q-card-section>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Category Title') }}</div>
                                             <q-input v-model="form.title" dense data-test="title-input"
                                                 :rules="[val => !!val || 'Field is required']" ref="catTitleRef">
@@ -119,7 +119,7 @@ const resetForm = () => {
                                             </q-input>
                                         </div>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Category Description') }}</div>
                                             <q-input v-model="form.content" dense data-test="description-input">
                                                 <template v-slot:prepend>
@@ -128,7 +128,7 @@ const resetForm = () => {
                                             </q-input>
                                         </div>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Category Meta Description (SEO)') }}</div>
                                             <q-input v-model="form.meta_title" dense data-test="meta-input">
                                                 <template v-slot:prepend>
@@ -149,7 +149,7 @@ const resetForm = () => {
                                                     <q-card-section>
                                                         <div class="row q-col-gutter-x-md items-stretch">
                                                             <div class="col-9">
-                                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                                     {{ $t('Available icons') }}
                                                                 </div>
                                                                 <q-separator spaced />
@@ -162,7 +162,7 @@ const resetForm = () => {
                                                                 </div>
                                                             </div>
                                                             <div class="col-3">
-                                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                                     {{ $t('Picked icon') }}
                                                                 </div>
                                                                 <q-separator spaced />
@@ -184,11 +184,11 @@ const resetForm = () => {
                             <div class="col-auto">
                                 <q-card flat bordered>
                                     <q-card-section class="column">
-                                        <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                        <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Pick category color') }}</div>
                                         <q-separator spaced />
                                         <div class="row items-center justify-start q-col-gutter-x-md">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">{{ $t('Example of picked color:') }}</div>
+                                            <div class="text-subtitle2 text-primary text-weight-regular">{{ $t('Example of picked color:') }}</div>
                                             <div >
                                                 <div class="row rounded-borders flex-center color-box" :style="{background: form.color}">
                                                     <q-icon name="sentiment_very_satisfied" color="white" size="md"/>

@@ -57,14 +57,14 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('First name') }}</div>
                                                     <q-input disable v-model="form.first_name" dense data-test="first_name-input"
                                                         input-class="bg-grey-3" filled >
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Last name') }}</div>
                                                     <q-input disable v-model="form.last_name" dense data-test="last_name-input"
                                                         input-class="bg-grey-3" filled >
@@ -77,14 +77,14 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Mobile') }}</div>
                                                     <q-input disable v-model="form.mobile" type="tel" dense data-test="mobile-input"
                                                         input-class="bg-grey-3" filled >
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Email') }}</div>
                                                     <q-input disable v-model="form.email" type="email" dense data-test="email-input"
                                                         input-class="bg-grey-3" filled >
@@ -99,13 +99,13 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Short introduction info') }}</div>
                                                     <q-editor disable :placeholder="$t('Drop some lines...')" v-model="form.intro"
                                                         min-height="5rem" content-class="bg-grey-4" />
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Profile description') }}</div>
                                                     <q-editor disable min-height="8rem" :placeholder="$t('Drop some lines...')"
                                                         v-model="form.profile" content-class="bg-grey-4" />
@@ -119,7 +119,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                 <div class="col-auto">
                                     <q-card flat bordered>
                                         <q-card-section class="column">
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('Current avatar') }}</div>
                                             <q-separator spaced />
                                             <div class="row flex-center relative-position">
@@ -134,7 +134,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
 
                                             </div>
                                             <div class="row q-mt-md justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User registered at:') }}
                                                 </div>
                                                 <div class="text-right">
@@ -143,7 +143,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                             </div>
                                             <q-separator spaced />
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User last logged-in:') }}
                                                 </div>
                                                 <div class="text-right">
@@ -152,7 +152,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                             </div>
                                             <q-separator spaced />
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('Email status:') }}
                                                 </div>
                                                 <div v-if="form.email_verified_at" class="row items-center">
@@ -167,7 +167,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                             </div>
                                             <q-separator spaced />
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User role:') }}
                                                 </div>
                                                 <div class="text-right">
@@ -177,7 +177,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                             <q-separator spaced />
 
                                             <div class="row justify-between items-center">
-                                                <div class="text-subtitle2 text-primary text-weight-thin">
+                                                <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('User status:') }}
                                                 </div>
                                                 <div class="text-right" :class="[form.status === 'enabled' ? 'text-green' : 'text-red']">
@@ -185,7 +185,7 @@ const symbols = computed(() => form.first_name[0] + form.last_name[0])
                                                 </div>
                                             </div>
                                             <q-separator spaced />
-                                            <div class="text-subtitle2 text-primary text-weight-thin">
+                                            <div class="text-subtitle2 text-primary text-weight-regular">
                                             {{ $t('User posts') }}</div>
                                             <div class="row flex-center text-h2 text-grey">
                                                 {{ form.posts_count }}

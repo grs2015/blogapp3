@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Actions\Blog\UpdatePostViewsAction;
 use App\Models\Post;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,14 +31,7 @@ class PostController extends Controller
      */
     public function show(Post $post, CacheService $cacheService): Response
     {
-        if (!in_array($post->id, session()->get('viewed_posts', []) )) {
-            if (!$post['views']) {
-                $post['views'] = 0;
-            }
-            $post->increment('views');
-            session()->push('viewed_posts', $post->id);
-            $post->save();
-        }
+        $post = UpdatePostViewsAction::execute($post);
 
         return Inertia::render('Public/Show', [
             'model' => new GetPublicSinglePostViewModel($post, $cacheService)

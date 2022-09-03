@@ -48,6 +48,7 @@ const onUpdateFail = (errors) => {
     })
 }
 
+const backToList = () => Inertia.get('/')
 
 </script>
 
@@ -61,7 +62,7 @@ const onUpdateFail = (errors) => {
         </q-parallax> -->
         <q-img fit="cover" height="400px" :src="currentHeroimagePath" style="filter: saturate(0.8)" class="rounded-borders">
             <div v-if="!currentHeroimagePath" class="absolute-full flex flex-center bg-grey-3 text-grey-5 text-h4">
-                No post image selected
+                {{ $t('No post image selected') }}
             </div>
         </q-img>
         <div class="column q-mx-xl">
@@ -72,11 +73,12 @@ const onUpdateFail = (errors) => {
                 </div>
             </template>
             <template class="row justify-between items-center">
-                <div class="text-weight-light">Published <span class="text-primary">{{ props.data.published_at }}</span> by {{ props.data.user.full_name }} - {{ props.data.time_to_read }} mins. to read</div>
-                <div class="text-weight-light">Views: {{ props.data.views }}</div>
+                <div class="text-weight-light">{{ $t('Published') }} <span class="text-primary">{{ props.data.published_at }}</span>
+                    {{ $t('by') }} {{ props.data.user.full_name }} - {{ props.data.time_to_read }} {{ $t('mins. to read') }}</div>
+                <div class="text-weight-light">{{ $t('Views:') }} {{ props.data.views }}</div>
             </template>
             <div class="row justify-end text-weight-light items-center q-mt-sm">
-                <div class="q-mr-sm">Categories:</div>
+                <div class="q-mr-sm">{{ $t('Categories:') }}</div>
                 <div v-for="(catIcon, index) in props.data.categories" :key="catIcon.id">
                         <div class="row rounded-borders flex-center color-box" :style="{background: catIcon.color}"
                             :class="[index !== props.data.categories.length - 1 ? 'q-mr-sm' : '']">
@@ -89,7 +91,7 @@ const onUpdateFail = (errors) => {
                 </div>
             </div>
             <div v-if="props.data.tags.length > 0" class="row justify-end text-weight-light items-center q-mt-sm">
-                <div class="q-mr-sm">Tags:</div>
+                <div class="q-mr-sm">{{ $t('Tags:') }}</div>
                 <div class="row q-col-gutter-x-sm">
                     <div v-for="(tag, index) in props.data.tags" :key="tag.id">
                         <q-badge outline color="primary" :label="tag.title" />
@@ -97,7 +99,7 @@ const onUpdateFail = (errors) => {
                 </div>
             </div>
             <div class="row justify-end text-weight-light items-center q-mt-sm">
-                <div class="q-mr-sm">Post rating:</div>
+                <div class="q-mr-sm">{{ $t('Post rating:') }}</div>
                 <div class="text-subtitle2 text-primary">{{ props.data.rating }}</div>
             </div>
             <div class="q-mt-xl">
@@ -118,7 +120,7 @@ const onUpdateFail = (errors) => {
             </div>
             <q-separator spaced />
             <div class="row justify-start items-center q-mt-md q-col-gutter-x-sm">
-                <div>Rate the post:</div>
+                <div>{{ $t('Rate the post:') }}</div>
                 <q-rating
                     v-model="rating"
                     size="2em"
@@ -129,16 +131,16 @@ const onUpdateFail = (errors) => {
                 />
             </div>
             <template v-if="props.data.comments.length !== 0">
-                <div class="text-h6 text-bold q-mt-sm">Comments ({{ props.data.comments.length }})</div>
+                <div class="text-h6 text-bold q-mt-sm">{{ $t('Comments') }} ({{ props.data.comments.length }})</div>
                 <PublishedComments :data="props.data.comments" />
             </template>
             <template v-if="usePage().props.value.auth.user && usePage().props.value.can.see_credentials && usePage().props.value.auth.user.status === UserStatus.Enabled">
-                <div class="text-h6 text-bold q-mt-sm">Your comment:</div>
+                <div class="text-h6 text-bold q-mt-sm">{{ $t('Your comment:') }}</div>
                 <CommentCreator :data="{ id: props.data.id, slug: props.data.slug }" />
             </template>
             <!-- <CommentCreator :data="{ id: props.data.id, slug: props.data.slug }" /> -->
-            <div class="q-mt-xl">
-
+            <div class="row justify-end q-my-md">
+                <q-btn outline color="primary" @click="backToList">{{ $t('Back') }}</q-btn>
             </div>
         </div>
     </div>

@@ -136,7 +136,7 @@
     "Back": "Wstecz",
     "Add admin user": "Dodaj administratora",
 
-    "To be published at": "Opublikować",
+    "To be published at": "Opublikować do",
     "Comments": "Komentarze",
     "Actions": "Działania",
     "Something went wrong with post deletion": "Coś poszło źle w trakcie usunięcia posta",
@@ -181,6 +181,67 @@
     "Current blog image": "Bieżący obrazek blogu",
     "No blog image attached at this time": "Obecnie nie wybrago żadnego obrazku",
 
-    "Your role: ": "Twoja rola: "
+    "Your role: ": "Twoja rola: ",
+
+    "Trashed/Restore": "Usunięte/Przywróć",
+
+    "Full name": "Pełne imię",
+    "Last Log-in": "Ostatni Log-in",
+    "Roles": "Role",
+    "Created at": "Stworzony",
+    "Published at": "Opublikowany",
+    "Rating": "Rating",
+
+    "Overall posts:": "Postów łącznie:",
+    "Published posts:": "Postów opublikowanych:",
+    "Pending posts:": "Postów oczekujących:",
+    "Draft posts:": "Postów szkicowych:",
+    "Recently added posts with pending status": "Ostatio dodane posty z oczekującym statusem",
+    "Most rated posts": "Najwyżej oceniane posty",
+    "Most viewed posts": "Najczęściej przeglądane posty",
+    "Most commented posts": "Najczęściej komentowane posty",
+    "User Statistics": "Statystyka użytkowników",
+    "Author users:": "Użytkownicy autorze:",
+    "Member users:": "Użytkownicy komentatorze:",
+    "Enabled users:": "Użytkownicy aktywni:",
+    "Pending users:": "Użytkownicy oczekujący:",
+    "Recently added users with pending status": "Ostatio dodane użytkowniki z oczekującym statusem",
+    "Most active authors": "Najbardziej aktywni autorze",
+    "Post Statistics": "Statystyka postów",
+
+    "Power Analysis Blog": "Blog - Analizatory mocy elektrycznej",
+
+    "Post comments": "Komentarze do posta",
+
+    "My Post Statistics": "Statystyka moich postów",
+
+    "Role": "Rola",
+
+    "Categories:": "Kategorie:",
+    "Tags:": "Tegi:",
+    "Filter": "Zastosuj filtry",
+    "Filter Reset": "Zresetuj filtry",
+
+    "Published": "Opublikowane",
+    "by": "przez",
+    "mins. to read": "minut na przeczytanie",
+    "rating:": "ocena:",
+    "Views:": "Przeglądów:",
+    "Read more": "Czytaj dalej",
+
+    "Filtered results:": "Odfiltrowane wyniki:",
+    "No posts found": "Wyników nie znaleziono",
+
+    "Post rating updated successfully. Thank you": "Rating posta został zaktualizowany pomyślnie. Dziękujemy",
+    "Something went wrong with post rating update: ": "Coś poszło źle w trakcie aktualizacji ratingu posta: ",
+    "There were errors while sending comment: ": "Wystąpiły błędy podczas wysyłania komentarza: ",
+    "The comment have been sent successfully. Thank you": "Komentarz został wysłany pomyślnie. Dziękujemy",
+    "No post image selected": "Nie wybrano obrazka posta",
+    "Post rating:": "Rating posta:",
+    "Rate the post:": "Oceń post:",
+    "Commented by:": "Skomentowany przez:",
+    "Your comment:": "Twój komentarz:",
+    "Title of your comment": "Tytuł twojego komentarza",
+    "Content of your comment": "Treść twojego komentarza"
 }
 

@@ -125,7 +125,7 @@ watch(() => props.data.baseinfo, () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Blog title') }}</div>
                                                     <q-input v-model="form.title" dense data-test="title-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -139,7 +139,7 @@ watch(() => props.data.baseinfo, () => {
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Blog meta title (SEO)') }}</div>
                                                     <q-input v-model="form.meta_title" dense data-test="meta-input"
                                                     ref="metaRef"
@@ -158,7 +158,7 @@ watch(() => props.data.baseinfo, () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Phone') }}</div>
                                                     <q-input v-model="form.phone" type="tel" dense data-test="phone-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -172,7 +172,7 @@ watch(() => props.data.baseinfo, () => {
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Email') }}</div>
                                                     <q-input v-model="form.email" type="email" dense data-test="email-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -192,7 +192,7 @@ watch(() => props.data.baseinfo, () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="col q-mb-md">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Address') }}</div>
                                                     <q-input v-model="form.address" dense data-test="title-input"
                                                     :rules="[val => !!val || $t('Field is required'),
@@ -206,7 +206,7 @@ watch(() => props.data.baseinfo, () => {
                                                     </q-input>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                         {{ $t('Website') }}</div>
                                                     <q-input v-model="form.meta_title" dense data-test="web-input"
                                                     ref="webRef"
@@ -228,7 +228,7 @@ watch(() => props.data.baseinfo, () => {
                                     <div class="col">
                                         <q-card flat bordered>
                                             <q-card-section>
-                                                <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                                <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('Blog information') }}</div>
                                                 <q-editor :placeholder="$t('Start creating here...')" v-model="form.content"
                                                     min-height="5rem" />
@@ -241,7 +241,7 @@ watch(() => props.data.baseinfo, () => {
                                         <q-card flat bordered>
                                             <q-card-section>
                                                 <div class="column">
-                                                    <div class="text-subtitle2 text-primary text-weight-thin">
+                                                    <div class="text-subtitle2 text-primary text-weight-regular">
                                                     {{ $t('Pick new blog image') }}</div>
                                                     <q-file max-file-size="1024000" v-model="form.hero_image" counter max-files="1"
                                                         use-chips accept=".jpg, .png, image/*" @rejected="onRejected">
@@ -253,7 +253,7 @@ watch(() => props.data.baseinfo, () => {
                                                         </template>
                                                     </q-file>
                                                     <template v-if="currentHeroimagePaths">
-                                                        <div class="text-subtitle2 text-primary text-weight-thin q-mt-md" >
+                                                        <div class="text-subtitle2 text-primary text-weight-regular q-mt-md" >
                                                             {{ $t('Current blog image') }}</div>
                                                         <div class="row">
                                                             <div class="col-3 relative-position">
@@ -274,7 +274,7 @@ watch(() => props.data.baseinfo, () => {
                                                         </div>
                                                     </template>
                                                     <template v-else>
-                                                        <div class="text-subtitle2 text-primary text-weight-thin q-mt-md">
+                                                        <div class="text-subtitle2 text-primary text-weight-regular q-mt-md">
                                                             {{ $t('No blog image attached at this time') }}
                                                         </div>
                                                     </template>

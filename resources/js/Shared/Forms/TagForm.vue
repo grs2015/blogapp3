@@ -106,7 +106,7 @@ const resetForm = () => {
                                 <q-card flat bordered>
                                     <q-card-section>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Tag Title') }}</div>
                                             <q-input v-model="form.title" dense data-test="title-input"
                                                 :rules="[val => !!val || 'Field is required',
@@ -119,7 +119,7 @@ const resetForm = () => {
                                             </q-input>
                                         </div>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Tag Description') }}</div>
                                             <q-input v-model="form.content" dense data-test="description-input"
                                                 :rules="[val => val.length <= 50 || 'Please use maximum 50 characters']">
@@ -135,7 +135,7 @@ const resetForm = () => {
                                 <q-card flat bordered>
                                     <q-card-section>
                                         <div class="col q-mb-md">
-                                            <div class="form_header text-subtitle2 text-primary text-weight-thin">
+                                            <div class="form_header text-subtitle2 text-primary text-weight-regular">
                                                 {{ $t('Tag Meta Description (SEO)') }}</div>
                                             <q-input v-model="form.meta_title" dense data-test="meta-input">
                                                 <template v-slot:prepend>

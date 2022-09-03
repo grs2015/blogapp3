@@ -25,10 +25,10 @@ const props = defineProps<Props>()
 <template>
     <Head title="Actual posts" />
     <div class="q-mt-xl">
-        <div class="q-mx-xl text-teal text-weight-medium text-h6">Filtered results:</div>
+        <div class="q-mx-xl text-teal text-weight-medium text-h6">{{ $t('Filtered results:') }}</div>
         <div v-if="props.model.posts">
             <PublishedPosts :paginatedData="props.model.posts" />
         </div>
-        <div v-else class="row justify-center text-h6 text-negative">No posts found</div>
+        <div v-else class="row justify-center text-h6 text-negative">{{ $t('No posts found') }}</div>
     </div>
 </template>

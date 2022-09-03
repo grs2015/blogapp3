@@ -62,7 +62,7 @@ const loginUser = () => form.post('/login')
                     <Link as="div" href="/">
                         <q-btn flat color="secondary" :disable="form.processing">Cancel</q-btn>
                     </Link>
-                    <q-btn flat color="primary" type="submit" :loading="form.processing">Login</q-btn>
+                    <q-btn flat color="primary" type="submit" :loading="form.processing">Sign-in</q-btn>
                 </q-card-actions>
             </q-card>
         </q-form>

@@ -56,4 +56,19 @@ class PostBuilder extends BaseBuilder
     {
         return $this->onlyTrashed()->whereIn('id', $ids)->get();
     }
+
+    public function onlyPublished(): Builder
+    {
+        return $this->where('status', PostStatus::Published);
+    }
+
+    public function onlyPending(): Builder
+    {
+        return $this->where('status', PostStatus::Pending);
+    }
+
+    public function onlyDraft(): Builder
+    {
+        return $this->where('status', PostStatus::Draft);
+    }
 }

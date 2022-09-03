@@ -23,7 +23,7 @@ class PostFactory extends Factory
             'author_id' => User::factory(),
             'title' => $this->faker->sentence(3),
             'meta_title' => $this->faker->sentence(),
-            'summary' => $this->faker->text(),
+            'summary' => $this->faker->text(400),
             'content' => $this->faker->text(),
             'views' => 0,
             'hero_image' => $this->faker->imageUrl(640, 480, 'blog-image', true),

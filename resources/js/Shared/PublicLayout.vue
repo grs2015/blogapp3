@@ -6,6 +6,7 @@ import { useForm, usePage } from '@inertiajs/inertia-vue3';
 import { categoryData, Paginated, tagData, UserStatus } from '@/Interfaces/PaginatedData';
 import { scroll } from 'quasar'
 import PublicFilters from './Filters/Public/PublicFilters.vue';
+import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { useQuasar } from 'quasar'
 import { trans } from 'laravel-vue-i18n';
 
@@ -79,12 +80,14 @@ const toTop = () => {
                     <q-avatar>
 
                     </q-avatar>
-                    Blog Application
+                    {{ $t('Power Analysis Blog') }}
                 </q-toolbar-title>
                 <q-space />
                 <div class="row items-center">
                     <div v-if="props.auth.user && usePage().props.value.can.see_credentials" class="q-mr-md">
-                        Hi, {{ props.auth.user.full_name }}! Role: {{ props.auth.user.role }}. Status: <span class="text-negative">{{ props.auth.user.status }}</span>
+                        {{ $t('Hi')}}, <span class="text-primary">{{ props.auth.user.full_name }}!</span> /
+                        {{ $t('Role') }}: <span class="text-negative">{{ props.auth.user.role }}</span> /
+                        Status: <span class="text-negative">{{ props.auth.user.status }}</span>
                     </div>
                     <div v-if="!props.auth.user">
                         <q-btn flat @click="login">Sign In</q-btn>
@@ -92,6 +95,25 @@ const toTop = () => {
                     </div>
                     <div v-else>
                         <q-btn flat @click="logout">Logout</q-btn>
+                    </div>
+                    <div class="col-auto row justify-end">
+                        <q-btn-group class="q-mr-md" outline>
+                            <q-btn round @click="loadLanguageAsync('de')" data-test="DE">
+                                <q-avatar>
+                                    <q-img src="/images/germany.png" />
+                                </q-avatar>
+                            </q-btn>
+                            <q-btn round @click="loadLanguageAsync('pl')" data-test="PL">
+                                <q-avatar>
+                                    <q-img src="/images/poland.png" />
+                                </q-avatar>
+                            </q-btn>
+                            <q-btn round @click="loadLanguageAsync('en')" data-test="EN">
+                                <q-avatar>
+                                    <q-img src="/images/great-britain.png" />
+                                </q-avatar>
+                            </q-btn>
+                        </q-btn-group>
                     </div>
                 </div>
             </q-toolbar>

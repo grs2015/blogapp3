@@ -58,7 +58,7 @@ const onStoreFail = (errors) => {
 const onStoreSuccess = () => {
     $q.notify({
         type: 'positive',
-        message: trans('The comment have been sent successfully. Thank you.')
+        message: trans('The comment have been sent successfully. Thank you')
     })
 }
 
@@ -76,7 +76,7 @@ const resetForm = () => {
                 <q-input
                     v-model="form.title"
                     dense clearable filled clear-icon="close" label-color="primary"
-                    label="Title of your comment"
+                    :label="$t('Title of your comment')"
                     ref="titleRef"
                     :rules="[val => !!val || 'Field is required']" >
                     <template v-slot:prepend>
@@ -87,7 +87,7 @@ const resetForm = () => {
                     v-model="form.content"
                     autogrow
                     filled clearable clear-icon="close" label-color="primary"
-                    label="Content of your comment"
+                    :label="$t('Content of your comment')"
                     dense
                     ref="contentRef"
                     :rules="[val => !!val || 'Field is required']"

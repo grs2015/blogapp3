@@ -182,5 +182,66 @@
     "Current blog image": "Aktuelles Blogbild",
     "No blog image attached at this time": "Derzeit ist kein Blog-Bild angehängt",
 
-    "Your role: ": "Deine Rolle: "
+    "Your role: ": "Deine Rolle: ",
+
+    "Trashed/Restore": "Gelöscht/Wiederherstellen",
+
+    "Full name": "Vollständiger Name",
+    "Last Log-in": "Letzte Log-in",
+    "Roles": "Rollen",
+    "Created at": "Hergestellt in",
+    "Published at": "Veröffentlicht unter",
+    "Rating": "Bewertung",
+
+    "Overall posts:": "Gesamtbeiträge:",
+    "Published posts:": "Veröffentlichte Beiträge:",
+    "Pending posts:": "Ausstehende Beiträge:",
+    "Draft posts:": "Beiträge entwerfen:",
+    "Recently added posts with pending status": "Kürzlich hinzugefügte Beiträge mit ausstehendem Status",
+    "Most rated posts": "Am meisten bewertete Beiträge",
+    "Most viewed posts": "Meistgesehene Beiträge",
+    "Most commented posts": "Die meisten kommentierten Beiträge",
+    "User Statistics": "Benutzerstatistik",
+    "Author users:": "Autorenbenutzer:",
+    "Member users:": "Mitgliedsbenutzer:",
+    "Enabled users:": "Aktivierte Benutzer:",
+    "Pending users:": "Ausstehende Benutzer:",
+    "Recently added users with pending status": "Kürzlich hinzugefügte Benutzer mit ausstehendem Status",
+    "Most active authors": "Die aktivsten Autoren",
+    "Post Statistics": "Beitragsstatistik",
+
+    "Power Analysis Blog": "Blog - Energieanalysatoren",
+
+    "Post comments": "Kommentare posten",
+
+    "My Post Statistics": "Meine Beitragsstatistik",
+
+    "Role": "Rolle",
+
+    "Categories:": "Kategorien:",
+    "Tags:": "Stichworte:",
+    "Filter": "Filter",
+    "Filter Reset": "Filter zurücksetzen",
+
+    "Published": "Herausgegeben",
+    "by": "von",
+    "mins. to read": "min. lesen",
+    "rating:": "rating:",
+    "Views:": "Ansichten:",
+    "Read more": "Weiterlesen",
+
+    "Filtered results:": "Gefilterte Ergebnisse:",
+    "No posts found": "Keine Einträge gefunden",
+
+    "Post rating updated successfully. Thank you": "Beitragsbewertung erfolgreich aktualisiert. Vielen Dank",
+    "Something went wrong with post rating update: ": "Bei der Aktualisierung nach der Bewertung ist etwas schief gelaufen: ",
+    "There were errors while sending comment: ": "Beim Senden des Kommentars sind Fehler aufgetreten: ",
+    "The comment have been sent successfully. Thank you": "Der Kommentar wurde erfolgreich versendet. Vielen Dank",
+    "No post image selected": "Kein Beitragsbild ausgewählt",
+    "Post rating:": "Beitragsbewertung:",
+    "Rate the post:": "Bewerten Sie den Beitrag:",
+    "Commented by:": "Kommentiert von:",
+    "Your comment:": "Dein Kommentar:",
+    "Title of your comment": "Titel Ihres Kommentars",
+    "Content of your comment": "Inhalt Ihres Kommentars"
 }

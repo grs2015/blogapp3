@@ -182,6 +182,67 @@
     "Current blog image": "Current blog image",
     "No blog image attached at this time": "No blog image attached at this time",
 
-    "Your role: ": "Your role: "
+    "Your role: ": "Your role: ",
+
+    "Trashed/Restore": "Trashed/Restore",
+
+    "Full name": "Full name",
+    "Last Log-in": "Last Log-in",
+    "Roles": "Roles",
+    "Created at": "Created at",
+    "Published at": "Published at",
+    "Rating": "Rating",
+
+    "Overall posts:": "Overall posts:",
+    "Published posts:": "Published posts:",
+    "Pending posts:": "Pending posts:",
+    "Draft posts:": "Draft posts:",
+    "Recently added posts with pending status": "Recently added posts with pending status",
+    "Most rated posts": "Most rated posts",
+    "Most viewed posts": "Most viewed posts",
+    "Most commented posts": "Most commented posts",
+    "User Statistics": "User Statistics",
+    "Author users:": "Author users:",
+    "Member users:": "Member users:",
+    "Enabled users:": "Enabled users:",
+    "Pending users:": "Pending users:",
+    "Recently added users with pending status": "Recently added users with pending status",
+    "Most active authors": "Most active authors",
+    "Post Statistics": "Post Statistics",
+
+    "Power Analysis Blog": "Blog - Electrical Power Analyzers",
+
+    "Post comments": "Post comments",
+
+    "My Post Statistics": "My Post Statistics",
+
+    "Role": "Role",
+
+    "Categories:": "Categories:",
+    "Tags:": "Tags:",
+    "Filter": "Filter",
+    "Filter Reset": "Filter Reset",
+
+    "Published": "Published",
+    "by": "by",
+    "mins. to read": "mins. to read",
+    "rating:": "rating:",
+    "Views:": "Views:",
+    "Read more": "Read more",
+
+    "Filtered results:": "Filtered results:",
+    "No posts found": "No posts found",
+
+    "Post rating updated successfully. Thank you": "Post rating updated successfully. Thank you",
+    "Something went wrong with post rating update: ": "Something went wrong with post rating update: ",
+    "There were errors while sending comment: ": "There were errors while sending comment: ",
+    "The comment have been sent successfully. Thank you": "The comment have been sent successfully. Thank you",
+    "No post image selected": "No post image selected",
+    "Post rating:": "Post rating:",
+    "Rate the post:": "Rate the post:",
+    "Commented by:": "Commented by:",
+    "Your comment:": "Your comment:",
+    "Title of your comment": "Title of your comment",
+    "Content of your comment": "Content of your comment"
 
 }
