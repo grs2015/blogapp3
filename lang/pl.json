@@ -213,6 +213,35 @@
 
     "Post comments": "Komentarze do posta",
 
-    "My Post Statistics": "Statystyka moich postów"
+    "My Post Statistics": "Statystyka moich postów",
+
+    "Role": "Rola",
+
+    "Categories:": "Kategorie:",
+    "Tags:": "Tegi:",
+    "Filter": "Zastosuj filtry",
+    "Filter Reset": "Zresetuj filtry",
+
+    "Published": "Opublikowane",
+    "by": "przez",
+    "mins. to read": "minut na przeczytanie",
+    "rating:": "ocena:",
+    "Views:": "Przeglądów:",
+    "Read more": "Czytaj dalej",
+
+    "Filtered results:": "Odfiltrowane wyniki:",
+    "No posts found": "Wyników nie znaleziono",
+
+    "Post rating updated successfully. Thank you": "Rating posta został zaktualizowany pomyślnie. Dziękujemy",
+    "Something went wrong with post rating update: ": "Coś poszło źle w trakcie aktualizacji ratingu posta: ",
+    "There were errors while sending comment: ": "Wystąpiły błędy podczas wysyłania komentarza: ",
+    "The comment have been sent successfully. Thank you": "Komentarz został wysłany pomyślnie. Dziękujemy",
+    "No post image selected": "Nie wybrano obrazka posta",
+    "Post rating:": "Rating posta:",
+    "Rate the post:": "Oceń post:",
+    "Commented by:": "Skomentowany przez:",
+    "Your comment:": "Twój komentarz:",
+    "Title of your comment": "Tytuł twojego komentarza",
+    "Content of your comment": "Treść twojego komentarza"
 }
 

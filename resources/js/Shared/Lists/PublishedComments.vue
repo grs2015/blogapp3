@@ -30,7 +30,7 @@ const props = defineProps<Props>()
                             <q-icon name="chat_bubble_outline" class="text-grey" />
                         </q-item-section>
                         <q-item-section>
-                            <q-item-label class="text-primary">{{ item.title }} <span class="text-caption text-grey text-italic"> Commented by: {{ item.author }} - {{ item.published_at }}</span></q-item-label>
+                            <q-item-label class="text-primary">{{ item.title }} <span class="text-caption text-grey text-italic"> {{ $t('Commented by:') }} {{ item.author }} - {{ item.published_at }}</span></q-item-label>
                             <q-item-label caption lines="2">{{ item.content }}</q-item-label>
                         </q-item-section>
 

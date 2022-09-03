@@ -36,7 +36,7 @@ const filterReset = () => {
     <q-form @submit="filterPosts" @reset="filterReset">
         <q-card flat bordered class="q-ma-md">
             <q-card-section>
-                <div class="text-h6 text-bold">Categories:</div>
+                <div class="text-h6 text-bold">{{ $t('Categories:') }}</div>
                 <q-option-group
                     v-model="groupCategory"
                     :options="optionsCategory"
@@ -47,7 +47,7 @@ const filterReset = () => {
             </q-card-section>
             <q-separator spaced inset />
             <q-card-section>
-                <div class="text-h6 text-bold">Tags:</div>
+                <div class="text-h6 text-bold">{{ $t('Tags:') }}</div>
                 <q-option-group
                     v-model="groupTag"
                     :options="optionsTag"
@@ -57,9 +57,9 @@ const filterReset = () => {
                 />
             </q-card-section>
             <q-card-actions>
-                <q-btn type="submit" outline color="teal" class="full-width">Filter</q-btn>
+                <q-btn type="submit" outline color="teal" class="full-width">{{ $t('Filter') }}</q-btn>
                 <div v-if="groupTag.length != 0 || groupCategory.length != 0" class="q-mt-sm full-width">
-                    <q-btn type="reset" outline color="negative" class="full-width">Filter Reset</q-btn>
+                    <q-btn type="reset" outline color="negative" class="full-width">{{ $t('Filter Reset') }}</q-btn>
                 </div>
             </q-card-actions>
         </q-card>

@@ -214,6 +214,35 @@
 
     "Post comments": "Post comments",
 
-    "My Post Statistics": "My Post Statistics"
+    "My Post Statistics": "My Post Statistics",
+
+    "Role": "Role",
+
+    "Categories:": "Categories:",
+    "Tags:": "Tags:",
+    "Filter": "Filter",
+    "Filter Reset": "Filter Reset",
+
+    "Published": "Published",
+    "by": "by",
+    "mins. to read": "mins. to read",
+    "rating:": "rating:",
+    "Views:": "Views:",
+    "Read more": "Read more",
+
+    "Filtered results:": "Filtered results:",
+    "No posts found": "No posts found",
+
+    "Post rating updated successfully. Thank you": "Post rating updated successfully. Thank you",
+    "Something went wrong with post rating update: ": "Something went wrong with post rating update: ",
+    "There were errors while sending comment: ": "There were errors while sending comment: ",
+    "The comment have been sent successfully. Thank you": "The comment have been sent successfully. Thank you",
+    "No post image selected": "No post image selected",
+    "Post rating:": "Post rating:",
+    "Rate the post:": "Rate the post:",
+    "Commented by:": "Commented by:",
+    "Your comment:": "Your comment:",
+    "Title of your comment": "Title of your comment",
+    "Content of your comment": "Content of your comment"
 
 }

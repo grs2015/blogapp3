@@ -26,8 +26,9 @@ const postList = computed(() => props.paginatedData.data)
                 <q-card-section>
                     <div class="text-h6 text-bold">{{ post.title }}</div>
                     <template class="row justify-between items-center">
-                        <div class="text-weight-light">Published <span class="text-primary">{{ post.published_at }}</span> by {{ post.user.full_name }} - {{ post.time_to_read }} mins. to read - rating: <span class="text-primary">{{ post.rating }}</span></div>
-                        <div class="text-weight-light">Views: {{ post.views }}</div>
+                        <div class="text-weight-light">{{ $t('Published') }} <span class="text-primary">{{ post.published_at }}</span>
+                            {{ $t('by') }} {{ post.user.full_name }} - {{ post.time_to_read }} {{ $t('mins. to read') }} - {{ $t('rating:') }} <span class="text-primary">{{ post.rating }}</span></div>
+                        <div class="text-weight-light">{{ $t('Views:') }} {{ post.views }}</div>
                     </template>
                 </q-card-section>
                 <q-separator inset />
@@ -35,7 +36,7 @@ const postList = computed(() => props.paginatedData.data)
                     <div v-html="post.summary"></div>
                 </q-card-section>
                 <q-card-actions align="right">
-                    <q-btn flat @click="viewPost(post.slug)">Read more</q-btn>
+                    <q-btn flat @click="viewPost(post.slug)">{{ $t('Read more') }}</q-btn>
                 </q-card-actions>
             </q-card>
             <template v-if="!(index === props.paginatedData.data.length - 1)">
