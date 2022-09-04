@@ -46,6 +46,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static CategoryBuilder|Category detachPosts(int $entityId)
  * @method static CategoryBuilder|Category getEntityById(int $entityId)
  * @method static CategoryBuilder|Category updateEntity(int $entityId, array $newAttributes)
+ * @property string|null $icon
+ * @property string|null $color
+ * @method static CategoryBuilder|Category filter(\App\Filters\QueryFilter $filters)
+ * @method static CategoryBuilder|Category whereColor($value)
+ * @method static CategoryBuilder|Category whereIcon($value)
  */
 class Category extends Model
 {

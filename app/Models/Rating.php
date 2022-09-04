@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Rating whereRating($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rating whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Database\Factories\RatingFactory factory(...$parameters)
  */
 class Rating extends Model
 {
