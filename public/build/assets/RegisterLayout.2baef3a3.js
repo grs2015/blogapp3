@@ -1,0 +1,1 @@
+import{_ as r}from"./_plugin-vue_export-helper.cdc0426e.js";import{b as e,o as s,k as c,h as o,g as _,A as l}from"./app.ea05a65f.js";const f={};function p(t,i){const a=e("q-page-container"),n=e("q-layout");return s(),c(n,{view:"hHh lpR fFf"},{default:o(()=>[_(a,{class:"bg-grey-2"},{default:o(()=>[l(t.$slots,"default")]),_:3})]),_:3})}const d=r(f,[["render",p]]);export{d as L};

@@ -12,6 +12,7 @@ import 'quasar/src/css/index.sass'
 // import route from 'ziggy-js';
 import { Ziggy } from './ziggy';
 import { ZiggyVue } from 'ziggy';
+// import  route from 'ziggy';
 
 import '@quasar/extras/animate/fadeIn.css'
 import '@quasar/extras/animate/fadeOut.css'
@@ -26,6 +27,7 @@ createInertiaApp({
 },
   setup({ el, App, props, plugin }) {
     const app = createApp({ render: () => h(App, props) })
+    // app.config.globalProperties.$route = route
     app.use(plugin)
     .use(i18nVue, {
         resolve: async lang => {

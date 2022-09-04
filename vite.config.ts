@@ -18,15 +18,20 @@ export default defineConfig({
                 },
             },
         }),
+        // vue({
+        //     template: { transformAssetUrls }
+        //   }),
         i18n(),
-        quasar({
-            sassVariables: "resources/css/quasar-variables.sass",
-        }),
+        //NOTE - quasar() is commented out to make build work
+        // quasar({
+        //     sassVariables: "resources/css/quasar-variables.sass",
+        // }),
     ],
     resolve: {
         alias: {
             "@": "/resources/js",
-            ziggy: "/vendor/tightenco/ziggy/dist/vue",
+            ziggy: "/vendor/tightenco/ziggy/dist/vue.es.js",
+
         },
     },
     test: {

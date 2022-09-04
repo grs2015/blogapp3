@@ -26,6 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Baseinfo::firstOrCreate(['id' => 1]);
+        // Baseinfo::firstOrCreate(['id' => 1]);
     }
 }
