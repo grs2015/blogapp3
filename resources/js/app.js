@@ -10,8 +10,8 @@ import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/roboto-font/roboto-font.css'
 import 'quasar/src/css/index.sass'
 // import route from 'ziggy-js';
-import { Ziggy } from './ziggy';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.es';
+// import { Ziggy } from './ziggy';
+// import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.es';
 // import  route from 'ziggy';
 
 import '@quasar/extras/animate/fadeIn.css'
@@ -38,7 +38,7 @@ createInertiaApp({
     .use(Quasar, {
         plugins: { Notify },
     })
-    .use(ZiggyVue, Ziggy)
+    // .use(ZiggyVue, Ziggy)
     // .mixin({ methods: { route: (name, params, absolute) => route(name, params, absolute, Ziggy) } })
     .mount(el)
 
