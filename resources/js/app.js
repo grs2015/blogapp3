@@ -11,7 +11,7 @@ import '@quasar/extras/roboto-font/roboto-font.css'
 import 'quasar/src/css/index.sass'
 // import route from 'ziggy-js';
 import { Ziggy } from './ziggy';
-import { ZiggyVue } from 'ziggy';
+import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.es';
 // import  route from 'ziggy';
 
 import '@quasar/extras/animate/fadeIn.css'
