@@ -47,6 +47,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static CommentBuilder|Comment getCommentEntityById(int $postId, int $commentId)
  * @method static CommentBuilder|Comment getEntityById(int $entityId)
  * @method static CommentBuilder|Comment updateEntity(int $entityId, array $newAttributes)
+ * @property CommentStatus|null $status
+ * @property string|null $author
+ * @method static CommentBuilder|Comment markAsPending()
+ * @method static CommentBuilder|Comment markAsPublished()
+ * @method static CommentBuilder|Comment markAsUnpublished()
+ * @method static CommentBuilder|Comment whereAuthor($value)
+ * @method static CommentBuilder|Comment whereStatus($value)
  */
 class Comment extends Model
 {

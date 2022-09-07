@@ -38,6 +38,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
  * @property-read int|null $posts_count
+ * @method static TagBuilder|Tag createEntity(array $baseAttributes)
+ * @method static TagBuilder|Tag destroyEntity(int $entityId)
+ * @method static TagBuilder|Tag detachPosts()
+ * @method static TagBuilder|Tag filter(\App\Filters\QueryFilter $filters)
+ * @method static TagBuilder|Tag getEntityById(int $entityId)
+ * @method static TagBuilder|Tag updateEntity(int $entityId, array $newAttributes)
  */
 class Tag extends Model
 {

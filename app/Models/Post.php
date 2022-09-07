@@ -84,6 +84,24 @@ use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
  * @method static \Illuminate\Database\Query\Builder|Post withoutTrashed()
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Gallery[] $galleries
  * @property-read int|null $galleries_count
+ * @property PostStatus|null $status
+ * @method static PostBuilder|Post createEntity(array $baseAttributes)
+ * @method static PostBuilder|Post destroyEntity(int $entityId)
+ * @method static PostBuilder|Post filter(\App\Filters\QueryFilter $filters)
+ * @method static PostBuilder|Post getEntityById(int $entityId)
+ * @method static PostBuilder|Post getTrashedCollection(array $ids)
+ * @method static PostBuilder|Post markAsDraft()
+ * @method static PostBuilder|Post markAsFavorite()
+ * @method static PostBuilder|Post markAsNonFavorite()
+ * @method static PostBuilder|Post markAsPending()
+ * @method static PostBuilder|Post markAsPublished()
+ * @method static PostBuilder|Post markAsUnpublished()
+ * @method static PostBuilder|Post onlyDraft()
+ * @method static PostBuilder|Post onlyPending()
+ * @method static PostBuilder|Post onlyPublished()
+ * @method static PostBuilder|Post restoreTrashed(array $ids)
+ * @method static PostBuilder|Post updateEntity(int $entityId, array $newAttributes)
+ * @method static PostBuilder|Post whereStatus($value)
  */
 class Post extends Model
 {

@@ -93,6 +93,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static Builder|User permission($permissions)
  * @method static Builder|User role($roles, $guard = null)
  * @method static Builder|User whereStatus($value)
+ * @method static UserBuilder|User createEntity(array $baseAttributes)
+ * @method static UserBuilder|User destroyEntity(int $entityId)
+ * @method static UserBuilder|User filter(\App\Filters\QueryFilter $filters)
+ * @method static UserBuilder|User getEntityById(int $entityId)
+ * @method static UserBuilder|User markAsDisabled()
+ * @method static UserBuilder|User markAsEnabled()
+ * @method static UserBuilder|User markAsPending()
+ * @method static UserBuilder|User onlyAuthors()
+ * @method static UserBuilder|User onlyEnabled()
+ * @method static UserBuilder|User onlyMembers()
+ * @method static UserBuilder|User onlyPending()
+ * @method static UserBuilder|User updateEntity(int $entityId, array $newAttributes)
  */
 class User extends Authenticatable
 {
